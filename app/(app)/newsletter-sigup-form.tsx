@@ -19,8 +19,6 @@ export default function NewsletterFormSignup() {
         `/api/send-confirm-email?id=${data.id}&email=${data.email}`
       );
 
-      console.log(response);
-
       if (response.ok) {
         router.push("/confirm-subscription");
       } else {

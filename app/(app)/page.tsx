@@ -31,6 +31,18 @@ export default function Home() {
       <p className="text-xs text-slate-500 mt-4">
         Comece cada dia com a Palavra de Deus. Cancele quando quiser.
       </p>
+      <p className="text-xs text-slate-500">
+        Aceitamos sugestões, críticas ou dúvidas. Compartilhe também seu
+        testemunho para futuras edições.
+      </p>
+      <p>
+        <a
+          href="/contact"
+          className="text-xs text-amber-700 underline hover:text-amber-800"
+        >
+          Fale conosco
+        </a>
+      </p>
     </div>
   );
 }
