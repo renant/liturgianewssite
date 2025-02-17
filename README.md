@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LiturgiaNews
 
-## Getting Started
+Site em Next.js que permite aos usuários se inscreverem em uma newsletter diária sobre liturgia católica.
 
-First, run the development server:
+## Funcionalidades
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Sistema de inscrição em newsletter com confirmação por e-mail
+- Formulário de contato com notificações por e-mail
+- Design responsivo utilizando Tailwind CSS
+- Tratamento de formulários server-side com validação Zod
+- Envio de e-mails via API Resend
+- Construído com React moderno e TypeScript
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Stack Tecnológica
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework**: Next.js 15.1 com App Router
+- **Estilização**: Tailwind CSS
+- **Serviço de E-mail**: Resend
+- **Validação de Formulários**: Zod
+- **Componentes UI**: Componentes personalizados usando shadcn/ui
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Estrutura do Projeto
 
-## Learn More
+- app: Páginas e rotas API do Next.js
+- components: Componentes React reutilizáveis
+- hooks: Hooks React personalizados
+- lib: Funções utilitárias
+- public: Arquivos estáticos
 
-To learn more about Next.js, take a look at the following resources:
+## Principais Recursos
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Inscrição na Newsletter
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Fluxo de inscrição com confirmação dupla
+- Sistema de confirmação por e-mail
+- Gerenciamento de inscrição via e-mail
 
-## Deploy on Vercel
+### Formulário de Contato
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Validação de formulário com tratamento de erros
+- Notificações por e-mail para submissões
+- Seção de Perguntas Frequentes
