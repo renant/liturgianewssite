@@ -1,3 +1,4 @@
+import TriggerFirebaseAnalytics from "@/components/firebase/TriggerFirebaseAnalytics";
 import { GoogleTagManager } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -63,6 +64,7 @@ export default function RootLayout({
           {children}
         </div>
         <GoogleTagManager gtmId={process.env.GA_TRACKING_ID as string} />
+        <TriggerFirebaseAnalytics />
       </body>
     </html>
   );
