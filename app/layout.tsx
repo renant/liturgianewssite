@@ -1,5 +1,4 @@
-import TriggerFirebaseAnalytics from "@/components/firebase/TriggerFirebaseAnalytics";
-import { GoogleTagManager } from "@next/third-parties/google";
+import { PostHogProvider } from "@/components/posthog/PosthogProvider";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -60,11 +59,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-amber-50 to-white p-4">
-          {children}
-        </div>
-        <GoogleTagManager gtmId={process.env.GA_TRACKING_ID as string} />
-        <TriggerFirebaseAnalytics />
+        <PostHogProvider>
+          <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-amber-50 to-white p-4">
+            {children}
+          </div>
+        </PostHogProvider>
       </body>
     </html>
   );
