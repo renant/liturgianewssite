@@ -1,3 +1,4 @@
+import JsonLd from "@/components/jsonld/JsonLd";
 import ContactForm from "./contact-form";
 
 export default function Contact() {
@@ -46,6 +47,30 @@ export default function Contact() {
           </div>
         </div>
       </div>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            {
+              "@type": "Question",
+              name: "Como faço para me inscrever na newsletter?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Visite nossa página inicial e preencha o formulário de inscrição.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Posso cancelar minha inscrição a qualquer momento?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Sim, você pode cancelar sua inscrição através do link no rodapé de qualquer e-mail que enviamos.",
+              },
+            },
+          ],
+        }}
+      />
     </div>
   );
 }
