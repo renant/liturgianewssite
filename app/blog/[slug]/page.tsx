@@ -12,7 +12,6 @@ type Props = {
 
 async function loadMdxFile(slug: string) {
   try {
-    console.log("Loading MDX file:", slug);
     const mdxPath = path.join(process.cwd(), "content", `${slug}.mdx`);
 
     if (!fs.existsSync(mdxPath)) {

@@ -6,11 +6,14 @@ function getFirstValue(param: string | string[] | undefined): string {
   return Array.isArray(param) ? param[0] : param || "";
 }
 
-export default async function BlogPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
+type Params = Promise<{ slug: string }>;
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+export default async function BlogPage(props: {
+  params: Params;
+  searchParams: SearchParams;
 }) {
+  const searchParams = await props.searchParams;
   const currentPage = Number(getFirstValue(searchParams.page)) || 1;
   const postsPerPage = Number(getFirstValue(searchParams.limit)) || 6;
   const sort = getFirstValue(searchParams.sort) || "date_desc";
