@@ -102,6 +102,16 @@ export default async function Page({
           />
           <Post />
         </article>
+        <section className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold mb-4">Gostou do conteúdo?</h2>
+          <p className="mb-4">
+            Assine a nossa newsletter para receber as últimas atualizações
+            diretamente no seu e-mail.
+          </p>
+          <Button asChild variant="default">
+            <Link href="/">Assinar Newsletter</Link>
+          </Button>
+        </section>
         <JsonLd
           data={{
             "@context": "https://schema.org",

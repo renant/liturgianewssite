@@ -1,5 +1,6 @@
 import NewsletterFormSignup from "@/app/(app)/newsletter-sigup-form";
 import { Cross } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -27,6 +28,15 @@ export default function Home() {
       </span>
     </p> */}
       <NewsletterFormSignup></NewsletterFormSignup>
+      {/* Blog Link */}
+      <p>
+        <Link
+          href="/blog"
+          className="text-xs text-amber-700 underline hover:text-amber-800"
+        >
+          Visite nosso blog
+        </Link>
+      </p>
       {/* Footer text */}
       <p className="text-xs text-slate-500 mt-4">
         Comece cada dia com a Palavra de Deus. Cancele quando quiser.
@@ -36,12 +46,12 @@ export default function Home() {
         testemunho para futuras edições.
       </p>
       <p>
-        <a
+        <Link
           href="/contact"
           className="text-xs text-amber-700 underline hover:text-amber-800"
         >
           Fale conosco
-        </a>
+        </Link>
       </p>
     </div>
   );
