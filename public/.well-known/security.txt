@@ -1,0 +1,4 @@
+Contact: mailto:security@liturgianews.site
+Expires: 2026-01-21T00:00:00.000Z
+Preferred-Languages: pt, en
+Canonical: https://www.liturgianews.site/.well-known/security.txt

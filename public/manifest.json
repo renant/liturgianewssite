@@ -1,0 +1,39 @@
+{
+  "name": "LiturgiaNews - Liturgia Católica Diária",
+  "short_name": "LiturgiaNews",
+  "description": "Receba gratuitamente a liturgia católica diária em seu e-mail todas as manhãs.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fef3c7",
+  "theme_color": "#b45309",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/images/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["news", "religion", "lifestyle"],
+  "lang": "pt-BR",
+  "dir": "ltr"
+}
