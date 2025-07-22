@@ -20,6 +20,25 @@ export default async function sitemap() {
     })
   );
 
+  path.join(process.cwd(), "liturgia-content");
+  const liturgiaFiles = fs.readdirSync(
+    path.join(process.cwd(), "liturgia-content")
+  );
+  const liturgiaSlugs = liturgiaFiles.map((file) => ({
+    slug: file.replace(/\.mdx$/, ""),
+  }));
+
+  const liturgiaRoutes = await Promise.all(
+    liturgiaSlugs.map(async ({ slug }) => {
+      return {
+        url: `https://www.liturgianews.site/liturgia/${slug}`,
+        lastModified: new Date(),
+        changeFrequency: "daily",
+        priority: 0.8,
+      };
+    })
+  );
+
   const routes = ["", "contact", "donate", "blog"].map((route) => {
     return {
       url: `https://www.liturgianews.site/${route}`,
@@ -29,5 +48,5 @@ export default async function sitemap() {
     };
   });
 
-  return [...routes, ...blogRoutes];
+  return [...routes, ...blogRoutes, ...liturgiaRoutes];
 }
