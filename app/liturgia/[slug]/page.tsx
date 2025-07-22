@@ -1,3 +1,4 @@
+import JsonLd from "@/components/jsonld/JsonLd";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import { Metadata } from "next";
@@ -109,6 +110,38 @@ export default async function Page({
           />
           <LiturgiaContent />
         </article>
+        <section className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold mb-4">Receba no seu e-mail</h2>
+          <p className="mb-4">
+            Assine a nossa newsletter para receber a liturgia diária no seu
+            e-mail.
+          </p>
+          <Button asChild variant="default">
+            <Link href="/">Assinar Newsletter</Link>{" "}
+          </Button>
+        </section>
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            headline: metadata.title,
+            description: metadata.title,
+            datePublished: new Date(metadata.date).toISOString(),
+            author: {
+              "@type": "Person",
+              name: "LiturgiaNews",
+            },
+            image:
+              "https://www.liturgianews.site/images/android-chrome-192x192.png",
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id":
+                `https://www.liturgianews.site/liturgia/${slug}`.toString(),
+            },
+            articleSection: "Liturgia",
+            keywords: "Liturgia, Liturgia Diária, Liturgia Católica",
+          }}
+        />
       </div>
     </div>
   );
