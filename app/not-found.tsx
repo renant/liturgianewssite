@@ -16,7 +16,7 @@ export default async function NotFound() {
           Ela pode ter sido movida ou não existe mais.
         </p>
       </div>
-      v
+
       <div className="space-y-4">
         <h3 className="text-lg font-medium text-slate-700">
           Você pode tentar:
