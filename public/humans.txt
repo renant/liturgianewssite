@@ -1,0 +1,16 @@
+/* TEAM */
+Organization: LiturgiaNews
+Site: https://www.liturgianews.site
+Email: contato@liturgianews.site
+Location: Brasil
+
+/* THANKS */
+Newsletter subscribers
+Contributors
+
+/* SITE */
+Last update: 2025/01/21
+Language: Portuguese / Português
+Doctype: HTML5
+IDE: VS Code, Cursor
+Technologies: Next.js, React, TypeScript, Tailwind CSS, Resend

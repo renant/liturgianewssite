@@ -45,34 +45,39 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const url = `https://www.liturgianews.site/blog/${slug}`;
 
   return {
-    title: metadata.title,
+    title: `${metadata.title} | Blog LiturgiaNews`,
     description: metadata.description,
     alternates: {
       canonical: url,
     },
     keywords: metadata.tags,
+    authors: [{ name: metadata.author || "LiturgiaNews" }],
     openGraph: {
       title: metadata.title,
       description: metadata.description,
+      url: url,
+      type: "article",
+      publishedTime: new Date(metadata.date).toISOString(),
+      modifiedTime: metadata.lastModified ? new Date(metadata.lastModified).toISOString() : undefined,
+      authors: [metadata.author || "LiturgiaNews"],
+      tags: metadata.tags,
       images: [
         {
-          url: "https://www.liturgianews.site/images/android-chrome-192x192.png",
-          width: 1200,
-          height: 630,
-          alt: "LiturgiaNews - Liturgia Católica Diária",
+          url: metadata.image || "https://www.liturgianews.site/images/android-chrome-192x192.png",
+          width: metadata.imageWidth || 192,
+          height: metadata.imageHeight || 192,
+          alt: metadata.imageAlt || metadata.title,
         },
       ],
-
       locale: "pt_BR",
-      type: "article",
       siteName: "LiturgiaNews",
     },
     twitter: {
-      card: "summary_large_image",
+      card: "summary",
       title: metadata.title,
       description: metadata.description,
       images: [
-        "https://www.liturgianews.site/images/android-chrome-192x192.png",
+        metadata.image || "https://www.liturgianews.site/images/android-chrome-192x192.png",
       ],
     },
   };
@@ -84,34 +89,72 @@ export default async function Page({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const { metadata, default: Post } = await loadMdxFile(slug);
+  const mdxModule = await loadMdxFile(slug);
+
+  if (!mdxModule) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white p-4">
+        <div className="max-w-lg mx-auto space-y-8">
+          <h1 className="text-2xl font-bold">Post não encontrado</h1>
+          <Button asChild variant="outline">
+            <Link href="/blog">
+              <ArrowLeftIcon className="mr-2 h-4 w-4" />
+              Voltar para o blog
+            </Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  const { metadata, default: Post } = mdxModule;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white p-4">
       <div className="max-w-lg mx-auto space-y-8">
-        <Button asChild variant="outline" className="mb-2">
-          <Link href="/blog">
-            <ArrowLeftIcon className="mr-2 h-4 w-4" />
-            Voltar para o blog
-          </Link>
-        </Button>
-        <article className="prose prose-pink max-w-none">
+        <nav aria-label="Navegação">
+          <Button asChild variant="outline" className="mb-2">
+            <Link href="/blog">
+              <ArrowLeftIcon className="mr-2 h-4 w-4" aria-hidden="true" />
+              Voltar para o blog
+            </Link>
+          </Button>
+        </nav>
+        
+        <article 
+          className="prose prose-pink max-w-none"
+          itemScope
+          itemType="https://schema.org/BlogPosting"
+        >
           <meta
             itemProp="datePublished"
             content={new Date(metadata.date).toISOString()}
           />
+          <meta
+            itemProp="dateModified"
+            content={metadata.lastModified ? new Date(metadata.lastModified).toISOString() : new Date(metadata.date).toISOString()}
+          />
+          <meta itemProp="author" content={metadata.author || "LiturgiaNews"} />
+          <meta itemProp="publisher" content="LiturgiaNews" />
+          <meta itemProp="inLanguage" content="pt-BR" />
+          <meta itemProp="url" content={`https://www.liturgianews.site/blog/${slug}`} />
+          
           <Post />
         </article>
-        <section className="bg-white p-6 rounded-lg shadow-md">
+        
+        <aside className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold mb-4">Gostou do conteúdo?</h2>
           <p className="mb-4">
             Assine a nossa newsletter para receber as últimas atualizações
             diretamente no seu e-mail.
           </p>
           <Button asChild variant="default">
-            <Link href="/">Assinar Newsletter</Link>
+            <Link href="/" aria-label="Assinar newsletter da LiturgiaNews">
+              Assinar Newsletter
+            </Link>
           </Button>
-        </section>
+        </aside>
+        
         <JsonLd
           data={{
             "@context": "https://schema.org",
@@ -119,18 +162,39 @@ export default async function Page({
             headline: metadata.title,
             description: metadata.description,
             datePublished: new Date(metadata.date).toISOString(),
+            dateModified: metadata.lastModified ? new Date(metadata.lastModified).toISOString() : new Date(metadata.date).toISOString(),
             author: {
-              "@type": "Person",
-              name: "LiturgiaNews",
+              "@type": metadata.authorType || "Person",
+              name: metadata.author || "LiturgiaNews",
+              url: metadata.authorUrl || "https://www.liturgianews.site"
             },
-            image:
-              "https://www.liturgianews.site/images/android-chrome-192x192.png",
+            publisher: {
+              "@type": "Organization",
+              name: "LiturgiaNews",
+              url: "https://www.liturgianews.site",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://www.liturgianews.site/images/android-chrome-192x192.png",
+                width: 192,
+                height: 192
+              }
+            },
+            image: metadata.image || "https://www.liturgianews.site/images/android-chrome-192x192.png",
             mainEntityOfPage: {
               "@type": "WebPage",
-              "@id": `https://www.liturgianews.site/blog/${slug}`.toString(),
+              "@id": `https://www.liturgianews.site/blog/${slug}`,
             },
-            articleSection: metadata.tags?.[0],
+            articleBody: metadata.excerpt || metadata.description,
+            articleSection: metadata.category || metadata.tags?.[0] || "Liturgia",
             keywords: metadata.tags?.join(", "),
+            wordCount: metadata.wordCount,
+            inLanguage: "pt-BR",
+            isAccessibleForFree: true,
+            isPartOf: {
+              "@type": "Blog",
+              name: "Blog da Liturgia Católica Diária",
+              url: "https://www.liturgianews.site/blog"
+            }
           }}
         />
       </div>
@@ -139,12 +203,13 @@ export default async function Page({
 }
 
 export function generateStaticParams() {
-  path.join(process.cwd(), "content");
-
-  const files = fs.readdirSync(path.join(process.cwd(), "content"));
-  const slugs = files.map((file) => ({
-    slug: file.replace(/\.mdx$/, ""),
-  }));
+  const contentDir = path.join(process.cwd(), "content");
+  const files = fs.readdirSync(contentDir);
+  const slugs = files
+    .filter((file) => file.endsWith(".mdx"))
+    .map((file) => ({
+      slug: file.replace(/\.mdx$/, ""),
+    }));
 
   return slugs;
 }
