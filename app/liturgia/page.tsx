@@ -6,13 +6,15 @@ import { getLiturgia, type LiturgiaMetadata } from "./actions";
 
 export const metadata: Metadata = {
   title: "Liturgia Católica Diária - Arquivo",
-  description: "Arquivo completo da liturgia católica diária. Acesse leituras, reflexões e orações de cada dia do ano litúrgico.",
+  description:
+    "Arquivo completo da liturgia católica diária. Acesse leituras, reflexões e orações de cada dia do ano litúrgico.",
   alternates: {
     canonical: "https://www.liturgianews.site/liturgia",
   },
   openGraph: {
     title: "Liturgia Católica Diária - Arquivo | LiturgiaNews",
-    description: "Arquivo completo da liturgia católica diária com leituras, reflexões e orações",
+    description:
+      "Arquivo completo da liturgia católica diária com leituras, reflexões e orações",
     type: "website",
   },
 };
@@ -61,7 +63,10 @@ export default async function LiturgiaPage(props: {
           </header>
 
           {searchTerm && (
-            <section className="text-center mb-8" aria-label="Resultados da busca">
+            <section
+              className="text-center mb-8"
+              aria-label="Resultados da busca"
+            >
               <p className="text-slate-600">
                 Resultados da busca por:{" "}
                 <span className="font-medium text-amber-700">{searchTerm}</span>
@@ -96,9 +101,11 @@ export default async function LiturgiaPage(props: {
                     </h2>
                     <div className="flex items-center space-x-2 text-sm text-slate-500">
                       <CalendarIcon className="w-4 h-4" aria-hidden="true" />
-                      <time dateTime={item.date} itemProp="datePublished">
-                        {item.formattedDate}
-                      </time>
+                      <time
+                        dateTime={item.date.toString()}
+                        itemProp="datePublished"
+                      ></time>
+                      {item.formattedDate}
                     </div>
                     <meta itemProp="inLanguage" content="pt-BR" />
                     <meta itemProp="author" content="LiturgiaNews" />
@@ -106,7 +113,10 @@ export default async function LiturgiaPage(props: {
                 ))}
               </section>
             ) : (
-              <section className="text-center py-12" aria-label="Nenhum resultado">
+              <section
+                className="text-center py-12"
+                aria-label="Nenhum resultado"
+              >
                 <p className="text-slate-600 text-lg">
                   Nenhuma liturgia encontrada.
                 </p>
@@ -126,9 +136,11 @@ export default async function LiturgiaPage(props: {
             <div className="flex space-x-2">
               {!isPreviousDisabled && (
                 <Link
-                  href={`/liturgia?limit=${itemsPerPage}&page=${currentPage - 1}${
-                    searchTerm ? `&search=${searchTerm}` : ""
-                  }${sort !== "date_desc" ? `&sort=${sort}` : ""}`}
+                  href={`/liturgia?limit=${itemsPerPage}&page=${
+                    currentPage - 1
+                  }${searchTerm ? `&search=${searchTerm}` : ""}${
+                    sort !== "date_desc" ? `&sort=${sort}` : ""
+                  }`}
                   className={`${
                     isPreviousDisabled ? disabledLinkStyle : ""
                   } inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-amber-200 rounded-md shadow-sm hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500`}
@@ -138,7 +150,7 @@ export default async function LiturgiaPage(props: {
                   Anterior
                 </Link>
               )}
-              <span 
+              <span
                 className="inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-amber-50 border border-amber-200 rounded-md"
                 aria-current="page"
                 aria-label={`Página ${currentPage} de ${totalPages}`}
@@ -147,9 +159,11 @@ export default async function LiturgiaPage(props: {
               </span>
               {!isNextDisabled && (
                 <Link
-                  href={`/liturgia?limit=${itemsPerPage}&page=${currentPage + 1}${
-                    searchTerm ? `&search=${searchTerm}` : ""
-                  }${sort !== "date_desc" ? `&sort=${sort}` : ""}`}
+                  href={`/liturgia?limit=${itemsPerPage}&page=${
+                    currentPage + 1
+                  }${searchTerm ? `&search=${searchTerm}` : ""}${
+                    sort !== "date_desc" ? `&sort=${sort}` : ""
+                  }`}
                   className={`${
                     isNextDisabled ? disabledLinkStyle : ""
                   } inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-amber-200 rounded-md shadow-sm hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500`}
@@ -161,8 +175,11 @@ export default async function LiturgiaPage(props: {
               )}
             </div>
           </nav>
-          
-          <p className="text-center text-sm text-slate-500" aria-label={`Mostrando ${liturgias.length} de ${totalLiturgias} liturgias`}>
+
+          <p
+            className="text-center text-sm text-slate-500"
+            aria-label={`Mostrando ${liturgias.length} de ${totalLiturgias} liturgias`}
+          >
             Mostrando {liturgias.length} de {totalLiturgias} liturgias
           </p>
         </div>
@@ -173,13 +190,14 @@ export default async function LiturgiaPage(props: {
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           name: "Arquivo de Liturgia Católica Diária",
-          description: "Arquivo completo da liturgia católica diária com leituras, reflexões e orações",
+          description:
+            "Arquivo completo da liturgia católica diária com leituras, reflexões e orações",
           url: "https://www.liturgianews.site/liturgia",
           inLanguage: "pt-BR",
           isPartOf: {
             "@type": "WebSite",
             name: "LiturgiaNews",
-            url: "https://www.liturgianews.site"
+            url: "https://www.liturgianews.site",
           },
           hasPart: liturgias.map((liturgia) => ({
             "@type": "Article",
@@ -188,14 +206,14 @@ export default async function LiturgiaPage(props: {
             url: `https://www.liturgianews.site/liturgia/${liturgia.slug}`,
             author: {
               "@type": "Organization",
-              name: "LiturgiaNews"
-            }
+              name: "LiturgiaNews",
+            },
           })),
           provider: {
             "@type": "Organization",
             name: "LiturgiaNews",
-            url: "https://www.liturgianews.site"
-          }
+            url: "https://www.liturgianews.site",
+          },
         }}
       />
     </>
