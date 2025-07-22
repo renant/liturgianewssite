@@ -18,19 +18,19 @@ export function PostCard({ post }: { post: PostMetadata }) {
   });
 
   return (
-    <article 
+    <article
       className="h-full"
-      itemScope 
+      itemScope
       itemType="https://schema.org/BlogPosting"
     >
-      <Link 
+      <Link
         href={`/blog/${post.slug}`}
         className="block h-full focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-lg"
         aria-label={`Ler artigo: ${post.title}`}
       >
         <Card className="flex flex-col h-full shadow-lg hover:shadow-xl hover:scale-105 transition-all transform duration-300 ease-in-out">
           <CardHeader>
-            <CardTitle 
+            <CardTitle
               className="text-xl font-serif text-amber-700 hover:text-amber-900 transition-colors duration-300"
               itemProp="headline"
             >
@@ -45,8 +45,8 @@ export function PostCard({ post }: { post: PostMetadata }) {
           <CardFooter className="flex flex-col items-start space-y-2">
             <div className="flex items-center space-x-2 text-sm text-slate-500">
               <CalendarIcon className="w-4 h-4" aria-hidden="true" />
-              <time 
-                dateTime={post.date} 
+              <time
+                dateTime={post.date.toString()}
                 itemProp="datePublished"
                 aria-label={`Publicado em ${formattedDate}`}
               >
@@ -56,13 +56,20 @@ export function PostCard({ post }: { post: PostMetadata }) {
             {post.author && (
               <div className="flex items-center space-x-2 text-sm text-slate-500">
                 <UserIcon className="w-4 h-4" aria-hidden="true" />
-                <span itemProp="author" itemScope itemType="https://schema.org/Person">
+                <span
+                  itemProp="author"
+                  itemScope
+                  itemType="https://schema.org/Person"
+                >
                   <span itemProp="name">{post.author}</span>
                 </span>
               </div>
             )}
           </CardFooter>
-          <meta itemProp="url" content={`https://www.liturgianews.site/blog/${post.slug}`} />
+          <meta
+            itemProp="url"
+            content={`https://www.liturgianews.site/blog/${post.slug}`}
+          />
           <meta itemProp="inLanguage" content="pt-BR" />
         </Card>
       </Link>
