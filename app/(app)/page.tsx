@@ -36,22 +36,6 @@ export default function Home() {
           </p>
         </header>
 
-        {/* Community section */}
-        <section aria-label="Comunidade">
-          <p className="text-sm text-slate-600">Junte-se à nossa comunidade</p>
-          <p>
-            <Link
-              href="https://t.me/liturgianews"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs text-amber-700 underline hover:text-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
-              aria-label="Receba a liturgia diária no nosso canal do Telegram"
-            >
-              Receba a liturgia diária no nosso canal do Telegram
-            </Link>
-          </p>
-        </section>
-
         {/* Newsletter signup section */}
         <section aria-label="Inscrição na newsletter">
           <NewsletterFormSignup />
@@ -80,6 +64,15 @@ export default function Home() {
 
         {/* Navigation links */}
         <nav aria-label="Links úteis" className="space-y-4">
+          <p>
+            <Link
+              href="/liturgia"
+              className="text-xs text-amber-700 underline hover:text-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+              aria-label="Visite nosso blog com artigos e reflexões"
+            >
+              Visite a liturgia diaria
+            </Link>
+          </p>
           <p>
             <Link
               href="/blog"
