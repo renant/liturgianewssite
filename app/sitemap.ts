@@ -32,6 +32,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
+  const liturgiaHojeRoutes = {
+    url: `https://www.liturgianews.site/liturgia/hoje`,
+    lastModified: new Date(),
+    changeFrequency: "daily" as const,
+    priority: 0.8,
+  };
+
   // Define static routes with specific priorities
   const staticRoutes: MetadataRoute.Sitemap = [
     {
@@ -66,5 +73,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  return [...staticRoutes, ...blogRoutes, ...liturgiaRoutes];
+  return [
+    ...staticRoutes,
+    ...blogRoutes,
+    ...liturgiaRoutes,
+    liturgiaHojeRoutes,
+  ];
 }
