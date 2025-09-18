@@ -51,6 +51,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const slug = getTodaySlug();
   const mdxModule = await loadMdxFile(slug);
   const url = `https://www.liturgianews.site/liturgia/hoje`;
+  const datedUrl = `https://www.liturgianews.site/liturgia/${slug}`;
 
   if (!mdxModule) {
     return {
@@ -89,7 +90,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: metadata.title,
     description: metadata.description || metadata.title,
-    alternates: { canonical: url },
+    alternates: { canonical: datedUrl },
     openGraph: {
       title: metadata.title,
       description: metadata.description || metadata.title,
@@ -182,10 +183,36 @@ export default async function Page() {
             "https://www.liturgianews.site/images/android-chrome-192x192.png",
           mainEntityOfPage: {
             "@type": "WebPage",
-            "@id": `https://www.liturgianews.site/liturgia/hoje`.toString(),
+            "@id": `https://www.liturgianews.site/liturgia/${slug}`.toString(),
           },
           articleSection: "Liturgia",
           keywords: "Liturgia, Liturgia Diária, Liturgia Católica",
+        }}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Início",
+              item: "https://www.liturgianews.site",
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "Liturgia",
+              item: "https://www.liturgianews.site/liturgia",
+            },
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: metadata.title,
+              item: `https://www.liturgianews.site/liturgia/${slug}`,
+            },
+          ],
         }}
       />
     </div>

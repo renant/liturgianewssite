@@ -64,8 +64,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [
         {
           url: metadata.image || "https://www.liturgianews.site/images/android-chrome-192x192.png",
-          width: metadata.imageWidth || 192,
-          height: metadata.imageHeight || 192,
+          width: metadata.imageWidth || 1200,
+          height: metadata.imageHeight || 630,
           alt: metadata.imageAlt || metadata.title,
         },
       ],
@@ -73,12 +73,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: "LiturgiaNews",
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: metadata.title,
       description: metadata.description,
-      images: [
-        metadata.image || "https://www.liturgianews.site/images/android-chrome-192x192.png",
-      ],
+      images: [metadata.image || "https://www.liturgianews.site/images/android-chrome-192x192.png"],
     },
   };
 }
@@ -195,6 +193,32 @@ export default async function Page({
               name: "Blog da Liturgia Católica Diária",
               url: "https://www.liturgianews.site/blog"
             }
+          }}
+        />
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Início",
+                item: "https://www.liturgianews.site",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Blog",
+                item: "https://www.liturgianews.site/blog",
+              },
+              {
+                "@type": "ListItem",
+                position: 3,
+                name: metadata.title,
+                item: `https://www.liturgianews.site/blog/${slug}`,
+              },
+            ],
           }}
         />
       </div>

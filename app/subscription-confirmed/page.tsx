@@ -1,6 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Home } from "lucide-react";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Inscrição confirmada - LiturgiaNews",
+  description:
+    "Inscrição confirmada para receber a liturgia católica diária por e-mail.",
+  alternates: {
+    canonical: "https://www.liturgianews.site/subscription-confirmed",
+  },
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default function SubscriptionConfirmed() {
   return (

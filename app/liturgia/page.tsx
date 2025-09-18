@@ -26,6 +26,63 @@ function getFirstValue(param: string | string[] | undefined): string {
 type Params = Promise<{ slug: string }>;
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}): Promise<Metadata> {
+  const sp = await searchParams;
+  const currentPage = Number(getFirstValue(sp.page)) || 1;
+  const itemsPerPage = Number(getFirstValue(sp.limit)) || 20;
+  const sort = getFirstValue(sp.sort) || "date_desc";
+  const searchTerm = getFirstValue(sp.search);
+
+  const base = "https://www.liturgianews.site/liturgia";
+  const query = new URLSearchParams();
+  if (currentPage > 1) query.set("page", String(currentPage));
+  if (itemsPerPage !== 20) query.set("limit", String(itemsPerPage));
+  if (sort !== "date_desc") query.set("sort", sort);
+  if (searchTerm) query.set("search", searchTerm);
+  const canonical = query.toString() ? `${base}?${query.toString()}` : base;
+
+  const title = searchTerm
+    ? `Resultados para "${searchTerm}" | Arquivo de Liturgia`
+    : currentPage > 1
+      ? `Página ${currentPage} | Arquivo de Liturgia`
+      : "Liturgia Católica Diária - Arquivo";
+
+  return {
+    title,
+    description:
+      searchTerm
+        ? `Resultados da busca por "${searchTerm}" no arquivo da liturgia católica diária.`
+        : "Arquivo completo da liturgia católica diária. Acesse leituras, reflexões e orações de cada dia do ano litúrgico.",
+    alternates: { canonical },
+    robots: searchTerm
+      ? { index: false, follow: true }
+      : { index: true, follow: true },
+    openGraph: {
+      title,
+      description:
+        searchTerm
+          ? `Resultados da busca por "${searchTerm}" no arquivo da liturgia católica diária.`
+          : "Arquivo completo da liturgia católica diária com leituras, reflexões e orações",
+      url: canonical,
+      type: "website",
+      siteName: "LiturgiaNews",
+      locale: "pt_BR",
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description:
+        searchTerm
+          ? `Resultados da busca por "${searchTerm}" no arquivo da liturgia católica diária.`
+          : "Arquivo completo da liturgia católica diária com leituras, reflexões e orações",
+    },
+  };
+}
+
 export default async function LiturgiaPage(props: {
   params: Params;
   searchParams: SearchParams;

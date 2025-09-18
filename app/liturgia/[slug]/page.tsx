@@ -142,6 +142,32 @@ export default async function Page({
           keywords: "Liturgia, Liturgia Diária, Liturgia Católica",
         }}
       />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Início",
+              item: "https://www.liturgianews.site",
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "Liturgia",
+              item: "https://www.liturgianews.site/liturgia",
+            },
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: metadata.title,
+              item: `https://www.liturgianews.site/liturgia/${slug}`,
+            },
+          ],
+        }}
+      />
     </div>
   );
 }

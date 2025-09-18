@@ -24,6 +24,63 @@ function getFirstValue(param: string | string[] | undefined): string {
 type Params = Promise<{ slug: string }>;
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}): Promise<Metadata> {
+  const sp = await searchParams;
+  const currentPage = Number(getFirstValue(sp.page)) || 1;
+  const postsPerPage = Number(getFirstValue(sp.limit)) || 6;
+  const sort = getFirstValue(sp.sort) || "date_desc";
+  const searchTerm = getFirstValue(sp.search);
+
+  const base = "https://www.liturgianews.site/blog";
+  const query = new URLSearchParams();
+  if (currentPage > 1) query.set("page", String(currentPage));
+  if (postsPerPage !== 6) query.set("limit", String(postsPerPage));
+  if (sort !== "date_desc") query.set("sort", sort);
+  if (searchTerm) query.set("search", searchTerm);
+  const canonical = query.toString() ? `${base}?${query.toString()}` : base;
+
+  const title = searchTerm
+    ? `Resultados para "${searchTerm}" | Blog - LiturgiaNews`
+    : currentPage > 1
+      ? `Página ${currentPage} | Blog - LiturgiaNews`
+      : "Blog - Liturgia Católica Diária";
+
+  return {
+    title,
+    description:
+      searchTerm
+        ? `Resultados da busca por "${searchTerm}" no Blog da Liturgia Católica Diária.`
+        : "Reflexões, ensinamentos e inspiração católica. Artigos sobre liturgia, fé, orações e vida cristã.",
+    alternates: { canonical },
+    robots: searchTerm
+      ? { index: false, follow: true }
+      : { index: true, follow: true },
+    openGraph: {
+      title,
+      description:
+        searchTerm
+          ? `Resultados da busca por "${searchTerm}" no Blog da Liturgia Católica Diária.`
+          : "Reflexões, ensinamentos e inspiração católica para sua jornada de fé",
+      url: canonical,
+      type: "website",
+      siteName: "LiturgiaNews",
+      locale: "pt_BR",
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description:
+        searchTerm
+          ? `Resultados da busca por "${searchTerm}" no Blog da Liturgia Católica Diária.`
+          : "Reflexões, ensinamentos e inspiração católica para sua jornada de fé",
+    },
+  };
+}
+
 export default async function BlogPage(props: {
   params: Params;
   searchParams: SearchParams;
@@ -169,6 +226,36 @@ export default async function BlogPage(props: {
               name: "LiturgiaNews"
             }
           }))
+        }}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Blog da Liturgia Católica Diária",
+          mainEntity: {
+            "@type": "ItemList",
+            numberOfItems: posts.length,
+            itemListElement: posts.map((post, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              item: {
+                "@type": "BlogPosting",
+                name: post.title,
+                url: `https://www.liturgianews.site/blog/${post.slug}`,
+              },
+            })),
+          },
+        }}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Início", item: "https://www.liturgianews.site" },
+            { "@type": "ListItem", position: 2, name: "Blog", item: "https://www.liturgianews.site/blog" },
+          ],
         }}
       />
     </>

@@ -28,6 +28,13 @@ export const metadata: Metadata = {
     "Receba gratuitamente a liturgia católica diária em seu e-mail todas as manhãs. Leituras, salmos, evangelho e reflexões para fortalecer sua fé.",
   alternates: {
     canonical: "https://www.liturgianews.site",
+    languages: {
+      "pt-BR": "https://www.liturgianews.site",
+      "x-default": "https://www.liturgianews.site",
+    },
+    types: {
+      "application/rss+xml": "https://www.liturgianews.site/rss.xml",
+    },
   },
   keywords: [
     "liturgia católica diária",
@@ -91,8 +98,15 @@ export const metadata: Metadata = {
     initialScale: 1,
     maximumScale: 5,
   },
+  formatDetection: {
+    telephone: false,
+  },
+  referrer: "origin-when-cross-origin",
   verification: {
     google: "verification-code", // Add your Google verification code when available
+    other: {
+      "msvalidate.01": "verification-code", // Add your Bing verification code when available
+    },
   },
   category: "religion",
 };
