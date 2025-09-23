@@ -52,15 +52,6 @@ export default function Home() {
               Visite a liturgia diaria
             </Link>
           </p>
-          <p>
-            <Link
-              href="/blog"
-              className="text-xs text-amber-700 underline hover:text-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
-              aria-label="Visite nosso blog com artigos e reflexões"
-            >
-              Visite nosso blog
-            </Link>
-          </p>
         </nav>
 
         {/* Footer section */}
