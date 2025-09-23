@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import fs from "node:fs";
 import path from "node:path";
+import NewsletterModal from "./newsletter-modal";
 
 // Cache revalidation to ensure the page updates periodically (changes daily)
 export const revalidate = 3600;
@@ -146,6 +147,8 @@ export default async function Page() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white p-4">
       <div className="max-w-lg mx-auto space-y-8">
+        {/** Modal abre no carregamento para incentivar inscrição */}
+        <NewsletterModal />
         <Button asChild variant="outline" className="mb-2">
           <Link href="/liturgia">
             <ArrowLeftIcon className="mr-2 h-4 w-4" />
