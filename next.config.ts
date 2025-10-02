@@ -1,5 +1,6 @@
 import createMDX from "@next/mdx";
 import type { NextConfig } from "next";
+import securityHeaders from "./headers";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true, // Enable strict mode for better error detection
@@ -31,17 +32,10 @@ const nextConfig: NextConfig = {
       {
         source: "/:path*",
         headers: [
+          ...securityHeaders,
           {
             key: "X-DNS-Prefetch-Control",
             value: "on",
-          },
-          {
-            key: "X-Frame-Options",
-            value: "SAMEORIGIN",
-          },
-          {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
           },
           {
             key: "Referrer-Policy",

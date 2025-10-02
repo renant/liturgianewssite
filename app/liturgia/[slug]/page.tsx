@@ -48,6 +48,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: metadata.title,
       description: metadata.description || metadata.title,
+      url: url,
+      type: "article",
+      publishedTime: new Date(metadata.date).toISOString(),
+      modifiedTime: metadata.lastModified
+        ? new Date(metadata.lastModified).toISOString()
+        : undefined,
+      authors: ["LiturgiaNews"],
       images: [
         {
           url: "https://www.liturgianews.site/images/android-chrome-192x192.png",
@@ -57,7 +64,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         },
       ],
       locale: "pt_BR",
-      type: "article",
       siteName: "LiturgiaNews",
     },
     twitter: {
@@ -122,25 +128,54 @@ export default async function Page({
         </Button>
       </section>
       <JsonLd
-        data={{
+        data={[{
           "@context": "https://schema.org",
           "@type": "BlogPosting",
           headline: metadata.title,
-          description: metadata.title,
+          description: metadata.description || metadata.title,
           datePublished: new Date(metadata.date).toISOString(),
+          dateModified: metadata.lastModified
+            ? new Date(metadata.lastModified).toISOString()
+            : new Date(metadata.date).toISOString(),
           author: {
-            "@type": "Person",
+            "@type": "Organization",
             name: "LiturgiaNews",
+            url: "https://www.liturgianews.site",
+          },
+          publisher: {
+            "@type": "Organization",
+            name: "LiturgiaNews",
+            url: "https://www.liturgianews.site",
+            logo: {
+              "@type": "ImageObject",
+              url: "https://www.liturgianews.site/images/android-chrome-192x192.png",
+              width: 192,
+              height: 192,
+            },
           },
           image:
             "https://www.liturgianews.site/images/android-chrome-192x192.png",
           mainEntityOfPage: {
             "@type": "WebPage",
-            "@id": `https://www.liturgianews.site/liturgia/${slug}`.toString(),
+            "@id": `https://www.liturgianews.site/liturgia/${slug}`,
           },
           articleSection: "Liturgia",
           keywords: "Liturgia, Liturgia Diária, Liturgia Católica",
-        }}
+        }, {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Liturgia",
+            "item": "https://www.liturgianews.site/liturgia"
+          }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": metadata.title,
+            "item": `https://www.liturgianews.site/liturgia/${slug}`
+          }]
+        }]}
       />
     </div>
   );
