@@ -7,30 +7,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const liturgiaDir = path.join(process.cwd(), "liturgia-content");
 
   // Get blog posts
-  const blogFiles = fs.readdirSync(contentDir);
-  const blogSlugs = blogFiles
-    .filter((file) => file.endsWith(".mdx"))
-    .map((file) => file.replace(/\.mdx$/, ""));
+  const blogFiles = fs
+    .readdirSync(contentDir)
+    .filter((file) => file.endsWith(".mdx"));
 
-  const blogRoutes = blogSlugs.map((slug) => ({
-    url: `https://www.liturgianews.site/blog/${slug}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly" as const,
-    priority: 0.7,
-  }));
+  const blogRoutes = blogFiles.map((file) => {
+    const slug = file.replace(/\.mdx$/, "");
+    const stats = fs.statSync(path.join(contentDir, file));
+    return {
+      url: `https://www.liturgianews.site/blog/${slug}`,
+      lastModified: stats.mtime,
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    };
+  });
 
   // Get liturgia posts
-  const liturgiaFiles = fs.readdirSync(liturgiaDir);
-  const liturgiaSlugs = liturgiaFiles
-    .filter((file) => file.endsWith(".mdx"))
-    .map((file) => file.replace(/\.mdx$/, ""));
+  const liturgiaFiles = fs
+    .readdirSync(liturgiaDir)
+    .filter((file) => file.endsWith(".mdx"));
 
-  const liturgiaRoutes = liturgiaSlugs.map((slug) => ({
-    url: `https://www.liturgianews.site/liturgia/${slug}`,
-    lastModified: new Date(),
-    changeFrequency: "daily" as const,
-    priority: 0.8,
-  }));
+  const liturgiaRoutes = liturgiaFiles.map((file) => {
+    const slug = file.replace(/\.mdx$/, "");
+    const stats = fs.statSync(path.join(liturgiaDir, file));
+    return {
+      url: `https://www.liturgianews.site/liturgia/${slug}`,
+      lastModified: stats.mtime,
+      changeFrequency: "daily" as const,
+      priority: 0.8,
+    };
+  });
 
   const liturgiaHojeRoutes = {
     url: `https://www.liturgianews.site/liturgia/hoje`,

@@ -73,7 +73,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: "LiturgiaNews",
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: metadata.title,
       description: metadata.description,
       images: [
@@ -156,7 +156,7 @@ export default async function Page({
         </aside>
         
         <JsonLd
-          data={{
+          data={[{
             "@context": "https://schema.org",
             "@type": "BlogPosting",
             headline: metadata.title,
@@ -195,7 +195,21 @@ export default async function Page({
               name: "Blog da Liturgia Católica Diária",
               url: "https://www.liturgianews.site/blog"
             }
-          }}
+          }, {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [{
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Blog",
+              "item": "https://www.liturgianews.site/blog"
+            }, {
+              "@type": "ListItem",
+              "position": 2,
+              "name": metadata.title,
+              "item": `https://www.liturgianews.site/blog/${slug}`
+            }]
+          }]}
         />
       </div>
     </div>
