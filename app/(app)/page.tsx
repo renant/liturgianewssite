@@ -1,4 +1,5 @@
 import NewsletterFormSignup from "@/app/(app)/newsletter-sigup-form";
+import { Button } from "@/components/ui/button";
 import JsonLd from "@/components/jsonld/JsonLd";
 import { Cross } from "lucide-react";
 import { Metadata } from "next";
@@ -41,15 +42,22 @@ export default function Home() {
           <NewsletterFormSignup />
         </section>
 
+        {/* Featured link to daily liturgy */}
+        <section aria-label="Liturgia Diária">
+          <Button asChild>
+            <Link href="/liturgia/hoje">Liturgia Diária</Link>
+          </Button>
+        </section>
+
         {/* Navigation links */}
         <nav aria-label="Links úteis" className="space-y-4">
           <p>
             <Link
               href="/liturgia"
               className="text-xs text-amber-700 underline hover:text-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
-              aria-label="Visite nosso blog com artigos e reflexões"
+              aria-label="Ver todas as liturgias"
             >
-              Visite a liturgia diaria
+              Ver todas as liturgias
             </Link>
           </p>
         </nav>

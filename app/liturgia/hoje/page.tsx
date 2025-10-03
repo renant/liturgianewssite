@@ -54,13 +54,17 @@ export async function generateMetadata(): Promise<Metadata> {
   const url = `https://www.liturgianews.site/liturgia/hoje`;
 
   if (!mdxModule) {
+    const title = "Liturgia do Dia - Liturgia Diária";
+    const description =
+      "Acompanhe a Liturgia do Dia e a Liturgia Diária da Igreja Católica. Leituras, salmos e evangelho do dia para sua reflexão.";
+
     return {
-      title: "Liturgia de hoje",
-      description: "Liturgia diária católica",
+      title,
+      description,
       alternates: { canonical: url },
       openGraph: {
-        title: "Liturgia de hoje",
-        description: "Liturgia diária católica",
+        title,
+        description,
         images: [
           {
             url: "https://www.liturgianews.site/images/android-chrome-192x192.png",
@@ -75,8 +79,8 @@ export async function generateMetadata(): Promise<Metadata> {
       },
       twitter: {
         card: "summary_large_image",
-        title: "Liturgia de hoje",
-        description: "Liturgia diária católica",
+        title,
+        description,
         images: [
           "https://www.liturgianews.site/images/android-chrome-192x192.png",
         ],
@@ -87,13 +91,19 @@ export async function generateMetadata(): Promise<Metadata> {
   const { metadata } = mdxModule as {
     metadata: { title: string; description?: string; date: string };
   };
+
+  const title = `Liturgia do Dia: ${metadata.title}`;
+  const description = `Liturgia Diária: ${
+    metadata.description || metadata.title
+  }. Acompanhe as leituras, salmos e o evangelho do dia.`;
+
   return {
-    title: metadata.title,
-    description: metadata.description || metadata.title,
+    title,
+    description,
     alternates: { canonical: url },
     openGraph: {
-      title: metadata.title,
-      description: metadata.description || metadata.title,
+      title,
+      description,
       images: [
         {
           url: "https://www.liturgianews.site/images/android-chrome-192x192.png",
@@ -108,13 +118,35 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: metadata.title,
-      description: metadata.description || metadata.title,
+      title,
+      description,
       images: [
         "https://www.liturgianews.site/images/android-chrome-192x192.png",
       ],
     },
   };
+}
+
+function getFormattedDate() {
+  const today = new Date();
+  const day = String(today.getDate()).padStart(2, "0");
+  const monthNames = [
+    "janeiro",
+    "fevereiro",
+    "marco",
+    "abril",
+    "maio",
+    "junho",
+    "julho",
+    "agosto",
+    "setembro",
+    "outubro",
+    "novembro",
+    "dezembro",
+  ];
+  const month = monthNames[today.getMonth()];
+  const year = today.getFullYear();
+  return `${day} de ${month} de ${year}`;
 }
 
 export default async function Page() {
@@ -156,6 +188,9 @@ export default async function Page() {
           </Link>
         </Button>
         <article className="prose max-w-none">
+          <h1 className="text-3xl font-bold mb-4">
+            Liturgia do Dia - {getFormattedDate()}
+          </h1>
           <meta
             itemProp="datePublished"
             content={new Date(metadata.date).toISOString()}
@@ -176,11 +211,13 @@ export default async function Page() {
       <JsonLd
         data={{
           "@context": "https://schema.org",
-          "@type": "BlogPosting",
-          headline: metadata.title,
-          description: metadata.title,
+          "@type": "Article",
+          headline: `Liturgia do Dia: ${metadata.title}`,
+          description: `Liturgia Diária: ${
+            metadata.description || metadata.title
+          }. Acompanhe as leituras, salmos e o evangelho do dia.`,
           datePublished: new Date(metadata.date).toISOString(),
-          author: { "@type": "Person", name: "LiturgiaNews" },
+          author: { "@type": "Organization", name: "LiturgiaNews" },
           image:
             "https://www.liturgianews.site/images/android-chrome-192x192.png",
           mainEntityOfPage: {
@@ -188,7 +225,7 @@ export default async function Page() {
             "@id": `https://www.liturgianews.site/liturgia/hoje`.toString(),
           },
           articleSection: "Liturgia",
-          keywords: "Liturgia, Liturgia Diária, Liturgia Católica",
+          keywords: "Liturgia, Liturgia Diária, Liturgia do Dia, Liturgia Católica",
         }}
       />
     </div>
