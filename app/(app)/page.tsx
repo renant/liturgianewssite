@@ -44,7 +44,7 @@ export default function Home() {
 
         {/* Featured link to daily liturgy */}
         <section aria-label="Liturgia Diária">
-          <Button asChild>
+          <Button asChild variant="outline">
             <Link href="/liturgia/hoje">Liturgia Diária</Link>
           </Button>
         </section>
