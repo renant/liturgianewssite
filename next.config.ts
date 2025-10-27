@@ -17,8 +17,6 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year cache
   },
   
-  // Production optimizations
-  swcMinify: true, // Use SWC for minification (faster than Terser)
   
   // Performance optimizations
   experimental: {
