@@ -29,8 +29,8 @@ export default function NewsletterFormSignup() {
   );
 
   return (
-    <form 
-      onSubmit={handleSubmit} 
+    <form
+      onSubmit={handleSubmit}
       className="space-y-4"
       aria-label="Formulário de inscrição na newsletter"
       noValidate
@@ -63,13 +63,17 @@ export default function NewsletterFormSignup() {
           Digite seu e-mail para receber a liturgia diária gratuitamente
         </p>
       </div>
-      
+
       <Button
         type="submit"
         className="w-full bg-amber-700 hover:bg-amber-800 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
         disabled={isPending}
         aria-busy={isPending}
-        aria-label={isPending ? "Processando inscrição..." : "Inscrever-se gratuitamente na newsletter"}
+        aria-label={
+          isPending
+            ? "Processando inscrição..."
+            : "Inscrever-se gratuitamente na newsletter"
+        }
       >
         {isPending ? (
           <>

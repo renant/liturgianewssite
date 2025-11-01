@@ -43,7 +43,7 @@ export default function Home() {
 
         {/* Navigation links */}
         <nav aria-label="Links úteis" className="space-y-4">
-          <p className="text-base text-slate-500">
+          <p className="text-base text-slate-500 flex flex-col items-center justify-center">
             <Link
               href="/liturgia"
               className="text-base text-amber-700 underline hover:text-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
@@ -51,7 +51,7 @@ export default function Home() {
             >
               Veja todas as liturgias
             </Link>
-            <p> ou </p>
+            <span> ou </span>
             <Link
               href="/liturgia/hoje"
               className="text-base text-amber-700 underline hover:text-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
