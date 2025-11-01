@@ -155,24 +155,24 @@ export default async function Page() {
             Voltar para a lista
           </Link>
         </Button>
-        <article className="prose max-w-none">
+        <article className="prose max-w-none" itemScope itemType="https://schema.org/BlogPosting">
           <meta
             itemProp="datePublished"
             content={new Date(metadata.date).toISOString()}
           />
           <LiturgiaContent />
         </article>
+        <section className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold mb-4">Receba no seu e-mail</h2>
+          <p className="mb-4">
+            Assine a nossa newsletter para receber a liturgia diária no seu
+            e-mail.
+          </p>
+          <Button asChild variant="default">
+            <Link href="/">Assinar Newsletter</Link>
+          </Button>
+        </section>
       </div>
-      <section className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-4">Receba no seu e-mail</h2>
-        <p className="mb-4">
-          Assine a nossa newsletter para receber a liturgia diária no seu
-          e-mail.
-        </p>
-        <Button asChild variant="default">
-          <Link href="/">Assinar Newsletter</Link>
-        </Button>
-      </section>
       <JsonLd
         data={{
           "@context": "https://schema.org",

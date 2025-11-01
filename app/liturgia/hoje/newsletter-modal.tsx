@@ -6,24 +6,28 @@ import { useEffect, useRef, useState } from "react";
 
 const NewsletterModal = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const modalRef = useRef<HTMLDivElement | null>(null);
 
+  // Track if component has mounted to avoid hydration mismatch
   useEffect(() => {
-    const dismissed =
-      typeof window !== "undefined" &&
-      sessionStorage.getItem("ln_newsletter_dismissed");
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
+    const dismissed = sessionStorage.getItem("ln_newsletter_dismissed");
     if (dismissed === "true") {
       setIsOpen(false);
       return;
     }
     const timer = setTimeout(() => setIsOpen(true), 300);
     return () => clearTimeout(timer);
-  }, []);
+  }, [mounted]);
 
   const handleClose = () => {
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem("ln_newsletter_dismissed", "true");
-    }
+    sessionStorage.setItem("ln_newsletter_dismissed", "true");
     setIsOpen(false);
   };
 
@@ -41,7 +45,8 @@ const NewsletterModal = () => {
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  // Don't render anything until mounted to avoid hydration mismatch
+  if (!mounted || !isOpen) return null;
 
   return (
     <div

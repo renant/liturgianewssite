@@ -1,6 +1,5 @@
 import JsonLd from "@/components/jsonld/JsonLd";
-import { PostHogProvider } from "@/components/posthog/PosthogProvider";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -86,15 +85,16 @@ export const metadata: Metadata = {
       alt: "LiturgiaNews Logo",
     },
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5,
-  },
   verification: {
     google: "verification-code", // Add your Google verification code when available
   },
   category: "religion",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({
@@ -105,10 +105,23 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="scroll-smooth">
       <head>
+        {/* DNS Prefetch para recursos externos */}
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+
+        {/* Preconnect para recursos críticos */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+
+        {/* Manifest e ícones */}
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+
+        {/* Meta tags PWA */}
         <meta name="theme-color" content="#b45309" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -119,48 +132,47 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <PostHogProvider>
-          <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-amber-50 to-white p-4">
-            {children}
-          </main>
-          <JsonLd
-            data={{
-              "@context": "https://schema.org",
-              "@type": "WebSite",
+        <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-amber-50 to-white p-4">
+          {children}
+        </main>
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "LiturgiaNews",
+            alternateName: "Liturgia News",
+            url: "https://www.liturgianews.site",
+            description:
+              "Receba a liturgia católica diária em seu e-mail todas as manhãs. Newsletter gratuita com leituras, salmos e reflexões.",
+            inLanguage: "pt-BR",
+            potentialAction: {
+              "@type": "SearchAction",
+              target: {
+                "@type": "EntryPoint",
+                urlTemplate:
+                  "https://www.liturgianews.site/blog?search={search_term_string}",
+              },
+              "query-input": "required name=search_term_string",
+            },
+            publisher: {
+              "@type": "Organization",
               name: "LiturgiaNews",
-              alternateName: "Liturgia News",
               url: "https://www.liturgianews.site",
-              description:
-                "Receba a liturgia católica diária em seu e-mail todas as manhãs. Newsletter gratuita com leituras, salmos e reflexões.",
-              inLanguage: "pt-BR",
-              potentialAction: {
-                "@type": "SearchAction",
-                target: {
-                  "@type": "EntryPoint",
-                  urlTemplate: "https://www.liturgianews.site/blog?search={search_term_string}"
-                },
-                "query-input": "required name=search_term_string"
+              logo: {
+                "@type": "ImageObject",
+                url: "https://www.liturgianews.site/images/android-chrome-192x192.png",
+                width: 192,
+                height: 192,
               },
-              publisher: {
-                "@type": "Organization",
-                name: "LiturgiaNews",
-                url: "https://www.liturgianews.site",
-                logo: {
-                  "@type": "ImageObject",
-                  url: "https://www.liturgianews.site/images/android-chrome-192x192.png",
-                  width: 192,
-                  height: 192,
-                },
-                contactPoint: {
-                  "@type": "ContactPoint",
-                  contactType: "customer service",
-                  availableLanguage: "Portuguese",
-                  url: "https://www.liturgianews.site/contact"
-                }
+              contactPoint: {
+                "@type": "ContactPoint",
+                contactType: "customer service",
+                availableLanguage: "Portuguese",
+                url: "https://www.liturgianews.site/contact",
               },
-            }}
-          />
-        </PostHogProvider>
+            },
+          }}
+        />
       </body>
     </html>
   );
