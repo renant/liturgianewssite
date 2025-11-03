@@ -42,7 +42,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `https://www.liturgianews.site/liturgia/hoje`,
     lastModified: new Date(),
     changeFrequency: "daily" as const,
-    priority: 0.8,
+    priority: 1.0, // Máxima prioridade para esta página estratégica
   };
 
   // Define static routes with specific priorities
