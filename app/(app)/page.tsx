@@ -43,21 +43,20 @@ export default function Home() {
 
         {/* Navigation links */}
         <nav aria-label="Links úteis" className="space-y-4">
-          <p className="text-base text-slate-500 flex flex-col items-center justify-center">
-            <Link
-              href="/liturgia"
-              className="text-base text-amber-700 underline hover:text-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
-              aria-label="Visite nosso blog com artigos e reflexões"
-            >
-              Veja todas as liturgias
-            </Link>
-            <span> ou </span>
+          <p className="text-base text-slate-500 flex flex-col items-center justify-center gap-2">
             <Link
               href="/liturgia/hoje"
               className="text-base text-amber-700 underline hover:text-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
-              aria-label="Visite nosso blog com artigos e reflexões"
+              aria-label="Visite a liturgia diária de hoje"
             >
-              Visite a liturgia diaria de hoje
+              📖 Liturgia de hoje
+            </Link>
+            <Link
+              href="/liturgia"
+              className="text-base text-amber-700 underline hover:text-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+              aria-label="Veja todas as liturgias"
+            >
+              📚 Ver todas as liturgias
             </Link>
           </p>
         </nav>
@@ -71,7 +70,7 @@ export default function Home() {
             Aceitamos sugestões, críticas ou dúvidas. Compartilhe também seu
             testemunho para futuras edições.
           </p>
-          <p>
+          <div className="flex flex-col items-center gap-2 mt-4">
             <Link
               href="/contact"
               className="text-xs text-amber-700 underline hover:text-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
@@ -79,7 +78,7 @@ export default function Home() {
             >
               Fale conosco
             </Link>
-          </p>
+          </div>
         </footer>
       </article>
 

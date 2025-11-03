@@ -121,6 +121,10 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
 
+        {/* RSS Feeds */}
+        <link rel="alternate" type="application/rss+xml" title="Blog - LiturgiaNews" href="https://www.liturgianews.site/feed.xml" />
+        <link rel="alternate" type="application/rss+xml" title="Liturgia Diária - LiturgiaNews" href="https://www.liturgianews.site/liturgia/feed.xml" />
+
         {/* Meta tags PWA */}
         <meta name="theme-color" content="#b45309" />
         <meta name="apple-mobile-web-app-capable" content="yes" />

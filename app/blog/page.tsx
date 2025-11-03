@@ -1,4 +1,5 @@
 import JsonLd from "@/components/jsonld/JsonLd";
+import { Breadcrumbs } from "@/components/breadcrumbs/breadcrumbs";
 import { PostCard } from "@/components/post-card/post-card";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -51,6 +52,8 @@ export default async function BlogPage(props: {
     <>
       <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white p-4">
         <div className="max-w-4xl mx-auto space-y-8 py-12">
+          <Breadcrumbs items={[{ label: "Blog", href: "/blog" }]} className="mb-4" />
+          
           <header className="text-center space-y-4">
             <h1 className="text-3xl font-serif font-semibold text-slate-800">
               Blog da Liturgia Católica Diária

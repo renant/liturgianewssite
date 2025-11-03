@@ -1,4 +1,4 @@
-import { CalendarIcon, UserIcon } from "lucide-react";
+import { CalendarIcon, TagIcon, UserIcon } from "lucide-react";
 
 import { PostMetadata } from "@/app/blog/actions";
 import {
@@ -63,6 +63,19 @@ export function PostCard({ post }: { post: PostMetadata }) {
                 >
                   <span itemProp="name">{post.author}</span>
                 </span>
+              </div>
+            )}
+            {post.tags && post.tags.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 mt-2">
+                <TagIcon className="w-4 h-4 text-slate-400" aria-hidden="true" />
+                {post.tags.slice(0, 3).map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-xs px-2 py-1 bg-amber-100 text-amber-800 rounded-full"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
             )}
           </CardFooter>

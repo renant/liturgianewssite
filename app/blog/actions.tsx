@@ -93,6 +93,59 @@ export async function getPosts({
   return { posts, totalPosts };
 }
 
+export async function getRelatedPosts(
+  currentSlug: string,
+  currentTags: string[],
+  limit: number = 3
+): Promise<PostMetadata[]> {
+  const files = fs.readdirSync(path.join(process.cwd(), "content"));
+  const slugs = files.map((file) => ({
+    slug: file.replace(/\.mdx$/, ""),
+  }));
+
+  let posts = await Promise.all(
+    slugs.map(async ({ slug }) => {
+      const metadata = await loadMdxMetadata(slug);
+      return metadata;
+    })
+  );
+
+  posts = posts.filter((post) => post !== null && post.slug !== currentSlug) as PostMetadata[];
+
+  // Score posts based on tag overlap
+  const scoredPosts = posts.map((post) => {
+    const matchingTags = post.tags.filter((tag) =>
+      currentTags.some((currentTag) =>
+        tag.toLowerCase() === currentTag.toLowerCase()
+      )
+    ).length;
+    return { post, score: matchingTags };
+  });
+
+  // Sort by score (descending) and then by date (descending)
+  scoredPosts.sort((a, b) => {
+    if (b.score !== a.score) {
+      return b.score - a.score;
+    }
+    const dateA = new Date(a.post.date);
+    const dateB = new Date(b.post.date);
+    return dateB.getTime() - dateA.getTime();
+  });
+
+  // Format dates
+  const relatedPosts = scoredPosts.slice(0, limit).map(({ post }) => {
+    const date = new Date(post.date);
+    post.formattedDate = date.toLocaleDateString("pt-BR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+    return post;
+  });
+
+  return relatedPosts;
+}
+
 async function loadMdxMetadata(slug: string): Promise<PostMetadata | null> {
   try {
     const mdxPath = path.join(process.cwd(), "content", `${slug}.mdx`);

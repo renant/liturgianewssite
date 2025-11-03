@@ -1,4 +1,6 @@
 import JsonLd from "@/components/jsonld/JsonLd";
+import { Breadcrumbs } from "@/components/breadcrumbs/breadcrumbs";
+import { SocialShare } from "@/components/social-share/social-share";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import { Metadata } from "next";
@@ -103,30 +105,49 @@ export default async function Page({
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white p-4">
       <div className="max-w-lg mx-auto space-y-8">
+        <Breadcrumbs
+          items={[
+            { label: "Liturgia", href: "/liturgia" },
+            { label: metadata.title, href: `/liturgia/${slug}` },
+          ]}
+          className="mb-4"
+        />
+
         <Button asChild variant="outline" className="mb-2">
           <Link href="/liturgia">
             <ArrowLeftIcon className="mr-2 h-4 w-4" />
             Voltar para a lista
           </Link>
         </Button>
-        <article className="prose max-w-none">
+        <article className="prose max-w-none" itemScope itemType="https://schema.org/BlogPosting">
           <meta
             itemProp="datePublished"
             content={new Date(metadata.date).toISOString()}
           />
           <LiturgiaContent />
         </article>
+
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold mb-4 text-slate-800">
+            Compartilhe este conteúdo
+          </h2>
+          <SocialShare
+            title={metadata.title}
+            description={metadata.description || metadata.title}
+          />
+        </div>
+
+        <section className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold mb-4">Receba no seu e-mail</h2>
+          <p className="mb-4">
+            Assine a nossa newsletter para receber a liturgia diária no seu
+            e-mail.
+          </p>
+          <Button asChild variant="default">
+            <Link href="/">Assinar Newsletter</Link>
+          </Button>
+        </section>
       </div>
-      <section className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-4">Receba no seu e-mail</h2>
-        <p className="mb-4">
-          Assine a nossa newsletter para receber a liturgia diária no seu
-          e-mail.
-        </p>
-        <Button asChild variant="default">
-          <Link href="/">Assinar Newsletter</Link>
-        </Button>
-      </section>
       <JsonLd
         data={[{
           "@context": "https://schema.org",

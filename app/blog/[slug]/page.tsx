@@ -1,10 +1,14 @@
 import JsonLd from "@/components/jsonld/JsonLd";
+import { Breadcrumbs } from "@/components/breadcrumbs/breadcrumbs";
+import { RelatedPosts } from "@/components/related-posts/related-posts";
+import { SocialShare } from "@/components/social-share/social-share";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import fs from "node:fs";
 import path from "node:path";
+import { getRelatedPosts } from "@/app/blog/actions";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -109,9 +113,24 @@ export default async function Page({
 
   const { metadata, default: Post } = mdxModule;
 
+  // Get related posts
+  const relatedPosts = await getRelatedPosts(
+    slug,
+    metadata.tags || [],
+    3
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white p-4">
       <div className="max-w-lg mx-auto space-y-8">
+        <Breadcrumbs
+          items={[
+            { label: "Blog", href: "/blog" },
+            { label: metadata.title, href: `/blog/${slug}` },
+          ]}
+          className="mb-4"
+        />
+
         <nav aria-label="Navegação">
           <Button asChild variant="outline" className="mb-2">
             <Link href="/blog">
@@ -141,6 +160,16 @@ export default async function Page({
           
           <Post />
         </article>
+
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold mb-4 text-slate-800">
+            Compartilhe este conteúdo
+          </h2>
+          <SocialShare
+            title={metadata.title}
+            description={metadata.description}
+          />
+        </div>
         
         <aside className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold mb-4">Gostou do conteúdo?</h2>
@@ -154,6 +183,10 @@ export default async function Page({
             </Link>
           </Button>
         </aside>
+
+        {relatedPosts.length > 0 && (
+          <RelatedPosts posts={relatedPosts} currentSlug={slug} />
+        )}
         
         <JsonLd
           data={[{
