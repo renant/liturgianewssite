@@ -13,6 +13,7 @@ export interface LiturgiaMetadata {
   slug: string;
   date: Date;
   formattedDate: string;
+  dayOfWeek: string;
 }
 
 export async function getLiturgia({
@@ -75,6 +76,11 @@ export async function getLiturgia({
       month: "long",
       day: "numeric",
     });
+    const dayOfWeekRaw = date.toLocaleDateString("pt-BR", {
+      weekday: "long",
+    });
+    liturgia.dayOfWeek =
+      dayOfWeekRaw.charAt(0).toUpperCase() + dayOfWeekRaw.slice(1);
   }
 
   const start = ((page ?? 1) - 1) * (limit ?? 10);

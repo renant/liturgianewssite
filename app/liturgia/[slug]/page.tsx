@@ -1,5 +1,5 @@
-import JsonLd from "@/components/jsonld/JsonLd";
 import { Breadcrumbs } from "@/components/breadcrumbs/breadcrumbs";
+import JsonLd from "@/components/jsonld/JsonLd";
 import { SocialShare } from "@/components/social-share/social-share";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
@@ -40,10 +40,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
   const { metadata } = mdxModule;
+  const date = new Date(metadata.date);
+  const dayOfWeekRaw = date.toLocaleDateString("pt-BR", {
+    weekday: "long",
+  });
+  const dayOfWeek =
+    dayOfWeekRaw.charAt(0).toUpperCase() + dayOfWeekRaw.slice(1);
   const url = `https://www.liturgianews.site/liturgia/${slug}`;
   return {
     title: metadata.title,
     description: metadata.description || metadata.title,
+    keywords: [
+      "Liturgia",
+      "Liturgia Diária",
+      "Liturgia Católica",
+      dayOfWeek,
+      `liturgia ${dayOfWeek}`,
+    ],
     alternates: {
       canonical: url,
     },
@@ -52,7 +65,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: metadata.description || metadata.title,
       url: url,
       type: "article",
-      publishedTime: new Date(metadata.date).toISOString(),
+      publishedTime: date.toISOString(),
       modifiedTime: metadata.lastModified
         ? new Date(metadata.lastModified).toISOString()
         : undefined,
@@ -102,6 +115,12 @@ export default async function Page({
     );
   }
   const { metadata, default: LiturgiaContent } = mdxModule;
+  const date = new Date(metadata.date);
+  const dayOfWeekRaw = date.toLocaleDateString("pt-BR", {
+    weekday: "long",
+  });
+  const dayOfWeek =
+    dayOfWeekRaw.charAt(0).toUpperCase() + dayOfWeekRaw.slice(1);
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white p-4">
       <div className="max-w-lg mx-auto space-y-8">
@@ -119,11 +138,12 @@ export default async function Page({
             Voltar para a lista
           </Link>
         </Button>
-        <article className="prose max-w-none" itemScope itemType="https://schema.org/BlogPosting">
-          <meta
-            itemProp="datePublished"
-            content={new Date(metadata.date).toISOString()}
-          />
+        <article
+          className="prose max-w-none"
+          itemScope
+          itemType="https://schema.org/BlogPosting"
+        >
+          <meta itemProp="datePublished" content={date.toISOString()} />
           <LiturgiaContent />
         </article>
 
@@ -149,54 +169,60 @@ export default async function Page({
         </section>
       </div>
       <JsonLd
-        data={[{
-          "@context": "https://schema.org",
-          "@type": "BlogPosting",
-          headline: metadata.title,
-          description: metadata.description || metadata.title,
-          datePublished: new Date(metadata.date).toISOString(),
-          dateModified: metadata.lastModified
-            ? new Date(metadata.lastModified).toISOString()
-            : new Date(metadata.date).toISOString(),
-          author: {
-            "@type": "Organization",
-            name: "LiturgiaNews",
-            url: "https://www.liturgianews.site",
-          },
-          publisher: {
-            "@type": "Organization",
-            name: "LiturgiaNews",
-            url: "https://www.liturgianews.site",
-            logo: {
-              "@type": "ImageObject",
-              url: "https://www.liturgianews.site/images/android-chrome-192x192.png",
-              width: 192,
-              height: 192,
+        data={[
+          {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            headline: metadata.title,
+            description: metadata.description || metadata.title,
+            datePublished: new Date(metadata.date).toISOString(),
+            dateModified: metadata.lastModified
+              ? new Date(metadata.lastModified).toISOString()
+              : new Date(metadata.date).toISOString(),
+            author: {
+              "@type": "Organization",
+              name: "LiturgiaNews",
+              url: "https://www.liturgianews.site",
             },
+            publisher: {
+              "@type": "Organization",
+              name: "LiturgiaNews",
+              url: "https://www.liturgianews.site",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://www.liturgianews.site/images/android-chrome-192x192.png",
+                width: 192,
+                height: 192,
+              },
+            },
+            image:
+              "https://www.liturgianews.site/images/android-chrome-192x192.png",
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": `https://www.liturgianews.site/liturgia/${slug}`,
+            },
+            articleSection: "Liturgia",
+            keywords: `Liturgia, Liturgia Diária, Liturgia Católica, ${dayOfWeek}, Liturgia ${dayOfWeek}`,
           },
-          image:
-            "https://www.liturgianews.site/images/android-chrome-192x192.png",
-          mainEntityOfPage: {
-            "@type": "WebPage",
-            "@id": `https://www.liturgianews.site/liturgia/${slug}`,
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Liturgia",
+                item: "https://www.liturgianews.site/liturgia",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: metadata.title,
+                item: `https://www.liturgianews.site/liturgia/${slug}`,
+              },
+            ],
           },
-          articleSection: "Liturgia",
-          keywords: "Liturgia, Liturgia Diária, Liturgia Católica",
-        }, {
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          "itemListElement": [{
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Liturgia",
-            "item": "https://www.liturgianews.site/liturgia"
-          }, {
-            "@type": "ListItem",
-            "position": 2,
-            "name": metadata.title,
-            "item": `https://www.liturgianews.site/liturgia/${slug}`
-          }]
-        }]}
+        ]}
       />
     </div>
   );
