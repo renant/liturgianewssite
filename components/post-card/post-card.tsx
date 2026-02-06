@@ -44,7 +44,7 @@ export function PostCard({ post }: { post: PostMetadata }) {
           </CardContent>
           <CardFooter className="flex flex-col items-start space-y-2">
             <div className="flex items-center space-x-2 text-sm text-slate-500">
-              <CalendarIcon className="w-4 h-4" aria-hidden="true" />
+              <CalendarIcon className="w-4 h-4" aria-label="Data de publicação" />
               <time
                 dateTime={post.date.toString()}
                 itemProp="datePublished"
@@ -55,7 +55,7 @@ export function PostCard({ post }: { post: PostMetadata }) {
             </div>
             {post.author && (
               <div className="flex items-center space-x-2 text-sm text-slate-500">
-                <UserIcon className="w-4 h-4" aria-hidden="true" />
+                <UserIcon className="w-4 h-4" aria-label="Autor" />
                 <span
                   itemProp="author"
                   itemScope
@@ -67,7 +67,7 @@ export function PostCard({ post }: { post: PostMetadata }) {
             )}
             {post.tags && post.tags.length > 0 && (
               <div className="flex flex-wrap items-center gap-2 mt-2">
-                <TagIcon className="w-4 h-4 text-slate-400" aria-hidden="true" />
+                <TagIcon className="w-4 h-4 text-slate-400" aria-label="Tags" />
                 {post.tags.slice(0, 3).map((tag) => (
                   <span
                     key={tag}

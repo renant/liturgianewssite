@@ -24,7 +24,7 @@ export function Breadcrumbs({ items, className = "" }: BreadcrumbsProps) {
             className="flex items-center hover:text-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded"
             itemProp="item"
           >
-            <Home className="w-4 h-4" aria-hidden="true" />
+            <Home className="w-4 h-4" aria-label="Início" />
             <span className="sr-only" itemProp="name">Home</span>
           </Link>
           <meta itemProp="position" content="1" />
@@ -37,7 +37,10 @@ export function Breadcrumbs({ items, className = "" }: BreadcrumbsProps) {
             itemScope
             itemType="https://schema.org/ListItem"
           >
-            <ChevronRight className="w-4 h-4 text-slate-400" aria-hidden="true" />
+            <ChevronRight
+              className="w-4 h-4 text-slate-400"
+              aria-label="Separador"
+            />
             {index === items.length - 1 ? (
               <span
                 className="text-slate-800 font-medium"

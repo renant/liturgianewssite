@@ -106,7 +106,7 @@ export default async function LiturgiaPage(props: {
                       </Link>
                     </h2>
                     <div className="flex items-center space-x-2 text-sm text-slate-500">
-                      <CalendarIcon className="w-4 h-4" aria-hidden="true" />
+                      <CalendarIcon className="w-4 h-4" aria-label="Data da liturgia" />
                       <time
                         dateTime={item.date.toString()}
                         itemProp="datePublished"

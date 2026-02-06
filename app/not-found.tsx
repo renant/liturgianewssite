@@ -38,7 +38,7 @@ export default async function NotFound() {
               className="text-amber-700 hover:text-amber-800 hover:underline inline-flex items-center focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded"
               aria-label="Voltar para a página inicial"
             >
-              <Home className="w-4 h-4 mr-2" aria-hidden="true" />
+              <Home className="w-4 h-4 mr-2" aria-label="Página inicial" />
               Voltar para a página inicial
             </Link>
           </li>
@@ -48,7 +48,7 @@ export default async function NotFound() {
               className="text-amber-700 hover:text-amber-800 hover:underline inline-flex items-center focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded"
               aria-label="Visitar nosso blog"
             >
-              <BookOpen className="w-4 h-4 mr-2" aria-hidden="true" />
+              <BookOpen className="w-4 h-4 mr-2" aria-label="Blog" />
               Visitar nosso blog
             </Link>
           </li>
@@ -58,7 +58,7 @@ export default async function NotFound() {
               className="text-amber-700 hover:text-amber-800 hover:underline inline-flex items-center focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded"
               aria-label="Ver liturgias diárias"
             >
-              <Mail className="w-4 h-4 mr-2" aria-hidden="true" />
+              <Mail className="w-4 h-4 mr-2" aria-label="Liturgias diárias" />
               Ver liturgias diárias
             </Link>
           </li>

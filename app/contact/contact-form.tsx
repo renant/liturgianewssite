@@ -21,7 +21,7 @@ export default function ContactForm() {
     >
       {formState.success === false && formState.message && (
         <Alert variant="destructive" role="alert">
-          <AlertTriangle className="size-4" aria-hidden="true" />
+          <AlertTriangle className="size-4" aria-label="Erro" />
           <AlertTitle>Erro ao enviar mensagem!</AlertTitle>
           <AlertDescription>{formState.message}</AlertDescription>
         </Alert>
@@ -97,12 +97,12 @@ export default function ContactForm() {
       >
         {isPending ? (
           <>
-            <Loader2 className="size-4 animate-spin mr-2" aria-hidden="true" />
+            <Loader2 className="size-4 animate-spin mr-2" aria-label="Enviando" />
             <span>Enviando...</span>
           </>
         ) : (
           <>
-            <Send className="w-4 h-4 mr-2" aria-hidden="true" />
+            <Send className="w-4 h-4 mr-2" aria-label="Enviar" />
             Enviar Mensagem de Contato
           </>
         )}
@@ -110,7 +110,7 @@ export default function ContactForm() {
 
       {formState.success && formState.message && (
         <Alert variant="default" role="status">
-          <CheckCircle className="size-4 text-green-600" aria-hidden="true" />
+          <CheckCircle className="size-4 text-green-600" aria-label="Sucesso" />
           <AlertTitle>Sucesso!</AlertTitle>
           <AlertDescription>{formState.message}</AlertDescription>
         </Alert>

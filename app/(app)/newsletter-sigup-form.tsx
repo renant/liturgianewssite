@@ -37,7 +37,7 @@ export default function NewsletterFormSignup() {
     >
       {formState.success === false && formState.message && (
         <Alert variant="destructive" role="alert">
-          <AlertTriangle className="size-4" aria-hidden="true" />
+          <AlertTriangle className="size-4" aria-label="Erro" />
           <AlertTitle>Erro ao se inscrever!</AlertTitle>
           <AlertDescription>{formState.message}</AlertDescription>
         </Alert>
@@ -54,6 +54,7 @@ export default function NewsletterFormSignup() {
           name="email"
           id="email"
           required
+          aria-label="Endereço de e-mail"
           aria-required="true"
           aria-describedby="email-description"
           autoComplete="email"
@@ -77,7 +78,7 @@ export default function NewsletterFormSignup() {
       >
         {isPending ? (
           <>
-            <Loader2 className="size-4 animate-spin mr-2" aria-hidden="true" />
+            <Loader2 className="size-4 animate-spin mr-2" aria-label="Carregando" />
             <span>Processando...</span>
           </>
         ) : (

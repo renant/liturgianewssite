@@ -23,7 +23,7 @@ export default function Home() {
           role="img"
           aria-label="Cruz cristã"
         >
-          <Cross className="w-10 h-10 text-amber-800" aria-hidden="true" />
+          <Cross className="w-10 h-10 text-amber-800" aria-label="Cruz cristã" />
         </div>
 
         {/* Main heading section */}

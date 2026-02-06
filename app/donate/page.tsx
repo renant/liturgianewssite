@@ -41,21 +41,30 @@ export default function Donate() {
               </h2>
               <ul className="space-y-4" role="list">
                 <li className="flex items-start space-x-3">
-                  <Server className="w-5 h-5 text-amber-700 mt-1 flex-shrink-0" aria-hidden="true" />
+                  <Server
+                    className="w-5 h-5 text-amber-700 mt-1 flex-shrink-0"
+                    aria-label="Servidores"
+                  />
                   <span className="text-muted-foreground">
                     Manutenção dos servidores para garantir que as newsletters
                     cheguem pontualmente todos os dias
                   </span>
                 </li>
                 <li className="flex items-start space-x-3">
-                  <Mail className="w-5 h-5 text-amber-700 mt-1 flex-shrink-0" aria-hidden="true" />
+                  <Mail
+                    className="w-5 h-5 text-amber-700 mt-1 flex-shrink-0"
+                    aria-label="E-mail"
+                  />
                   <span className="text-muted-foreground">
                     Custos com serviços de email para enviar newsletters
                     diariamente
                   </span>
                 </li>
                 <li className="flex items-start space-x-3">
-                  <Heart className="w-5 h-5 text-amber-700 mt-1 flex-shrink-0" aria-hidden="true" />
+                  <Heart
+                    className="w-5 h-5 text-amber-700 mt-1 flex-shrink-0"
+                    aria-label="Apoio"
+                  />
                   <span className="text-muted-foreground">
                     Desenvolvimento contínuo para melhorar a experiência dos
                     nossos leitores
@@ -83,7 +92,10 @@ export default function Donate() {
                   aria-label="Doar agora via LivePix (abre em nova janela)"
                 >
                   Doar Agora
-                  <ExternalLink className="w-4 h-4 ml-2" aria-hidden="true" />
+                  <ExternalLink
+                    className="w-4 h-4 ml-2"
+                    aria-label="Abrir em nova janela"
+                  />
                 </Link>
               </Button>
             </div>

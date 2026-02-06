@@ -5,7 +5,10 @@ import Link from "next/link";
 export default function ConfirmSubscription() {
   return (
     <div className="text-center max-w-md mx-auto space-y-8">
-      <CheckCircle className="w-16 h-16 text-green-600 mx-auto" />
+      <CheckCircle
+        className="w-16 h-16 text-green-600 mx-auto"
+        aria-label="Inscrição pendente de confirmação"
+      />
 
       <div className="space-y-4">
         <h1 className="text-3xl font-serif font-semibold text-slate-800">
@@ -19,7 +22,10 @@ export default function ConfirmSubscription() {
 
       <div className="space-y-6 text-left">
         <div className="flex items-start space-x-3">
-          <Mail className="w-6 h-6 text-amber-700 mt-1 flex-shrink-0" />
+          <Mail
+            className="w-6 h-6 text-amber-700 mt-1 flex-shrink-0"
+            aria-label="E-mail"
+          />
           <div>
             <h2 className="font-medium text-slate-800">Verifique seu e-mail</h2>
             <p className="text-sm text-slate-600">
@@ -30,7 +36,10 @@ export default function ConfirmSubscription() {
         </div>
 
         <div className="flex items-start space-x-3">
-          <Shield className="w-6 h-6 text-amber-700 mt-1 flex-shrink-0" />
+          <Shield
+            className="w-6 h-6 text-amber-700 mt-1 flex-shrink-0"
+            aria-label="Segurança"
+          />
           <div>
             <h2 className="font-medium text-slate-800">
               Verifique a pasta de spam
