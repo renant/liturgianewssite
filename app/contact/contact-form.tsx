@@ -90,7 +90,7 @@ export default function ContactForm() {
       
       <Button
         type="submit"
-        className="w-full bg-amber-700 hover:bg-amber-800 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+        className="w-full bg-amber-700 hover:bg-amber-800 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
         disabled={isPending}
         aria-busy={isPending}
         aria-label={isPending ? "Enviando mensagem..." : "Enviar mensagem de contato"}
@@ -103,7 +103,7 @@ export default function ContactForm() {
         ) : (
           <>
             <Send className="w-4 h-4 mr-2" aria-hidden="true" />
-            Enviar Mensagem
+            Enviar Mensagem de Contato
           </>
         )}
       </Button>

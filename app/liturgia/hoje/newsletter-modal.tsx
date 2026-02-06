@@ -57,7 +57,7 @@ const NewsletterModal = () => {
       aria-describedby="newsletter-modal-description"
     >
       <button
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
         onClick={handleClose}
         aria-label="Fechar modal"
         tabIndex={0}
@@ -68,30 +68,30 @@ const NewsletterModal = () => {
       <div
         ref={modalRef}
         tabIndex={-1}
-        className="relative w-full max-w-md rounded-lg bg-white shadow-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
+        className="relative w-full max-w-md rounded-lg bg-white shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
       >
         <button
           onClick={handleClose}
           aria-label="Fechar"
-          className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+          className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
         >
           <X className="h-4 w-4" aria-hidden="true" />
         </button>
         <div className="p-6">
           <h2
             id="newsletter-modal-title"
-            className="mb-2 text-xl font-semibold"
+            className="mb-2 text-xl font-semibold text-foreground"
           >
             Receba a Liturgia de hoje por e-mail
           </h2>
           <p
             id="newsletter-modal-description"
-            className="mb-4 text-sm text-slate-600"
+            className="mb-4 text-sm text-muted-foreground"
           >
             Inscreva-se gratuitamente e receba a liturgia diária no seu e-mail.
           </p>
           <NewsletterFormSignup />
-          <p className="mt-3 text-xs text-slate-500">
+          <p className="mt-3 text-xs text-muted-foreground">
             Prometemos não enviar spam. Você pode cancelar a inscrição quando
             quiser.
           </p>

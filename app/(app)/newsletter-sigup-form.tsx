@@ -66,13 +66,13 @@ export default function NewsletterFormSignup() {
 
       <Button
         type="submit"
-        className="w-full bg-amber-700 hover:bg-amber-800 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+        className="w-full bg-amber-700 hover:bg-amber-800 text-white font-semibold shadow-md hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
         disabled={isPending}
         aria-busy={isPending}
         aria-label={
           isPending
             ? "Processando inscrição..."
-            : "Inscrever-se gratuitamente na newsletter"
+            : "Receber Liturgia Diária gratuitamente"
         }
       >
         {isPending ? (
@@ -81,7 +81,7 @@ export default function NewsletterFormSignup() {
             <span>Processando...</span>
           </>
         ) : (
-          "Inscreva-se (Grátis)"
+          "Receber Liturgia Diária"
         )}
       </Button>
     </form>
