@@ -2,33 +2,42 @@
 
 import NewsletterFormSignup from "@/app/(app)/newsletter-sigup-form";
 import { X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
+
+const newsletterSubscribers = new Set<() => void>();
+
+function subscribeNewsletter(listener: () => void) {
+  newsletterSubscribers.add(listener);
+  return () => {
+    newsletterSubscribers.delete(listener);
+  };
+}
+
+function notifyNewsletterSubscribers() {
+  newsletterSubscribers.forEach((listener) => listener());
+}
+
+function getNewsletterDismissedSnapshot() {
+  if (typeof window === "undefined") return true;
+  return sessionStorage.getItem("ln_newsletter_dismissed") === "true";
+}
+
+function getNewsletterDismissedServerSnapshot() {
+  return true;
+}
 
 const NewsletterModal = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const isDismissed = useSyncExternalStore(
+    subscribeNewsletter,
+    getNewsletterDismissedSnapshot,
+    getNewsletterDismissedServerSnapshot
+  );
+  const isOpen = !isDismissed;
   const modalRef = useRef<HTMLDivElement | null>(null);
-
-  // Track if component has mounted to avoid hydration mismatch
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-
-    const dismissed = sessionStorage.getItem("ln_newsletter_dismissed");
-    if (dismissed === "true") {
-      setIsOpen(false);
-      return;
-    }
-    const timer = setTimeout(() => setIsOpen(true), 300);
-    return () => clearTimeout(timer);
-  }, [mounted]);
 
   const handleClose = () => {
     sessionStorage.setItem("ln_newsletter_dismissed", "true");
-    setIsOpen(false);
+    notifyNewsletterSubscribers();
   };
 
   useEffect(() => {
@@ -46,7 +55,7 @@ const NewsletterModal = () => {
   }, [isOpen]);
 
   // Don't render anything until mounted to avoid hydration mismatch
-  if (!mounted || !isOpen) return null;
+  if (!isOpen) return null;
 
   return (
     <div
@@ -57,7 +66,7 @@ const NewsletterModal = () => {
       aria-describedby="newsletter-modal-description"
     >
       <button
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
         onClick={handleClose}
         aria-label="Fechar modal"
         tabIndex={0}
@@ -68,30 +77,30 @@ const NewsletterModal = () => {
       <div
         ref={modalRef}
         tabIndex={-1}
-        className="relative w-full max-w-md rounded-lg bg-white shadow-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
+        className="relative w-full max-w-md rounded-lg bg-white shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
       >
         <button
           onClick={handleClose}
           aria-label="Fechar"
-          className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+          className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
         >
-          <X className="h-4 w-4" aria-hidden="true" />
+          <X className="h-4 w-4" aria-label="Fechar" />
         </button>
         <div className="p-6">
           <h2
             id="newsletter-modal-title"
-            className="mb-2 text-xl font-semibold"
+            className="mb-2 text-xl font-semibold text-foreground"
           >
             Receba a Liturgia de hoje por e-mail
           </h2>
           <p
             id="newsletter-modal-description"
-            className="mb-4 text-sm text-slate-600"
+            className="mb-4 text-sm text-muted-foreground"
           >
             Inscreva-se gratuitamente e receba a liturgia diária no seu e-mail.
           </p>
           <NewsletterFormSignup />
-          <p className="mt-3 text-xs text-slate-500">
+          <p className="mt-3 text-xs text-muted-foreground">
             Prometemos não enviar spam. Você pode cancelar a inscrição quando
             quiser.
           </p>

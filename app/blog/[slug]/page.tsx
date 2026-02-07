@@ -134,7 +134,7 @@ export default async function Page({
         <nav aria-label="Navegação">
           <Button asChild variant="outline" className="mb-2">
             <Link href="/blog">
-              <ArrowLeftIcon className="mr-2 h-4 w-4" aria-hidden="true" />
+              <ArrowLeftIcon className="mr-2 h-4 w-4" aria-label="Voltar" />
               Voltar para o blog
             </Link>
           </Button>

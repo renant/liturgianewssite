@@ -37,7 +37,7 @@ export default function NewsletterFormSignup() {
     >
       {formState.success === false && formState.message && (
         <Alert variant="destructive" role="alert">
-          <AlertTriangle className="size-4" aria-hidden="true" />
+          <AlertTriangle className="size-4" aria-label="Erro" />
           <AlertTitle>Erro ao se inscrever!</AlertTitle>
           <AlertDescription>{formState.message}</AlertDescription>
         </Alert>
@@ -54,6 +54,7 @@ export default function NewsletterFormSignup() {
           name="email"
           id="email"
           required
+          aria-label="Endereço de e-mail"
           aria-required="true"
           aria-describedby="email-description"
           autoComplete="email"
@@ -66,22 +67,22 @@ export default function NewsletterFormSignup() {
 
       <Button
         type="submit"
-        className="w-full bg-amber-700 hover:bg-amber-800 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+        className="w-full bg-amber-700 hover:bg-amber-800 text-white font-semibold shadow-md hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
         disabled={isPending}
         aria-busy={isPending}
         aria-label={
           isPending
             ? "Processando inscrição..."
-            : "Inscrever-se gratuitamente na newsletter"
+            : "Receber Liturgia Diária gratuitamente"
         }
       >
         {isPending ? (
           <>
-            <Loader2 className="size-4 animate-spin mr-2" aria-hidden="true" />
+            <Loader2 className="size-4 animate-spin mr-2" aria-label="Carregando" />
             <span>Processando...</span>
           </>
         ) : (
-          "Inscreva-se (Grátis)"
+          "Receber Liturgia Diária"
         )}
       </Button>
     </form>

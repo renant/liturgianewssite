@@ -23,15 +23,15 @@ export default function Home() {
           role="img"
           aria-label="Cruz cristã"
         >
-          <Cross className="w-10 h-10 text-amber-800" aria-hidden="true" />
+          <Cross className="w-10 h-10 text-amber-800" aria-label="Cruz cristã" />
         </div>
 
         {/* Main heading section */}
-        <header className="space-y-4">
-          <h1 className="text-3xl font-serif font-semibold text-slate-800 md:text-4xl">
+        <header className="space-y-6">
+          <h1 className="text-3xl font-serif font-bold text-foreground md:text-4xl tracking-tight">
             Newsletter da Liturgia Católica Diária
           </h1>
-          <p className="text-slate-600 text-lg">
+          <p className="text-muted-foreground text-lg leading-relaxed">
             Receba a liturgia católica diária em seu e-mail todas as manhãs.
           </p>
         </header>
@@ -42,18 +42,18 @@ export default function Home() {
         </section>
 
         {/* Navigation links */}
-        <nav aria-label="Links úteis" className="space-y-4">
-          <p className="text-base text-slate-500 flex flex-col items-center justify-center gap-2">
+        <nav aria-label="Links úteis" className="space-y-6">
+          <p className="text-base text-muted-foreground flex flex-col items-center justify-center gap-3">
             <Link
               href="/liturgia/hoje"
-              className="text-base text-amber-700 underline hover:text-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+              className="text-base font-medium text-amber-700 underline hover:text-amber-800 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-sm"
               aria-label="Visite a liturgia diária de hoje"
             >
               📖 Liturgia de hoje
             </Link>
             <Link
               href="/liturgia"
-              className="text-base text-amber-700 underline hover:text-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+              className="text-base font-medium text-amber-700 underline hover:text-amber-800 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-sm"
               aria-label="Veja todas as liturgias"
             >
               📚 Ver todas as liturgias
@@ -62,18 +62,18 @@ export default function Home() {
         </nav>
 
         {/* Footer section */}
-        <footer className="space-y-2">
-          <p className="text-xs text-slate-500 mt-4">
+        <footer className="space-y-3 pt-4">
+          <p className="text-sm text-muted-foreground mt-4">
             Comece cada dia com a Palavra de Deus. Cancele quando quiser.
           </p>
-          <p className="text-xs text-slate-500">
+          <p className="text-sm text-muted-foreground">
             Aceitamos sugestões, críticas ou dúvidas. Compartilhe também seu
             testemunho para futuras edições.
           </p>
-          <div className="flex flex-col items-center gap-2 mt-4">
+          <div className="flex flex-col items-center gap-2 mt-6">
             <Link
               href="/contact"
-              className="text-xs text-amber-700 underline hover:text-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+              className="text-sm font-medium text-amber-700 underline hover:text-amber-800 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-sm"
               aria-label="Entre em contato conosco"
             >
               Fale conosco

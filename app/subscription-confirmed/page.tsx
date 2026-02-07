@@ -5,7 +5,10 @@ import Link from "next/link";
 export default function SubscriptionConfirmed() {
   return (
     <div className="text-center max-w-md mx-auto space-y-8">
-      <CheckCircle className="w-16 h-16 text-green-600 mx-auto" />
+      <CheckCircle
+        className="w-16 h-16 text-green-600 mx-auto"
+        aria-label="Inscrição confirmada"
+      />
 
       <div className="space-y-4">
         <h1 className="text-3xl font-serif font-semibold text-slate-800">
@@ -27,7 +30,7 @@ export default function SubscriptionConfirmed() {
         asChild
       >
         <Link href="/">
-          <Home className="w-4 h-4 mr-2" />
+          <Home className="w-4 h-4 mr-2" aria-label="Página inicial" />
           Voltar para a página inicial
         </Link>
       </Button>

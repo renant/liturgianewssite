@@ -24,10 +24,10 @@ export default function Donate() {
     <>
       <div className="max-w-4xl mx-auto space-y-12 py-12">
         <header className="text-center space-y-4">
-          <h1 className="text-3xl font-serif font-semibold text-slate-800">
+          <h1 className="text-3xl font-serif font-semibold text-foreground">
             Apoie Nossa Missão
           </h1>
-          <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-lg leading-relaxed max-w-2xl mx-auto">
             Ajude-nos a continuar levando a Palavra de Deus e as leituras diárias
             da liturgia para milhares de fiéis.
           </p>
@@ -36,27 +36,36 @@ export default function Donate() {
         <main className="grid md:grid-cols-2 gap-8 items-center">
           <section className="space-y-6">
             <div className="space-y-4">
-              <h2 className="text-xl font-serif font-semibold text-slate-800">
+              <h2 className="text-xl font-serif font-semibold text-foreground">
                 Por que precisamos do seu apoio?
               </h2>
               <ul className="space-y-4" role="list">
                 <li className="flex items-start space-x-3">
-                  <Server className="w-5 h-5 text-amber-700 mt-1 flex-shrink-0" aria-hidden="true" />
-                  <span className="text-slate-600">
+                  <Server
+                    className="w-5 h-5 text-amber-700 mt-1 flex-shrink-0"
+                    aria-label="Servidores"
+                  />
+                  <span className="text-muted-foreground">
                     Manutenção dos servidores para garantir que as newsletters
                     cheguem pontualmente todos os dias
                   </span>
                 </li>
                 <li className="flex items-start space-x-3">
-                  <Mail className="w-5 h-5 text-amber-700 mt-1 flex-shrink-0" aria-hidden="true" />
-                  <span className="text-slate-600">
+                  <Mail
+                    className="w-5 h-5 text-amber-700 mt-1 flex-shrink-0"
+                    aria-label="E-mail"
+                  />
+                  <span className="text-muted-foreground">
                     Custos com serviços de email para enviar newsletters
                     diariamente
                   </span>
                 </li>
                 <li className="flex items-start space-x-3">
-                  <Heart className="w-5 h-5 text-amber-700 mt-1 flex-shrink-0" aria-hidden="true" />
-                  <span className="text-slate-600">
+                  <Heart
+                    className="w-5 h-5 text-amber-700 mt-1 flex-shrink-0"
+                    aria-label="Apoio"
+                  />
+                  <span className="text-muted-foreground">
                     Desenvolvimento contínuo para melhorar a experiência dos
                     nossos leitores
                   </span>
@@ -65,25 +74,28 @@ export default function Donate() {
             </div>
 
             <div className="space-y-4">
-              <h2 className="text-xl font-serif font-semibold text-slate-800">
+              <h2 className="text-xl font-serif font-semibold text-foreground">
                 Como doar?
               </h2>
-              <p className="text-slate-600">
+              <p className="text-muted-foreground leading-relaxed">
                 Você pode fazer sua doação através do LivePix escaneando o QR Code
                 ao lado ou clicando no botão abaixo.
               </p>
               <Button
-                className="bg-amber-700 hover:bg-amber-800 text-white inline-flex items-center focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+                className="bg-amber-700 hover:bg-amber-800 text-white inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
                 asChild
               >
                 <Link 
                   href="https://livepix.gg/liturgianews" 
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Fazer doação através do LivePix (abre em nova janela)"
+                  aria-label="Doar agora via LivePix (abre em nova janela)"
                 >
-                  Fazer Doação
-                  <ExternalLink className="w-4 h-4 ml-2" aria-hidden="true" />
+                  Doar Agora
+                  <ExternalLink
+                    className="w-4 h-4 ml-2"
+                    aria-label="Abrir em nova janela"
+                  />
                 </Link>
               </Button>
             </div>
@@ -101,25 +113,25 @@ export default function Donate() {
                 placeholder="blur"
               />
             </div>
-            <p className="text-sm text-slate-500" aria-label="Link do LivePix">livepix.gg/liturgianews</p>
+            <p className="text-sm text-muted-foreground" aria-label="Link do LivePix">livepix.gg/liturgianews</p>
           </aside>
         </main>
 
         <section className="bg-amber-50 p-8 rounded-lg text-center space-y-4 max-w-2xl mx-auto">
-          <h2 className="text-2xl font-serif font-semibold text-slate-800">
+          <h2 className="text-2xl font-serif font-semibold text-foreground">
             Agradecemos seu Apoio
           </h2>
-          <p className="text-slate-600">
+          <p className="text-muted-foreground leading-relaxed">
             Cada doação nos ajuda a continuar nossa missão de levar a Palavra de
             Deus e as leituras diárias da liturgia para mais pessoas. Que Deus
             abençoe sua generosidade!
           </p>
           <blockquote className="pt-4">
-            <p className="text-sm text-slate-500 italic">
+            <p className="text-sm text-muted-foreground italic">
               &quot;Cada um dê conforme determinou em seu coração, não com pesar
               ou por obrigação, pois Deus ama quem dá com alegria.&quot;
             </p>
-            <cite className="text-sm text-slate-500 mt-2 block not-italic">- 2 Coríntios 9:7</cite>
+            <cite className="text-sm text-muted-foreground mt-2 block not-italic">- 2 Coríntios 9:7</cite>
           </blockquote>
         </section>
       </div>

@@ -21,7 +21,7 @@ export default function ContactForm() {
     >
       {formState.success === false && formState.message && (
         <Alert variant="destructive" role="alert">
-          <AlertTriangle className="size-4" aria-hidden="true" />
+          <AlertTriangle className="size-4" aria-label="Erro" />
           <AlertTitle>Erro ao enviar mensagem!</AlertTitle>
           <AlertDescription>{formState.message}</AlertDescription>
         </Alert>
@@ -90,27 +90,27 @@ export default function ContactForm() {
       
       <Button
         type="submit"
-        className="w-full bg-amber-700 hover:bg-amber-800 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+        className="w-full bg-amber-700 hover:bg-amber-800 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
         disabled={isPending}
         aria-busy={isPending}
         aria-label={isPending ? "Enviando mensagem..." : "Enviar mensagem de contato"}
       >
         {isPending ? (
           <>
-            <Loader2 className="size-4 animate-spin mr-2" aria-hidden="true" />
+            <Loader2 className="size-4 animate-spin mr-2" aria-label="Enviando" />
             <span>Enviando...</span>
           </>
         ) : (
           <>
-            <Send className="w-4 h-4 mr-2" aria-hidden="true" />
-            Enviar Mensagem
+            <Send className="w-4 h-4 mr-2" aria-label="Enviar" />
+            Enviar Mensagem de Contato
           </>
         )}
       </Button>
 
       {formState.success && formState.message && (
         <Alert variant="default" role="status">
-          <CheckCircle className="size-4 text-green-600" aria-hidden="true" />
+          <CheckCircle className="size-4 text-green-600" aria-label="Sucesso" />
           <AlertTitle>Sucesso!</AlertTitle>
           <AlertDescription>{formState.message}</AlertDescription>
         </Alert>

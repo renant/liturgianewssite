@@ -106,7 +106,7 @@ export default async function Page({
           <h1 className="text-2xl font-bold mb-4">Liturgia não encontrada</h1>
           <Button asChild variant="outline">
             <Link href="/liturgia">
-              <ArrowLeftIcon className="mr-2 h-4 w-4" />
+              <ArrowLeftIcon className="mr-2 h-4 w-4" aria-label="Voltar" />
               Voltar para a lista
             </Link>
           </Button>
@@ -134,7 +134,7 @@ export default async function Page({
 
         <Button asChild variant="outline" className="mb-2">
           <Link href="/liturgia">
-            <ArrowLeftIcon className="mr-2 h-4 w-4" />
+            <ArrowLeftIcon className="mr-2 h-4 w-4" aria-label="Voltar" />
             Voltar para a lista
           </Link>
         </Button>
