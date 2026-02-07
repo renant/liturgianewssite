@@ -77,6 +77,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.5,
     },
+    {
+      url: "https://www.liturgianews.site/sobre",
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: "https://www.liturgianews.site/privacidade",
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.4,
+    },
   ];
 
   return [
