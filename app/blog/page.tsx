@@ -5,18 +5,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { getPosts, type PostMetadata } from "./actions";
 
-export const metadata: Metadata = {
-  title: "Blog - Liturgia Católica Diária",
-  description: "Reflexões, ensinamentos e inspiração católica. Artigos sobre liturgia, fé, orações e vida cristã para fortalecer sua jornada espiritual.",
-  alternates: {
-    canonical: "https://www.liturgianews.site/blog",
-  },
-  openGraph: {
-    title: "Blog - Liturgia Católica Diária | LiturgiaNews",
-    description: "Reflexões, ensinamentos e inspiração católica para sua jornada de fé",
-    type: "website",
-  },
-};
+const blogDescription = "Reflexões, ensinamentos e inspiração católica. Artigos sobre liturgia, fé, orações e vida cristã para fortalecer sua jornada espiritual.";
 
 function getFirstValue(param: string | string[] | undefined): string {
   return Array.isArray(param) ? param[0] : param || "";
@@ -24,6 +13,32 @@ function getFirstValue(param: string | string[] | undefined): string {
 
 type Params = Promise<{ slug: string }>;
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+export async function generateMetadata({ searchParams }: { searchParams: SearchParams }): Promise<Metadata> {
+  const query = await searchParams;
+  const page = Math.max(1, Number(getFirstValue(query.page)) || 1);
+  const hasFilters = Boolean(getFirstValue(query.search)) ||
+    (Boolean(getFirstValue(query.sort)) && getFirstValue(query.sort) !== "date_desc") ||
+    (Boolean(getFirstValue(query.limit)) && Number(getFirstValue(query.limit)) !== 6);
+  const canonical = hasFilters || page === 1
+    ? "https://www.liturgianews.site/blog"
+    : `https://www.liturgianews.site/blog?page=${page}`;
+  return {
+    title: "Blog - Liturgia Católica Diária",
+    description: blogDescription,
+    alternates: { canonical },
+    robots: hasFilters ? { index: false, follow: true } : undefined,
+    openGraph: { title: "Blog - Liturgia Católica Diária | LiturgiaNews", description: blogDescription, type: "website", url: canonical },
+  };
+}
+
+function paginationHref(page: number, limit: number, search: string, sort: string) {
+  const query = new URLSearchParams({ page: String(page) });
+  if (limit !== 6) query.set("limit", String(limit));
+  if (search) query.set("search", search);
+  if (sort !== "date_desc") query.set("sort", sort);
+  return `/blog?${query}`;
+}
 
 export default async function BlogPage(props: {
   params: Params;
@@ -106,9 +121,7 @@ export default async function BlogPage(props: {
             <div className="flex space-x-2">
               {!isPreviousDisabled && (
                 <Link
-                  href={`/blog?limit=${postsPerPage}&page=${currentPage - 1}${
-                    searchTerm ? `&search=${searchTerm}` : ""
-                  }${sort !== "date_desc" ? `&sort=${sort}` : ""}`}
+                  href={paginationHref(currentPage - 1, postsPerPage, searchTerm, sort)}
                   className={`${
                     isPreviousDisabled ? disabledLinkStyle : ""
                   } inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-amber-200 rounded-md shadow-sm hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500`}
@@ -127,9 +140,7 @@ export default async function BlogPage(props: {
               </span>
               {!isNextDisabled && (
                 <Link
-                  href={`/blog?limit=${postsPerPage}&page=${currentPage + 1}${
-                    searchTerm ? `&search=${searchTerm}` : ""
-                  }${sort !== "date_desc" ? `&sort=${sort}` : ""}`}
+                  href={paginationHref(currentPage + 1, postsPerPage, searchTerm, sort)}
                   className={`${
                     isNextDisabled ? disabledLinkStyle : ""
                   } inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-amber-200 rounded-md shadow-sm hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500`}

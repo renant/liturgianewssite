@@ -7,10 +7,20 @@ import { Label } from "@/components/ui/label";
 import { useFormState } from "@/hooks/use-form-state";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useRef } from "react";
 import { subscribe } from "./actions";
+import { captureEvent } from "@/lib/analytics";
 
-export default function NewsletterFormSignup() {
+type NewsletterSource = "home" | "liturgia_hoje" | "liturgia_datada";
+
+export default function NewsletterFormSignup({ source = "home" }: { source?: NewsletterSource }) {
   const router = useRouter();
+  const started = useRef(false);
+  const captureStart = () => {
+    if (started.current) return;
+    started.current = true;
+    captureEvent("newsletter_signup_start", { source });
+  };
   const [formState, handleSubmit, isPending] = useFormState(
     subscribe,
     async (data) => {
@@ -21,6 +31,7 @@ export default function NewsletterFormSignup() {
       );
 
       if (response.ok) {
+        captureEvent("newsletter_signup_completed", { source });
         router.push("/confirm-subscription");
       } else {
         router.push("/error");
@@ -59,6 +70,8 @@ export default function NewsletterFormSignup() {
           aria-describedby="email-description"
           autoComplete="email"
           disabled={isPending}
+          onFocus={captureStart}
+          onChange={captureStart}
         />
         <p id="email-description" className="sr-only">
           Digite seu e-mail para receber a liturgia diária gratuitamente

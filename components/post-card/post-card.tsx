@@ -11,11 +11,7 @@ import {
 import Link from "next/link";
 
 export function PostCard({ post }: { post: PostMetadata }) {
-  const formattedDate = new Date(post.date).toLocaleDateString("pt-BR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const formattedDate = post.formattedDate;
 
   return (
     <article
@@ -46,7 +42,7 @@ export function PostCard({ post }: { post: PostMetadata }) {
             <div className="flex items-center space-x-2 text-sm text-slate-500">
               <CalendarIcon className="w-4 h-4" aria-label="Data de publicação" />
               <time
-                dateTime={post.date.toString()}
+                dateTime={post.date}
                 itemProp="datePublished"
                 aria-label={`Publicado em ${formattedDate}`}
               >

@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Home } from "lucide-react";
 import Link from "next/link";
+import { EmailConfirmedTracker } from "@/components/analytics/liturgy-tracker";
 
 export default function SubscriptionConfirmed() {
   return (
     <div className="text-center max-w-md mx-auto space-y-8">
+      <EmailConfirmedTracker />
       <CheckCircle
         className="w-16 h-16 text-green-600 mx-auto"
         aria-label="Inscrição confirmada"

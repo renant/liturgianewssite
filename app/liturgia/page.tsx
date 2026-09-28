@@ -4,21 +4,9 @@ import { CalendarIcon } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { getLiturgia, type LiturgiaMetadata } from "./actions";
+import { getLiturgicalDate, MONTH_NAMES } from "@/lib/liturgical-date";
 
-export const metadata: Metadata = {
-  title: "Liturgia Católica Diária - Arquivo",
-  description:
-    "Arquivo completo da liturgia católica diária. Acesse leituras, reflexões e orações de cada dia do ano litúrgico.",
-  alternates: {
-    canonical: "https://www.liturgianews.site/liturgia",
-  },
-  openGraph: {
-    title: "Liturgia Católica Diária - Arquivo | LiturgiaNews",
-    description:
-      "Arquivo completo da liturgia católica diária com leituras, reflexões e orações",
-    type: "website",
-  },
-};
+const archiveDescription = "Arquivo completo da liturgia católica diária. Acesse leituras, reflexões e orações de cada dia do ano litúrgico.";
 
 function getFirstValue(param: string | string[] | undefined): string {
   return Array.isArray(param) ? param[0] : param || "";
@@ -26,6 +14,32 @@ function getFirstValue(param: string | string[] | undefined): string {
 
 type Params = Promise<{ slug: string }>;
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+export async function generateMetadata({ searchParams }: { searchParams: SearchParams }): Promise<Metadata> {
+  const query = await searchParams;
+  const page = Math.max(1, Number(getFirstValue(query.page)) || 1);
+  const hasFilters = Boolean(getFirstValue(query.search)) ||
+    (Boolean(getFirstValue(query.sort)) && getFirstValue(query.sort) !== "date_desc") ||
+    (Boolean(getFirstValue(query.limit)) && Number(getFirstValue(query.limit)) !== 20);
+  const canonical = hasFilters || page === 1
+    ? "https://www.liturgianews.site/liturgia"
+    : `https://www.liturgianews.site/liturgia?page=${page}`;
+  return {
+    title: "Liturgia Católica Diária - Arquivo",
+    description: archiveDescription,
+    alternates: { canonical },
+    robots: hasFilters ? { index: false, follow: true } : undefined,
+    openGraph: { title: "Liturgia Católica Diária - Arquivo | LiturgiaNews", description: archiveDescription, type: "website", url: canonical },
+  };
+}
+
+function paginationHref(page: number, limit: number, search: string, sort: string) {
+  const query = new URLSearchParams({ page: String(page) });
+  if (limit !== 20) query.set("limit", String(limit));
+  if (search) query.set("search", search);
+  if (sort !== "date_desc") query.set("sort", sort);
+  return `/liturgia?${query}`;
+}
 
 export default async function LiturgiaPage(props: {
   params: Params;
@@ -49,6 +63,8 @@ export default async function LiturgiaPage(props: {
   const isPreviousDisabled = currentPage <= 1;
   const isNextDisabled = currentPage >= totalPages;
   const disabledLinkStyle = "opacity-50 cursor-not-allowed pointer-events-none";
+  const today = getLiturgicalDate();
+  const calendarHref = `/liturgia/calendario/${today.year}/${MONTH_NAMES[today.month - 1]}`;
 
   return (
     <>
@@ -66,6 +82,9 @@ export default async function LiturgiaPage(props: {
             <p className="text-slate-600 text-lg">
               Leituras, reflexões e orações para cada dia
             </p>
+            <Link href={calendarHref} className="inline-flex text-amber-700 underline underline-offset-4 hover:text-amber-900">
+              Calendário
+            </Link>
           </header>
 
           {searchTerm && (
@@ -142,11 +161,7 @@ export default async function LiturgiaPage(props: {
             <div className="flex space-x-2">
               {!isPreviousDisabled && (
                 <Link
-                  href={`/liturgia?limit=${itemsPerPage}&page=${
-                    currentPage - 1
-                  }${searchTerm ? `&search=${searchTerm}` : ""}${
-                    sort !== "date_desc" ? `&sort=${sort}` : ""
-                  }`}
+                  href={paginationHref(currentPage - 1, itemsPerPage, searchTerm, sort)}
                   className={`${
                     isPreviousDisabled ? disabledLinkStyle : ""
                   } inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-amber-200 rounded-md shadow-sm hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500`}
@@ -165,11 +180,7 @@ export default async function LiturgiaPage(props: {
               </span>
               {!isNextDisabled && (
                 <Link
-                  href={`/liturgia?limit=${itemsPerPage}&page=${
-                    currentPage + 1
-                  }${searchTerm ? `&search=${searchTerm}` : ""}${
-                    sort !== "date_desc" ? `&sort=${sort}` : ""
-                  }`}
+                  href={paginationHref(currentPage + 1, itemsPerPage, searchTerm, sort)}
                   className={`${
                     isNextDisabled ? disabledLinkStyle : ""
                   } inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-amber-200 rounded-md shadow-sm hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500`}

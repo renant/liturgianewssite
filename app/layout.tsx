@@ -86,9 +86,7 @@ export const metadata: Metadata = {
       alt: "LiturgiaNews Logo",
     },
   },
-  verification: {
-    google: "verification-code", // Add your Google verification code when available
-  },
+  // Quando houver um código real do Search Console (método tag HTML), adicione-o em verification.google.
   category: "religion",
 };
 
@@ -216,6 +214,15 @@ export default function RootLayout({
                   <Link href="/donate" className={navLinkClassName}>
                     Apoiar
                   </Link>
+                  <Link href="/acompanhar" className={navLinkClassName}>
+                    Como acompanhar
+                  </Link>
+                  <Link href="/lectio-divina" className={navLinkClassName}>
+                    Lectio divina
+                  </Link>
+                  <Link href="/tempo-liturgico" className={navLinkClassName}>
+                    Tempo litúrgico
+                  </Link>
                 </nav>
               </div>
               <p className="mt-4 text-xs text-muted-foreground">
@@ -235,15 +242,6 @@ export default function RootLayout({
             description:
               "Receba a liturgia católica diária em seu e-mail todas as manhãs. Newsletter gratuita com leituras, salmos e reflexões.",
             inLanguage: "pt-BR",
-            potentialAction: {
-              "@type": "SearchAction",
-              target: {
-                "@type": "EntryPoint",
-                urlTemplate:
-                  "https://www.liturgianews.site/blog?search={search_term_string}",
-              },
-              "query-input": "required name=search_term_string",
-            },
             publisher: {
               "@type": "Organization",
               name: "LiturgiaNews",
