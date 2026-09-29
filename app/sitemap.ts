@@ -1,100 +1,119 @@
-import { MetadataRoute } from "next";
-import fs from "node:fs";
-import path from "node:path";
+import { getContentIndex } from "@/lib/content-metadata";
+import { getLiturgicalDate, MONTH_NAMES } from "@/lib/liturgical-date";
+import type { MetadataRoute } from "next";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const contentDir = path.join(process.cwd(), "content");
-  const liturgiaDir = path.join(process.cwd(), "liturgia-content");
+const baseUrl = "https://www.liturgianews.site";
 
-  // Get blog posts
-  const blogFiles = fs
-    .readdirSync(contentDir)
-    .filter((file) => file.endsWith(".mdx"));
+export default function sitemap(): MetadataRoute.Sitemap {
+  const today = getLiturgicalDate();
+  const liturgies = getContentIndex("liturgia-content");
+  const blogPosts = getContentIndex("content");
+  const months = new Map<string, string>();
 
-  const blogRoutes = blogFiles.map((file) => {
-    const slug = file.replace(/\.mdx$/, "");
-    const stats = fs.statSync(path.join(contentDir, file));
-    return {
-      url: `https://www.liturgianews.site/blog/${slug}`,
-      lastModified: stats.mtime,
-      changeFrequency: "weekly" as const,
-      priority: 0.7,
-    };
-  });
+  for (const entry of liturgies) {
+    const [year, month] = entry.date.split("-").map(Number);
+    const route = `${year}/${MONTH_NAMES[month - 1]}`;
+    if (!months.has(route) || entry.date > months.get(route)!)
+      months.set(route, entry.date);
+  }
 
-  // Get liturgia posts
-  const liturgiaFiles = fs
-    .readdirSync(liturgiaDir)
-    .filter((file) => file.endsWith(".mdx"));
-
-  const liturgiaRoutes = liturgiaFiles.map((file) => {
-    const slug = file.replace(/\.mdx$/, "");
-    const stats = fs.statSync(path.join(liturgiaDir, file));
-    return {
-      url: `https://www.liturgianews.site/liturgia/${slug}`,
-      lastModified: stats.mtime,
-      changeFrequency: "daily" as const,
-      priority: 0.8,
-    };
-  });
-
-  const liturgiaHojeRoutes = {
-    url: `https://www.liturgianews.site/liturgia/hoje`,
-    lastModified: new Date(),
-    changeFrequency: "daily" as const,
-    priority: 1.0, // Máxima prioridade para esta página estratégica
-  };
-
-  // Define static routes with specific priorities
   const staticRoutes: MetadataRoute.Sitemap = [
     {
-      url: "https://www.liturgianews.site",
-      lastModified: new Date(),
+      url: baseUrl,
+      lastModified: today.iso,
       changeFrequency: "daily",
-      priority: 1.0,
+      priority: 1,
     },
     {
-      url: "https://www.liturgianews.site/blog",
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 0.9,
-    },
-    {
-      url: "https://www.liturgianews.site/liturgia",
-      lastModified: new Date(),
+      url: `${baseUrl}/liturgia`,
+      lastModified: today.iso,
       changeFrequency: "daily",
       priority: 0.9,
     },
     {
-      url: "https://www.liturgianews.site/contact",
-      lastModified: new Date(),
+      url: `${baseUrl}/blog`,
+      lastModified: today.iso,
+      changeFrequency: "daily",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/liturgia/hoje`,
+      lastModified: today.iso,
+      changeFrequency: "daily",
+      priority: 1,
+    },
+    {
+      url: `${baseUrl}/acompanhar`,
+      lastModified: "2026-09-28",
       changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/lectio-divina`,
+      lastModified: "2026-09-28",
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/tempo-liturgico`,
+      lastModified: "2026-09-28",
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/sobre`,
+      lastModified: "2026-01-01",
+      changeFrequency: "yearly",
       priority: 0.5,
     },
     {
-      url: "https://www.liturgianews.site/donate",
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.5,
-    },
-    {
-      url: "https://www.liturgianews.site/sobre",
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.5,
-    },
-    {
-      url: "https://www.liturgianews.site/privacidade",
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      url: `${baseUrl}/privacidade`,
+      lastModified: "2026-01-01",
+      changeFrequency: "yearly",
       priority: 0.4,
+    },
+    {
+      url: `${baseUrl}/contact`,
+      lastModified: "2026-01-01",
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/donate`,
+      lastModified: "2026-01-01",
+      changeFrequency: "yearly",
+      priority: 0.5,
     },
   ];
 
-  return [
-    ...staticRoutes,
-    ...blogRoutes,
-    ...liturgiaRoutes,
-    liturgiaHojeRoutes,
-  ];
+  const liturgyRoutes: MetadataRoute.Sitemap = liturgies.map((entry) => ({
+    url: `${baseUrl}/liturgia/${entry.slug}`,
+    lastModified: entry.date,
+    changeFrequency:
+      entry.date === today.iso
+        ? "daily"
+        : entry.date < today.iso
+          ? "yearly"
+          : undefined,
+    priority: 0.8,
+  }));
+
+  const blogRoutes: MetadataRoute.Sitemap = blogPosts.map((entry) => ({
+    url: `${baseUrl}/blog/${entry.slug}`,
+    lastModified: entry.date,
+    changeFrequency: "yearly",
+    priority: 0.7,
+  }));
+
+  const calendarRoutes: MetadataRoute.Sitemap = Array.from(
+    months,
+    ([route, lastModified]) => ({
+      url: `${baseUrl}/liturgia/calendario/${route}`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    }),
+  );
+
+  return [...staticRoutes, ...blogRoutes, ...liturgyRoutes, ...calendarRoutes];
 }

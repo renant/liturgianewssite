@@ -1,165 +1,58 @@
-import fs from "node:fs";
-import path from "node:path";
+import { getContentIndex } from "@/lib/content-metadata";
 
-interface GetPostsParams {
-  limit?: number;
-  page?: number;
-  searchTerm?: string;
-  sort?: string;
-}
+interface GetPostsParams { limit?: number; page?: number; searchTerm?: string; sort?: string }
 
 export interface PostMetadata {
   title: string;
   slug: string;
   description: string;
-  date: Date;
+  date: string;
   formattedDate: string;
-  author: string | string[] | null;
+  author: string | null;
   tags: string[];
 }
 
-export async function getPosts({
-  limit,
-  page,
-  searchTerm,
-  sort = "date_asc",
-}: GetPostsParams) {
-  path.join(process.cwd(), "content");
-
-  const files = fs.readdirSync(path.join(process.cwd(), "content"));
-  const slugs = files.map((file) => ({
-    slug: file.replace(/\.mdx$/, ""),
+function allPosts(): PostMetadata[] {
+  return getContentIndex("content").map((entry) => ({
+    title: entry.title,
+    slug: entry.slug,
+    description: entry.description || entry.title,
+    date: entry.date,
+    formattedDate: entry.formattedDate,
+    author: entry.author || null,
+    tags: entry.tags || [],
   }));
+}
 
-  let posts = await Promise.all(
-    slugs.map(async ({ slug }) => {
-      const metadata = await loadMdxMetadata(slug);
-      return metadata;
-    })
-  );
-
-  posts = posts.filter((post) => post !== null) as PostMetadata[];
-
-  if (searchTerm && searchTerm.trim() !== "") {
-    posts = posts.filter(
-      (post) =>
-        post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        post.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        post.tags.some((tag) =>
-          tag.toLowerCase().includes(searchTerm.toLowerCase())
-        )
+export async function getPosts({ limit, page, searchTerm, sort = "date_asc" }: GetPostsParams) {
+  let posts = allPosts();
+  if (searchTerm?.trim()) {
+    const query = searchTerm.toLocaleLowerCase("pt-BR");
+    posts = posts.filter((post) =>
+      post.title.toLocaleLowerCase("pt-BR").includes(query) ||
+      post.description.toLocaleLowerCase("pt-BR").includes(query) ||
+      post.tags.some((tag) => tag.toLocaleLowerCase("pt-BR").includes(query))
     );
   }
 
   const totalPosts = posts.length;
   const [sortBy, sortOrder] = sort.split("_");
-
-  posts.sort((a: PostMetadata, b: PostMetadata) => {
-    if (sortBy === "date") {
-      const dateA = new Date(a.date);
-      const dateB = new Date(b.date);
-
-      if (Number.isNaN(dateA.getTime()) || Number.isNaN(dateB.getTime())) {
-        console.error("Invalid date found", {
-          dateA: a.date,
-          dateB: b.date,
-        });
-        return 0;
-      }
-
-      return sortOrder === "asc"
-        ? dateA.getTime() - dateB.getTime()
-        : dateB.getTime() - dateA.getTime();
-    }
-
-    return 0;
-  });
-
-  for (const post of posts) {
-    const date = new Date(post.date);
-    post.formattedDate = date.toLocaleDateString("pt-BR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+  if (sortBy === "date") {
+    posts.sort((a, b) => sortOrder === "asc" ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date));
   }
-
   const start = ((page ?? 1) - 1) * (limit ?? 10);
-
-  if (limit) {
-    posts = posts.slice(start, start + limit);
-  }
-
+  if (limit) posts = posts.slice(start, start + limit);
   return { posts, totalPosts };
 }
 
-export async function getRelatedPosts(
-  currentSlug: string,
-  currentTags: string[],
-  limit: number = 3
-): Promise<PostMetadata[]> {
-  const files = fs.readdirSync(path.join(process.cwd(), "content"));
-  const slugs = files.map((file) => ({
-    slug: file.replace(/\.mdx$/, ""),
-  }));
-
-  let posts = await Promise.all(
-    slugs.map(async ({ slug }) => {
-      const metadata = await loadMdxMetadata(slug);
-      return metadata;
-    })
-  );
-
-  posts = posts.filter((post) => post !== null && post.slug !== currentSlug) as PostMetadata[];
-
-  // Score posts based on tag overlap
-  const scoredPosts = posts.map((post) => {
-    const matchingTags = post.tags.filter((tag) =>
-      currentTags.some((currentTag) =>
-        tag.toLowerCase() === currentTag.toLowerCase()
-      )
-    ).length;
-    return { post, score: matchingTags };
-  });
-
-  // Sort by score (descending) and then by date (descending)
-  scoredPosts.sort((a, b) => {
-    if (b.score !== a.score) {
-      return b.score - a.score;
-    }
-    const dateA = new Date(a.post.date);
-    const dateB = new Date(b.post.date);
-    return dateB.getTime() - dateA.getTime();
-  });
-
-  // Format dates
-  const relatedPosts = scoredPosts.slice(0, limit).map(({ post }) => {
-    const date = new Date(post.date);
-    post.formattedDate = date.toLocaleDateString("pt-BR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-    return post;
-  });
-
-  return relatedPosts;
-}
-
-async function loadMdxMetadata(slug: string): Promise<PostMetadata | null> {
-  try {
-    const mdxPath = path.join(process.cwd(), "content", `${slug}.mdx`);
-
-    if (!fs.existsSync(mdxPath)) {
-      return null;
-    }
-    const { metadata } = await import(`@/content/${slug}.mdx`);
-    return {
-      ...metadata,
-      slug,
-    } as PostMetadata;
-  } catch (error) {
-    console.error("Failed to load MDX file:", error);
-    return null;
-  }
+export async function getRelatedPosts(currentSlug: string, currentTags: string[], limit = 3) {
+  return allPosts()
+    .filter((post) => post.slug !== currentSlug)
+    .map((post) => ({
+      post,
+      score: post.tags.filter((tag) => currentTags.some((current) => current.toLocaleLowerCase("pt-BR") === tag.toLocaleLowerCase("pt-BR"))).length,
+    }))
+    .sort((a, b) => b.score - a.score || b.post.date.localeCompare(a.post.date))
+    .slice(0, limit)
+    .map(({ post }) => post);
 }

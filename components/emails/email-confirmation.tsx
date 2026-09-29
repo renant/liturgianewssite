@@ -77,6 +77,12 @@ const EmailConfirmation: React.FC<{ confirmationLink: string }> = ({
               >
                 {confirmationLink}
               </p>
+              <p style={{ color: "#78350F", fontSize: "14px", lineHeight: "1.5", marginTop: "24px" }}>
+                Se esta liturgia ajudou você, encaminhe para alguém:{" "}
+                <a href="https://www.liturgianews.site/liturgia/hoje?utm_source=newsletter&utm_medium=email&utm_campaign=indicacao&utm_content=hoje">
+                  Liturgia de hoje
+                </a>
+              </p>
             </td>
           </tr>
         </table>
