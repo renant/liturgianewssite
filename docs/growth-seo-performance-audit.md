@@ -149,7 +149,7 @@ Intenção “hoje”, alta e repetida todo dia: liturgia de hoje, liturgia diá
 
 Intenção de data: “liturgia 28 de setembro de 2026”. A URL existe. O title não responde à frase. É o buraco mais barato de fechar.
 
-Intenção de calendário: liturgia do próximo domingo, evangelho do próximo domingo, calendário litúrgico, cores litúrgicas, tempo litúrgico. Não há URL. Cor litúrgica não está nos dados: não prometer cor até o MDX ter o campo. Próximo domingo e calendário do mês podem ser páginas curtas que linkam a liturgia, sem copiar as leituras. Spec P2-02.
+Intenção de calendário: calendário litúrgico, cores litúrgicas, tempo litúrgico. Cor litúrgica não está nos dados: não prometer cor até o MDX ter o campo. O calendário do mês pode listar somente as liturgias já publicadas, sem criar páginas ou links para datas futuras. Spec P2-02.
 
 Intenção de aprender: como acompanhar a liturgia diária, como fazer lectio divina, receber a liturgia por e-mail, newsletter católica. Cabe em três páginas escritas, não numa fábrica de artigos. Spec P2-01.
 
@@ -273,7 +273,7 @@ Fato. `SearchAction` para o blog, `BlogPosting`, autor `Person`. Impacto: dado e
 
 ### P2. Páginas permanentes, calendário, imagem de compartilhamento
 
-Não são bugs. São as únicas expansões que cabem no objetivo: três textos originais, calendário dos meses que já têm arquivo, próximo domingo sem copiar as leituras, Open Graph 1200×630 com dados do dia. Specs em `specs/p2/`.
+Não são bugs. São as únicas expansões que cabem no objetivo: três textos originais, calendário dos meses que já têm arquivo e Open Graph 1200×630 com dados do dia. Specs em `specs/p2/`.
 
 ### P3. Indicação, card e UTM
 
@@ -330,7 +330,7 @@ Dá para fazer em poucas horas, sem conteúdo novo:
 12. P1-06 remover o placeholder do Search Console. O token real espera o mantenedor.
 13. P1-05 eventos do PostHog.
 14. P2-01 três páginas evergreen, quando houver quem escreva o texto com calma.
-15. P2-02 calendário do mês e próximo domingo.
+15. P2-02 calendário do mês.
 16. P2-03 Open Graph 1200×630.
 17. P3-03 UTM nos botões de compartilhamento.
 18. P3-02 link da imagem, depois da P2-03.
