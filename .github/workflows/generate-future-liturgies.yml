@@ -30,6 +30,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Test future liturgy formatting
+        run: node --test scripts/future-liturgy-format.test.mjs
       - name: Generate missing future liturgies
         id: generate
         continue-on-error: true
