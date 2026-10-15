@@ -88,7 +88,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const liturgyRoutes: MetadataRoute.Sitemap = liturgies.map((entry) => ({
     url: `${baseUrl}/liturgia/${entry.slug}`,
-    lastModified: entry.date,
+    lastModified: entry.updatedAt ?? entry.publishedAt ?? entry.date,
     changeFrequency:
       entry.date === today.iso
         ? "daily"

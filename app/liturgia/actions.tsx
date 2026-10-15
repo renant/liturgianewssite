@@ -1,4 +1,5 @@
 import { getContentIndex } from "@/lib/content-metadata";
+import { getLiturgicalDate } from "@/lib/liturgical-date";
 
 interface Params { limit?: number; page?: number; searchTerm?: string; sort?: string }
 
@@ -18,6 +19,9 @@ export async function getLiturgia({ limit, page, searchTerm, sort = "date_asc" }
     formattedDate: entry.formattedDate,
     dayOfWeek: entry.dayOfWeek,
   }));
+
+  const today = getLiturgicalDate().iso;
+  liturgias = liturgias.filter((item) => item.date <= today);
 
   if (searchTerm?.trim()) {
     const query = searchTerm.toLocaleLowerCase("pt-BR");

@@ -5,6 +5,8 @@ import { formatCivilDate } from "./liturgical-date";
 export type ContentMetadata = {
   title: string;
   date: string;
+  publishedAt?: string;
+  updatedAt?: string;
   description?: string;
   author?: string | null;
   tags?: string[];
@@ -32,6 +34,8 @@ export function parseExportedMetadata(source: string): ContentMetadata | null {
   return {
     title,
     date,
+    publishedAt: quotedField(header, "publishedAt"),
+    updatedAt: quotedField(header, "updatedAt"),
     description: quotedField(header, "description"),
     author: authorMatch?.[1] === "null" ? null : authorMatch?.[3],
     tags,

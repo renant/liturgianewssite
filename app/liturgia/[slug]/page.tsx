@@ -36,7 +36,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const canonical = `https://www.liturgianews.site/liturgia/${slug}`;
   return {
     title: { absolute: title }, description, alternates: { canonical },
-    openGraph: { title, description, url: canonical, type: "article", publishedTime: `${mdxModule.metadata.date}T00:00:00-03:00`, locale: "pt_BR", siteName: "LiturgiaNews" },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      type: "article",
+      publishedTime: mdxModule.metadata.publishedAt ?? `${mdxModule.metadata.date}T00:00:00-03:00`,
+      modifiedTime: mdxModule.metadata.updatedAt,
+      locale: "pt_BR",
+      siteName: "LiturgiaNews",
+    },
     twitter: { card: "summary_large_image", title, description },
   };
 }
@@ -51,6 +60,7 @@ export default async function Page({ params }: Props) {
   const headline = `Liturgia de ${formattedDate}`;
   const description = buildLiturgyDescription(metadata.title, formattedDate, facts);
   const isToday = slug === getLiturgicalDate().slug;
+  const isFuture = metadata.date > getLiturgicalDate().iso;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white p-4">
@@ -66,6 +76,11 @@ export default async function Page({ params }: Props) {
           </TrackedTodayLink>
         </header>
         <LiturgySummary formattedDate={formattedDate} facts={facts} isToday={isToday} />
+        {isFuture && (
+          <p className="rounded-lg border border-amber-200 bg-white px-4 py-3 text-sm text-slate-700">
+            A reflexão e as notícias serão adicionadas neste dia.
+          </p>
+        )}
         <AdjacentDays date={metadata.date} />
         <article className="prose max-w-none"><LiturgiaContent components={liturgyMdxComponents} /></article>
         <section className="bg-white p-6 rounded-lg shadow-md">
@@ -78,7 +93,7 @@ export default async function Page({ params }: Props) {
         </section>
       </div>
       <JsonLd data={[
-        { "@context": "https://schema.org", "@type": "Article", headline, description, datePublished: metadata.date, author: { "@type": "Organization", name: "LiturgiaNews" }, publisher: { "@type": "Organization", name: "LiturgiaNews" }, mainEntityOfPage: `https://www.liturgianews.site/liturgia/${slug}`, inLanguage: "pt-BR" },
+        { "@context": "https://schema.org", "@type": "Article", headline, description, datePublished: metadata.publishedAt ?? metadata.date, dateModified: metadata.updatedAt ?? metadata.publishedAt ?? metadata.date, author: { "@type": "Organization", name: "LiturgiaNews" }, publisher: { "@type": "Organization", name: "LiturgiaNews" }, mainEntityOfPage: `https://www.liturgianews.site/liturgia/${slug}`, inLanguage: "pt-BR" },
         { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
           { "@type": "ListItem", position: 1, name: "Home", item: "https://www.liturgianews.site" },
           { "@type": "ListItem", position: 2, name: "Liturgia", item: "https://www.liturgianews.site/liturgia" },
