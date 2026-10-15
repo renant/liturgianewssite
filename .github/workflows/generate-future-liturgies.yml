@@ -1,0 +1,52 @@
+name: Generate future liturgies
+
+on:
+  schedule:
+    - cron: "0 11 * * *" # 08:00 in America/Sao_Paulo
+  workflow_dispatch:
+    inputs:
+      days_ahead:
+        description: Days ahead to publish
+        required: false
+        default: "7"
+        type: choice
+        options:
+          - "7"
+          - "30"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: generate-future-liturgies
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Generate missing future liturgies
+        id: generate
+        continue-on-error: true
+        env:
+          DAYS_AHEAD: ${{ inputs.days_ahead || '7' }}
+        run: node scripts/generate-future-liturgies.mjs
+      - name: Commit new pages
+        run: |
+          if [[ -z "$(git status --porcelain liturgia-content)" ]]; then
+            echo "No new liturgy pages."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add liturgia-content/*.mdx
+          git commit -m "Publica liturgias dos próximos dias"
+          git push
+      - name: Report source failures
+        if: steps.generate.outcome == 'failure'
+        run: exit 1

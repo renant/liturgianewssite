@@ -4,7 +4,8 @@ import { CalendarIcon } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { getLiturgia, type LiturgiaMetadata } from "./actions";
-import { getLiturgicalDate, MONTH_NAMES } from "@/lib/liturgical-date";
+import { formatCivilDate, getLiturgicalDate, MONTH_NAMES } from "@/lib/liturgical-date";
+import { getContentIndex } from "@/lib/content-metadata";
 
 const archiveDescription = "Arquivo completo da liturgia católica diária. Acesse leituras, reflexões e orações de cada dia do ano litúrgico.";
 
@@ -65,6 +66,10 @@ export default async function LiturgiaPage(props: {
   const disabledLinkStyle = "opacity-50 cursor-not-allowed pointer-events-none";
   const today = getLiturgicalDate();
   const calendarHref = `/liturgia/calendario/${today.year}/${MONTH_NAMES[today.month - 1]}`;
+  const upcomingLiturgias = getContentIndex("liturgia-content")
+    .filter((item) => item.date > today.iso)
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .slice(0, 7);
 
   return (
     <>
@@ -106,6 +111,20 @@ export default async function LiturgiaPage(props: {
           )}
 
           <main>
+            {upcomingLiturgias.length > 0 && (
+              <section aria-labelledby="proximos-dias" className="mb-10 rounded-xl border border-amber-200 bg-white p-5 shadow-sm">
+                <h2 id="proximos-dias" className="mb-4 text-xl font-semibold text-slate-800">Próximos dias</h2>
+                <ul className="grid gap-3 sm:grid-cols-2">
+                  {upcomingLiturgias.map((item) => (
+                    <li key={item.slug} className="rounded-lg bg-amber-50 p-4">
+                      <Link href={`/liturgia/${item.slug}`} className="font-medium text-amber-800 underline underline-offset-4">
+                        {formatCivilDate(item.date)} — {item.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
             {liturgias.length > 0 ? (
               <section aria-label="Lista de liturgias" className="space-y-6">
                 {liturgias.map((item: LiturgiaMetadata) => (

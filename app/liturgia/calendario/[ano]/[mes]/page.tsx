@@ -33,13 +33,29 @@ export default async function CalendarPage({ params }: Props) {
   const { ano, mes } = await params;
   const monthIndex = MONTH_NAMES.indexOf(mes as (typeof MONTH_NAMES)[number]);
   const entries = monthGroups().get(`${ano}/${mes}`) || [];
+  const groups = monthGroups();
   const byDay = new Map(entries.map((entry) => [Number(entry.date.slice(8, 10)), entry]));
   const days = monthIndex >= 0 ? new Date(Date.UTC(Number(ano), monthIndex + 1, 0)).getUTCDate() : 0;
+  const currentMonth = monthIndex >= 0 ? new Date(Date.UTC(Number(ano), monthIndex, 1)) : null;
+  const monthHref = (offset: number) => {
+    if (!currentMonth) return null;
+    const date = new Date(Date.UTC(currentMonth.getUTCFullYear(), currentMonth.getUTCMonth() + offset, 1));
+    const name = MONTH_NAMES[date.getUTCMonth()];
+    return groups.has(`${date.getUTCFullYear()}/${name}`)
+      ? `/liturgia/calendario/${date.getUTCFullYear()}/${name}`
+      : null;
+  };
+  const previousMonth = monthHref(-1);
+  const nextMonth = monthHref(1);
 
   return (
     <div className="mx-auto max-w-4xl space-y-8 py-8">
       <Breadcrumbs items={[{ label: "Liturgia", href: "/liturgia" }, { label: "Calendário", href: `/liturgia/calendario/${ano}/${mes}` }]} />
       <header className="space-y-3"><h1 className="text-3xl font-serif font-bold text-slate-900">Calendário litúrgico de {mes} de {ano}</h1><p className="text-slate-600">Selecione um dia publicado para abrir a liturgia completa.</p></header>
+      <nav aria-label="Navegação entre meses" className="flex justify-between">
+        {previousMonth ? <Link href={previousMonth} className="text-amber-800 underline underline-offset-4">Mês anterior</Link> : <span />}
+        {nextMonth ? <Link href={nextMonth} className="text-amber-800 underline underline-offset-4">Próximo mês</Link> : <span />}
+      </nav>
       <ol className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: days }, (_, index) => index + 1).map((day) => {
           const entry = byDay.get(day);
