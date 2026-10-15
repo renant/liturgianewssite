@@ -1,0 +1,581 @@
+{
+  "date": "2026-10-14",
+  "timeZone": "America/Sao_Paulo",
+  "environment": "Next.js development server at localhost:3000",
+  "method": "agent-browser, document.readyState complete before DOM inspection; 390x900 and 1440x900 viewports",
+  "scope": "19 sampled URLs per viewport; no form submission; no production performance metrics",
+  "results": [
+    {
+      "route": "/",
+      "width": 390,
+      "title": "Newsletter da Liturgia Católica Diária | LiturgiaNews | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/",
+      "robots": "index, follow",
+      "h1": [
+        "Newsletter da Liturgia Católica Diária"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 1,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/liturgia",
+      "width": 390,
+      "title": "Liturgia Católica Diária - Arquivo | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/liturgia",
+      "h1": [
+        "Liturgia Católica Diária"
+      ],
+      "mainCount": 2,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 22,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/liturgia/calendario/2026/outubro",
+      "width": 390,
+      "title": "Calendário litúrgico de outubro de 2026 | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/liturgia/calendario/2026/outubro",
+      "robots": "index, follow",
+      "h1": [
+        "Calendário litúrgico de outubro de 2026"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 1,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/liturgia/hoje",
+      "width": 390,
+      "title": "Liturgia de hoje, 14 de outubro de 2026 | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/liturgia/hoje",
+      "robots": "index, follow",
+      "h1": [
+        "Liturgia de 14 de outubro de 2026"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "firstReadingY": 984,
+      "headingCount": 8,
+      "unnamedLinksCount": 4
+    },
+    {
+      "route": "/liturgia/02-setembro-2026",
+      "width": 390,
+      "title": "Liturgia de 2 de setembro de 2026: Evangelho Lc 4,38-44",
+      "canonical": "https://www.liturgianews.site/liturgia/02-setembro-2026",
+      "robots": "index, follow",
+      "h1": [
+        "Liturgia de 2 de setembro de 2026"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "firstReadingY": 1048,
+      "headingCount": 8,
+      "unnamedLinksCount": 4
+    },
+    {
+      "route": "/liturgia/17-outubro-2026",
+      "width": 390,
+      "title": "Liturgia de 17 de outubro de 2026 | Santo Inácio de Antioquia, bispo e mártir - Memória | Sábado",
+      "canonical": "https://www.liturgianews.site/liturgia/17-outubro-2026",
+      "robots": "index, follow",
+      "h1": [
+        "Liturgia de 17 de outubro de 2026"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "firstReadingY": 1158,
+      "headingCount": 6,
+      "unnamedLinksCount": 4
+    },
+    {
+      "route": "/blog",
+      "width": 390,
+      "title": "Blog - Liturgia Católica Diária | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/blog",
+      "h1": [
+        "Blog da Liturgia Católica Diária"
+      ],
+      "mainCount": 2,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 1,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/blog/orientacoes-catolicas-para-a-quaresma",
+      "width": 390,
+      "title": "Orientações Católicas para a Quaresma: Um Caminho de Conversão e Renovação | Blog LiturgiaNews | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/blog/orientacoes-catolicas-para-a-quaresma",
+      "robots": "index, follow",
+      "h1": [
+        "Orientações Católicas para a Quaresma: Um Caminho de Conversão e Renovação"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 12,
+      "unnamedLinksCount": 4
+    },
+    {
+      "route": "/sobre",
+      "width": 390,
+      "title": "Sobre a LiturgiaNews | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/sobre",
+      "robots": "index, follow",
+      "h1": [
+        "Sobre a LiturgiaNews"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 3,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/acompanhar",
+      "width": 390,
+      "title": "Como acompanhar a liturgia diária | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/acompanhar",
+      "robots": "index, follow",
+      "h1": [
+        "Como acompanhar a liturgia diária"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 4,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/lectio-divina",
+      "width": 390,
+      "title": "Lectio divina: o que é e como fazer | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/lectio-divina",
+      "robots": "index, follow",
+      "h1": [
+        "Lectio divina: o que é e como fazer"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 4,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/tempo-liturgico",
+      "width": 390,
+      "title": "O que é o tempo litúrgico | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/tempo-liturgico",
+      "robots": "index, follow",
+      "h1": [
+        "O que é o tempo litúrgico"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 4,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/contact",
+      "width": 390,
+      "title": "Entre em Contato - LiturgiaNews | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/contact",
+      "robots": "index, follow",
+      "h1": [
+        "Entre em Contato"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 6,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/donate",
+      "width": 390,
+      "title": "Apoie Nossa Missão - LiturgiaNews | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/donate",
+      "robots": "index, follow",
+      "h1": [
+        "Apoie Nossa Missão"
+      ],
+      "mainCount": 2,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 4,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/privacidade",
+      "width": 390,
+      "title": "Politica de Privacidade - LiturgiaNews | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/privacidade",
+      "robots": "index, follow",
+      "h1": [
+        "Politica de Privacidade"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 4,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/confirm-subscription",
+      "width": 390,
+      "title": "LiturgiaNews - Liturgia Católica Diária por E-mail",
+      "canonical": "https://www.liturgianews.site/",
+      "robots": "index, follow",
+      "h1": [
+        "Quase lá!"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 4,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/subscription-confirmed",
+      "width": 390,
+      "title": "LiturgiaNews - Liturgia Católica Diária por E-mail",
+      "canonical": "https://www.liturgianews.site/",
+      "robots": "index, follow",
+      "h1": [
+        "Inscrição Confirmada!"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 1,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/error",
+      "width": 390,
+      "title": "LiturgiaNews - Liturgia Católica Diária por E-mail",
+      "canonical": "https://www.liturgianews.site/",
+      "robots": "index, follow",
+      "h1": [
+        "Ops! Algo deu errado"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 1,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/pagina-inexistente",
+      "width": 390,
+      "title": "Página Não Encontrada - LiturgiaNews | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/",
+      "robots": "noindex",
+      "h1": [
+        "404"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 3,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/",
+      "width": 1440,
+      "title": "Newsletter da Liturgia Católica Diária | LiturgiaNews | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/",
+      "robots": "index, follow",
+      "h1": [
+        "Newsletter da Liturgia Católica Diária"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 1,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/liturgia",
+      "width": 1440,
+      "title": "Liturgia Católica Diária - Arquivo | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/liturgia",
+      "h1": [
+        "Liturgia Católica Diária"
+      ],
+      "mainCount": 2,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 22,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/liturgia/calendario/2026/outubro",
+      "width": 1440,
+      "title": "Calendário litúrgico de outubro de 2026 | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/liturgia/calendario/2026/outubro",
+      "robots": "index, follow",
+      "h1": [
+        "Calendário litúrgico de outubro de 2026"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 1,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/liturgia/hoje",
+      "width": 1440,
+      "title": "Liturgia de hoje, 14 de outubro de 2026 | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/liturgia/hoje",
+      "robots": "index, follow",
+      "h1": [
+        "Liturgia de 14 de outubro de 2026"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "firstReadingY": 738,
+      "headingCount": 8,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/liturgia/02-setembro-2026",
+      "width": 1440,
+      "title": "Liturgia de 2 de setembro de 2026: Evangelho Lc 4,38-44",
+      "canonical": "https://www.liturgianews.site/liturgia/02-setembro-2026",
+      "robots": "index, follow",
+      "h1": [
+        "Liturgia de 2 de setembro de 2026"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "firstReadingY": 806,
+      "headingCount": 8,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/liturgia/17-outubro-2026",
+      "width": 1440,
+      "title": "Liturgia de 17 de outubro de 2026 | Santo Inácio de Antioquia, bispo e mártir - Memória | Sábado",
+      "canonical": "https://www.liturgianews.site/liturgia/17-outubro-2026",
+      "robots": "index, follow",
+      "h1": [
+        "Liturgia de 17 de outubro de 2026"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "firstReadingY": 852,
+      "headingCount": 6,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/blog",
+      "width": 1440,
+      "title": "Blog - Liturgia Católica Diária | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/blog",
+      "h1": [
+        "Blog da Liturgia Católica Diária"
+      ],
+      "mainCount": 2,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 1,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/blog/orientacoes-catolicas-para-a-quaresma",
+      "width": 1440,
+      "title": "Orientações Católicas para a Quaresma: Um Caminho de Conversão e Renovação | Blog LiturgiaNews | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/blog/orientacoes-catolicas-para-a-quaresma",
+      "robots": "index, follow",
+      "h1": [
+        "Orientações Católicas para a Quaresma: Um Caminho de Conversão e Renovação"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 12,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/sobre",
+      "width": 1440,
+      "title": "Sobre a LiturgiaNews | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/sobre",
+      "robots": "index, follow",
+      "h1": [
+        "Sobre a LiturgiaNews"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 3,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/acompanhar",
+      "width": 1440,
+      "title": "Como acompanhar a liturgia diária | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/acompanhar",
+      "robots": "index, follow",
+      "h1": [
+        "Como acompanhar a liturgia diária"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 4,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/lectio-divina",
+      "width": 1440,
+      "title": "Lectio divina: o que é e como fazer | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/lectio-divina",
+      "robots": "index, follow",
+      "h1": [
+        "Lectio divina: o que é e como fazer"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 4,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/tempo-liturgico",
+      "width": 1440,
+      "title": "O que é o tempo litúrgico | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/tempo-liturgico",
+      "robots": "index, follow",
+      "h1": [
+        "O que é o tempo litúrgico"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 4,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/contact",
+      "width": 1440,
+      "title": "Entre em Contato - LiturgiaNews | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/contact",
+      "robots": "index, follow",
+      "h1": [
+        "Entre em Contato"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 6,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/donate",
+      "width": 1440,
+      "title": "Apoie Nossa Missão - LiturgiaNews | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/donate",
+      "robots": "index, follow",
+      "h1": [
+        "Apoie Nossa Missão"
+      ],
+      "mainCount": 2,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 4,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/privacidade",
+      "width": 1440,
+      "title": "Politica de Privacidade - LiturgiaNews | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/privacidade",
+      "robots": "index, follow",
+      "h1": [
+        "Politica de Privacidade"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 4,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/confirm-subscription",
+      "width": 1440,
+      "title": "LiturgiaNews - Liturgia Católica Diária por E-mail",
+      "canonical": "https://www.liturgianews.site/",
+      "robots": "index, follow",
+      "h1": [
+        "Quase lá!"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 4,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/subscription-confirmed",
+      "width": 1440,
+      "title": "LiturgiaNews - Liturgia Católica Diária por E-mail",
+      "canonical": "https://www.liturgianews.site/",
+      "robots": "index, follow",
+      "h1": [
+        "Inscrição Confirmada!"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 1,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/error",
+      "width": 1440,
+      "title": "LiturgiaNews - Liturgia Católica Diária por E-mail",
+      "canonical": "https://www.liturgianews.site/",
+      "robots": "index, follow",
+      "h1": [
+        "Ops! Algo deu errado"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 1,
+      "unnamedLinksCount": 0
+    },
+    {
+      "route": "/pagina-inexistente",
+      "width": 1440,
+      "title": "Página Não Encontrada - LiturgiaNews | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/",
+      "robots": "noindex",
+      "h1": [
+        "404"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "headingCount": 3,
+      "unnamedLinksCount": 0
+    }
+  ]
+}

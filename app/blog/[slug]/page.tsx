@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import fs from "node:fs";
 import path from "node:path";
 import { getRelatedPosts } from "@/app/blog/actions";
@@ -49,7 +50,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const url = `https://www.liturgianews.site/blog/${slug}`;
 
   return {
-    title: `${metadata.title} | Blog LiturgiaNews`,
+    title: metadata.title,
     description: metadata.description,
     alternates: {
       canonical: url,
@@ -95,21 +96,7 @@ export default async function Page({
   const { slug } = await params;
   const mdxModule = await loadMdxFile(slug);
 
-  if (!mdxModule) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white p-4">
-        <div className="max-w-lg mx-auto space-y-8">
-          <h1 className="text-2xl font-bold">Post não encontrado</h1>
-          <Button asChild variant="outline">
-            <Link href="/blog">
-              <ArrowLeftIcon className="mr-2 h-4 w-4" />
-              Voltar para o blog
-            </Link>
-          </Button>
-        </div>
-      </div>
-    );
-  }
+  if (!mdxModule) notFound();
 
   const { metadata, default: Post } = mdxModule;
 
@@ -121,8 +108,8 @@ export default async function Page({
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white p-4">
-      <div className="max-w-lg mx-auto space-y-8">
+    <div className="reading-container">
+      <div className="space-y-8">
         <Breadcrumbs
           items={[
             { label: "Blog", href: "/blog" },
@@ -141,7 +128,7 @@ export default async function Page({
         </nav>
         
         <article 
-          className="prose prose-pink max-w-none"
+          className="editorial-prose"
           itemScope
           itemType="https://schema.org/BlogPosting"
         >
@@ -161,7 +148,7 @@ export default async function Page({
           <Post />
         </article>
 
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="border-t border-amber-200/70 pt-6">
           <h2 className="text-xl font-semibold mb-4 text-slate-800">
             Compartilhe este conteúdo
           </h2>
@@ -171,14 +158,14 @@ export default async function Page({
           />
         </div>
         
-        <aside className="bg-white p-6 rounded-lg shadow-md">
+        <aside className="border-t border-amber-200/70 pt-6">
           <h2 className="text-2xl font-bold mb-4">Gostou do conteúdo?</h2>
           <p className="mb-4">
             Assine a nossa newsletter para receber as últimas atualizações
             diretamente no seu e-mail.
           </p>
           <Button asChild variant="default">
-            <Link href="/" aria-label="Assinar newsletter da LiturgiaNews">
+            <Link href="/#newsletter" aria-label="Assinar newsletter da LiturgiaNews">
               Assinar Newsletter
             </Link>
           </Button>
@@ -197,7 +184,7 @@ export default async function Page({
             datePublished: new Date(metadata.date).toISOString(),
             dateModified: metadata.lastModified ? new Date(metadata.lastModified).toISOString() : new Date(metadata.date).toISOString(),
             author: {
-              "@type": metadata.authorType || "Person",
+              "@type": metadata.authorType || (metadata.author ? "Person" : "Organization"),
               name: metadata.author || "LiturgiaNews",
               url: metadata.authorUrl || "https://www.liturgianews.site"
             },
@@ -228,20 +215,6 @@ export default async function Page({
               name: "Blog da Liturgia Católica Diária",
               url: "https://www.liturgianews.site/blog"
             }
-          }, {
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            "itemListElement": [{
-              "@type": "ListItem",
-              "position": 1,
-              "name": "Blog",
-              "item": "https://www.liturgianews.site/blog"
-            }, {
-              "@type": "ListItem",
-              "position": 2,
-              "name": metadata.title,
-              "item": `https://www.liturgianews.site/blog/${slug}`
-            }]
           }]}
         />
       </div>

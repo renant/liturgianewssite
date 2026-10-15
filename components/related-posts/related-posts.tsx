@@ -28,9 +28,9 @@ export function RelatedPosts({
       aria-label="Posts relacionados"
     >
       <h2 className="text-2xl font-serif font-semibold text-slate-800 mb-6">
-        Posts Relacionados
+        Artigos relacionados
       </h2>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="space-y-6">
         {relatedPosts.map((post) => (
           <PostCard key={post.slug} post={post} />
         ))}

@@ -3,26 +3,27 @@ import { Metadata } from "next";
 import ContactForm from "./contact-form";
 
 export const metadata: Metadata = {
-  title: "Entre em Contato - LiturgiaNews",
+  title: "Entre em contato",
   description: "Entre em contato com a LiturgiaNews. Envie suas dúvidas, sugestões ou testemunhos. Estamos aqui para ajudar em sua jornada de fé.",
   alternates: {
     canonical: "https://www.liturgianews.site/contact",
   },
   openGraph: {
-    title: "Entre em Contato - LiturgiaNews",
+    title: "Entre em contato",
     description: "Entre em contato com a equipe da LiturgiaNews. Envie suas dúvidas, sugestões ou testemunhos.",
     type: "website",
+    url: "https://www.liturgianews.site/contact",
   },
 };
 
 export default function Contact() {
   return (
-    <div className="max-w-4xl mx-auto space-y-12 py-12">
-      <header className="text-center space-y-4">
-        <h1 className="text-3xl font-serif font-semibold text-foreground">
-          Entre em Contato
+    <div className="page-container space-y-8">
+      <header className="page-header">
+        <h1 className="page-title">
+          Entre em contato
         </h1>
-        <p className="text-muted-foreground text-lg leading-relaxed">
+        <p className="page-description">
           Estamos aqui para ajudar. Envie-nos sua mensagem e responderemos o
           mais breve possível.
         </p>
@@ -36,7 +37,7 @@ export default function Contact() {
         <aside className="space-y-8">
           <section className="space-y-4" aria-label="Perguntas frequentes">
             <h2 className="text-xl font-serif font-semibold text-foreground">
-              Perguntas Frequentes
+              Perguntas frequentes
             </h2>
             <dl className="space-y-3">
               <div itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
@@ -98,7 +99,7 @@ export default function Contact() {
         data={{
           "@context": "https://schema.org",
           "@type": ["ContactPage", "FAQPage"],
-          name: "Entre em Contato - LiturgiaNews",
+          name: "Entre em contato",
           description: "Página de contato da LiturgiaNews com formulário e perguntas frequentes",
           url: "https://www.liturgianews.site/contact",
           mainEntity: [

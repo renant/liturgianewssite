@@ -1,120 +1,32 @@
 "use client";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useFormState } from "@/hooks/use-form-state";
-import { AlertTriangle, CheckCircle, Loader2, Send } from "lucide-react";
+import { Loader2, Send } from "lucide-react";
 import { sendContact } from "./actions";
+
+const fields = [
+  { name: "name", label: "Nome", type: "text", autoComplete: "name", placeholder: "Seu nome" },
+  { name: "email", label: "E-mail", type: "email", autoComplete: "email", placeholder: "voce@exemplo.com" },
+  { name: "subject", label: "Assunto", type: "text", autoComplete: "off", placeholder: "Sobre o que você quer conversar?" },
+];
 
 export default function ContactForm() {
   const [formState, handleSubmit, isPending] = useFormState(sendContact);
-
-  return (
-    <form 
-      onSubmit={handleSubmit} 
-      className="space-y-4"
-      aria-label="Formulário de contato"
-      noValidate
-    >
-      {formState.success === false && formState.message && (
-        <Alert variant="destructive" role="alert">
-          <AlertTriangle className="size-4" aria-label="Erro" />
-          <AlertTitle>Erro ao enviar mensagem!</AlertTitle>
-          <AlertDescription>{formState.message}</AlertDescription>
-        </Alert>
-      )}
-
-      <div className="space-y-2">
-        <Label htmlFor="name">
-          Nome <span className="text-red-500" aria-label="campo obrigatório">*</span>
-        </Label>
-        <Input 
-          id="name" 
-          name="name" 
-          placeholder="Seu nome completo" 
-          required 
-          aria-required="true"
-          autoComplete="name"
-          disabled={isPending}
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="email">
-          E-mail <span className="text-red-500" aria-label="campo obrigatório">*</span>
-        </Label>
-        <Input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="seu@email.com"
-          required
-          aria-required="true"
-          autoComplete="email"
-          disabled={isPending}
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="subject">
-          Assunto <span className="text-red-500" aria-label="campo obrigatório">*</span>
-        </Label>
-        <Input
-          id="subject"
-          name="subject"
-          placeholder="Assunto da mensagem"
-          required
-          aria-required="true"
-          disabled={isPending}
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="message">
-          Mensagem <span className="text-red-500" aria-label="campo obrigatório">*</span>
-        </Label>
-        <Textarea
-          id="message"
-          name="message"
-          placeholder="Sua mensagem..."
-          required
-          aria-required="true"
-          rows={5}
-          className="resize-none"
-          disabled={isPending}
-        />
-      </div>
-      
-      <Button
-        type="submit"
-        className="w-full bg-amber-700 hover:bg-amber-800 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
-        disabled={isPending}
-        aria-busy={isPending}
-        aria-label={isPending ? "Enviando mensagem..." : "Enviar mensagem de contato"}
-      >
-        {isPending ? (
-          <>
-            <Loader2 className="size-4 animate-spin mr-2" aria-label="Enviando" />
-            <span>Enviando...</span>
-          </>
-        ) : (
-          <>
-            <Send className="w-4 h-4 mr-2" aria-label="Enviar" />
-            Enviar Mensagem de Contato
-          </>
-        )}
-      </Button>
-
-      {formState.success && formState.message && (
-        <Alert variant="default" role="status">
-          <CheckCircle className="size-4 text-green-600" aria-label="Sucesso" />
-          <AlertTitle>Sucesso!</AlertTitle>
-          <AlertDescription>{formState.message}</AlertDescription>
-        </Alert>
-      )}
-    </form>
-  );
+  const errors = formState.errors;
+  return <form onSubmit={handleSubmit} className="space-y-5" aria-label="Formulário de contato" noValidate>
+    <p className="text-sm text-slate-600">Todos os campos são obrigatórios.</p>
+    {fields.map(field => <div key={field.name} className="space-y-2">
+      <Label htmlFor={`contact-${field.name}`}>{field.label}</Label>
+      <Input id={`contact-${field.name}`} {...field} className="min-h-12 bg-white text-base" spellCheck={field.type !== "email"} required disabled={isPending} aria-invalid={Boolean(errors?.[field.name])} aria-describedby={errors?.[field.name] ? `contact-${field.name}-error` : undefined} />
+      {errors?.[field.name] && <p id={`contact-${field.name}-error`} className="text-sm text-red-700">{errors[field.name][0]}</p>}
+    </div>)}
+    <div className="space-y-2"><Label htmlFor="contact-message">Mensagem</Label><Textarea id="contact-message" name="message" required rows={6} className="resize-y bg-white text-base" placeholder="Escreva sua mensagem…" disabled={isPending} aria-invalid={Boolean(errors?.message)} aria-describedby={errors?.message ? "contact-message-error" : undefined} />{errors?.message && <p id="contact-message-error" className="text-sm text-red-700">{errors.message[0]}</p>}</div>
+    {!formState.success && formState.message && <p role="alert" className="text-sm text-red-700">{formState.message}</p>}
+    <Button type="submit" className="w-full bg-amber-700 text-white hover:bg-amber-800 sm:w-auto" disabled={isPending} aria-busy={isPending}>{isPending ? <Loader2 className="size-4 animate-spin motion-reduce:animate-none" aria-hidden="true" /> : <Send className="size-4" aria-hidden="true" />}{isPending ? "Enviando…" : "Enviar mensagem"}</Button>
+    {formState.success && <p role="status" className="text-sm text-green-800">{formState.message}</p>}
+  </form>;
 }

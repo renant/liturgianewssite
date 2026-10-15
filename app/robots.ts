@@ -7,9 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: ["/", "/blog/", "/contact/", "/donate/", "/liturgia/", "/liturgia/hoje"],
       disallow: [
         "/api/",
-        "/error/",
-        "/confirm-subscription/",
-        "/subscription-confirmed/",
       ],
     },
     sitemap: "https://www.liturgianews.site/sitemap.xml",

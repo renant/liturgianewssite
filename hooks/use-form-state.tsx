@@ -1,4 +1,4 @@
-import { FormEvent, useState, useTransition } from "react";
+import { FormEvent, useEffect, useRef, useState, useTransition } from "react";
 
 type ValidationError = Record<string, string[]>;
 
@@ -15,6 +15,7 @@ export function useFormState<T = null>(
   initialState?: ActionResult<T>
 ) {
   const [isPending, startTransition] = useTransition();
+  const submittedForm = useRef<HTMLFormElement | null>(null);
 
   const [formState, setFormState] = useState(
     initialState ?? {
@@ -25,24 +26,39 @@ export function useFormState<T = null>(
     }
   );
 
+  useEffect(() => {
+    const firstError = Object.keys(formState.errors ?? {})[0];
+    const field = firstError && submittedForm.current?.elements.namedItem(firstError);
+    if (field instanceof HTMLElement) field.focus();
+  }, [formState]);
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const form = event.currentTarget;
+    if (isPending) return;
+    submittedForm.current = form;
+    const errors: ValidationError = {};
+    for (const field of Array.from(form.elements)) {
+      if (!(field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement || field instanceof HTMLSelectElement) || !field.name || field.validity.valid) continue;
+      errors[field.name] = [field.validity.valueMissing ? "Preencha este campo." : field instanceof HTMLInputElement && field.type === "email" ? "Informe um endereço de e-mail válido." : "Verifique o valor deste campo."];
+    }
+    if (Object.keys(errors).length > 0) {
+      setFormState({ success: false, message: "Confira os campos indicados.", errors, data: null });
+      return;
+    }
     const data = new FormData(form);
 
     startTransition(async () => {
-      const result = await action(data);
-
-      if (result.success && onSuccess) {
-        if (result.data !== null) {
-          await onSuccess(result.data);
-        } else {
-          await onSuccess();
+      try {
+        const result = await action(data);
+        setFormState(result);
+        if (result.success && onSuccess) {
+          await onSuccess(result.data ?? undefined);
         }
+      } catch {
+        setFormState({ success: false, message: "Não foi possível concluir o envio. Verifique sua conexão e tente novamente.", errors: null, data: null });
       }
-
-      setFormState(result);
     });
   }
 

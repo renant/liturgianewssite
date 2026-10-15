@@ -10,6 +10,7 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: { sans: ["var(--font-geist-sans)", "Arial", "sans-serif"] },
       typography: () => ({
         pink: {
           css: {

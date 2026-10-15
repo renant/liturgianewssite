@@ -2,116 +2,124 @@
 @tailwind components;
 @tailwind utilities;
 
-@config '../tailwind.config.ts';
-
 @layer base {
   :root {
-    --background: 0 0% 100%;
-
-    --foreground: 0 0% 3.9%;
-
+    color-scheme: light;
+    --background: 48 100% 96.1%;
+    --foreground: 222 47% 11%;
     --card: 0 0% 100%;
-
-    --card-foreground: 0 0% 3.9%;
-
+    --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
-
-    --popover-foreground: 0 0% 3.9%;
-
-    --primary: 0 0% 9%;
-
-    --primary-foreground: 0 0% 98%;
-
-    --secondary: 0 0% 96.1%;
-
-    --secondary-foreground: 0 0% 9%;
-
-    --muted: 0 0% 96.1%;
-
-    --muted-foreground: 0 0% 35%;
-
-    --accent: 0 0% 96.1%;
-
-    --accent-foreground: 0 0% 9%;
-
-    --destructive: 0 84.2% 60.2%;
-
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 89.8%;
-
-    --input: 0 0% 80%;
-
-    --ring: 0 0% 3.9%;
-
-    --chart-1: 12 76% 61%;
-
-    --chart-2: 173 58% 39%;
-
-    --chart-3: 197 37% 24%;
-
-    --chart-4: 43 74% 66%;
-
-    --chart-5: 27 87% 67%;
-
-    --radius: 0.5rem;
+    --popover-foreground: 222 47% 11%;
+    --primary: 32 95% 34%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 48 96% 89%;
+    --secondary-foreground: 28 73% 26%;
+    --muted: 48 96% 94%;
+    --muted-foreground: 215 16% 40%;
+    --accent: 48 96% 89%;
+    --accent-foreground: 28 73% 26%;
+    --destructive: 0 72% 42%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 45 65% 83%;
+    --input: 36 35% 72%;
+    --ring: 32 95% 34%;
+    --radius: .5rem;
   }
-  .dark {
-    --background: 0 0% 3.9%;
-
-    --foreground: 0 0% 98%;
-
-    --card: 0 0% 3.9%;
-
-    --card-foreground: 0 0% 98%;
-
-    --popover: 0 0% 3.9%;
-
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 0 0% 98%;
-
-    --primary-foreground: 0 0% 9%;
-
-    --secondary: 0 0% 14.9%;
-
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 0 0% 14.9%;
-
-    --muted-foreground: 0 0% 75%;
-
-    --accent: 0 0% 14.9%;
-
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 14.9%;
-
-    --input: 0 0% 25%;
-
-    --ring: 0 0% 83.1%;
-
-    --chart-1: 220 70% 50%;
-
-    --chart-2: 160 60% 45%;
-
-    --chart-3: 30 80% 55%;
-
-    --chart-4: 280 65% 60%;
-
-    --chart-5: 340 75% 55%;
-  }
+  * { @apply border-border; }
+  html { scroll-behavior: smooth; scroll-padding-top: 1.5rem; }
+  body { @apply bg-background text-foreground antialiased; font-family: var(--font-geist-sans), Arial, sans-serif; }
+  h1, h2, h3 { text-wrap: balance; }
+  :where(a, button, input, select, textarea, summary):focus-visible { outline: 2px solid #b45309; outline-offset: 4px; }
+  :where(a, button, summary) { touch-action: manipulation; }
+  :where(input, select, textarea) { font-size: 1rem; }
+  input[aria-invalid="true"], textarea[aria-invalid="true"], select[aria-invalid="true"] { border-color: hsl(var(--destructive)); }
+  [id] { scroll-margin-top: 1.5rem; }
+  ::selection { background: #fde68a; color: #451a03; }
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+@layer components {
+  .site-shell { @apply flex min-h-dvh flex-col; }
+  .site-container { @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8; }
+  .site-main { @apply flex-1 py-8 sm:py-12; }
+  .site-header { @apply border-b border-amber-200/60 bg-white/80; }
+  .header-content { @apply grid grid-cols-[1fr_auto] items-center gap-x-3 gap-y-3 py-4 md:flex md:gap-8 md:py-5; }
+  .site-brand { @apply min-w-0 font-serif text-xl font-semibold tracking-tight text-amber-900; }
+  .site-brand span { @apply mt-1 block font-sans text-xs font-normal tracking-normal text-slate-600; }
+  .header-subscribe { @apply inline-flex min-h-11 items-center justify-center rounded-md border border-amber-200 bg-white px-3 text-xs font-medium text-amber-800 transition-colors hover:bg-amber-100 md:order-last md:text-sm; }
+  .header-nav { @apply col-span-2 flex items-center gap-7 md:ml-auto; }
+  .header-nav a { @apply inline-flex min-h-11 items-center border-b-2 border-transparent text-sm font-medium text-slate-600 transition-colors hover:text-amber-800; }
+  .header-nav a[aria-current] { @apply border-amber-700 text-amber-800; }
+  .site-footer { @apply border-t border-amber-200/60 bg-white/70; }
+  .footer-content { @apply grid gap-6 py-8 md:grid-cols-[1fr_2fr] md:gap-x-12; }
+  .footer-nav { @apply flex flex-wrap items-start gap-x-6 gap-y-2 text-sm text-amber-800 md:justify-end; }
+  .footer-nav a { @apply inline-flex min-h-9 items-center hover:underline; }
+  .footer-note { @apply text-xs leading-relaxed text-slate-500 md:col-span-2; }
+  .reading-container { @apply mx-auto w-full max-w-[44rem]; }
+  .page-container { @apply mx-auto w-full max-w-4xl; }
+  .page-header { @apply mb-8 space-y-4 sm:mb-10; }
+  .page-title { @apply font-serif text-3xl font-semibold leading-tight tracking-tight text-slate-900 sm:text-4xl; }
+  .page-description { @apply max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg; }
+  .eyebrow { @apply mb-3 text-xs font-medium tracking-wide text-amber-800; }
+  .text-link { @apply text-amber-800 underline decoration-amber-700/40 underline-offset-4 transition-colors hover:text-amber-950 hover:decoration-amber-900; }
+  .breadcrumbs { @apply mb-6 text-sm text-slate-600; }
+  .breadcrumbs ol { @apply flex flex-wrap items-center gap-x-2 gap-y-1; }
+  .breadcrumbs li { @apply flex min-w-0 items-center gap-2; }
+  .breadcrumbs a { @apply inline-flex min-h-9 items-center hover:text-amber-800; }
+  .breadcrumbs [aria-current] { @apply break-words text-slate-700; }
+  .newsletter-panel { @apply rounded-lg border border-amber-200/70 bg-white/80 p-5 sm:p-8; }
+  .newsletter-panel h2 { @apply font-serif text-2xl font-semibold leading-snug text-slate-900; }
+  .newsletter-panel p { @apply text-sm leading-relaxed text-slate-600; }
+  .liturgy-header { @apply mb-5; }
+  .liturgy-header h1 { @apply font-serif text-[1.875rem] font-semibold leading-tight tracking-tight text-slate-900 sm:text-4xl; }
+  .liturgy-context { @apply mt-3 text-base leading-relaxed text-amber-800; }
+  .liturgy-topline { @apply mb-6 flex flex-wrap items-center justify-between gap-x-5 gap-y-2 text-sm; }
+  .liturgy-topline a { @apply inline-flex min-h-9 items-center gap-2 text-amber-800 hover:underline; }
+  .section-nav { @apply mb-2 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm; }
+  .section-nav a { @apply inline-flex min-h-11 items-center text-amber-800 underline decoration-amber-700/40 underline-offset-4 hover:decoration-amber-900; }
+  .adjacent-days { @apply flex min-h-12 items-center justify-between gap-4 border-b border-amber-200/70 pb-3 text-sm; }
+  .adjacent-days a { @apply inline-flex min-h-11 items-center gap-2 text-amber-800 hover:underline; }
+  .adjacent-days.after-reading { @apply mt-8 border-b-0 border-t pt-4; }
+  .editorial-prose { @apply prose prose-slate max-w-none; --tw-prose-body: #334155; --tw-prose-headings: #92400e; --tw-prose-links: #92400e; font-size: 1.0625rem; line-height: 1.8; }
+  .editorial-prose :where(h1,h2,h3,h4) { @apply font-serif; }
+  .editorial-prose h1 { @apply text-3xl leading-tight text-slate-900 sm:text-4xl; }
+  .editorial-prose h2 { @apply mt-10 text-2xl font-semibold; }
+  .editorial-prose h3 { @apply mt-8 text-xl font-semibold; }
+  .editorial-prose a { @apply break-words underline-offset-4; }
+  .editorial-prose p { line-height: 1.8; }
+  .editorial-prose :where(img) { @apply max-w-full; }
+  .liturgy-prose > h2:first-child { @apply mt-7; }
+  .calendar-heading { @apply mb-8 flex flex-col items-start justify-between gap-5 md:flex-row md:items-end; }
+  .calendar-toolbar { @apply mb-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-3 border-t border-amber-200/70 pt-5; }
+  .calendar-month { @apply font-serif text-2xl font-semibold text-slate-900; }
+  .calendar-navigation { @apply flex items-center gap-1; }
+  .calendar-arrow { @apply inline-flex size-11 items-center justify-center rounded-md text-amber-800 hover:bg-amber-100; }
+  .calendar-arrow[aria-disabled] { @apply text-slate-400 hover:bg-transparent; }
+  .calendar-picker { @apply relative; }
+  .calendar-picker summary { @apply inline-flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-md border border-amber-200 bg-white px-3 text-sm text-amber-800; }
+  .calendar-picker summary::-webkit-details-marker { display: none; }
+  .calendar-picker nav { @apply absolute left-0 z-20 mt-2 max-h-80 w-64 overflow-y-auto overscroll-contain rounded-md border border-amber-200 bg-white p-4 shadow-sm sm:left-auto sm:right-0; }
+  .calendar-picker nav h3 { @apply mb-2 text-sm font-semibold text-slate-800; }
+  .calendar-picker nav ul { @apply mb-4 grid grid-cols-2 gap-1 last:mb-0; }
+  .calendar-picker nav a { @apply flex min-h-11 items-center rounded px-2 text-sm capitalize text-amber-800 hover:bg-amber-50; }
+  .calendar-picker nav a[aria-current] { @apply bg-amber-100 font-semibold; }
+  .calendar-table { @apply w-full table-fixed border-collapse; }
+  .calendar-table th { @apply pb-3 text-center text-xs font-normal text-slate-600 sm:px-3 sm:text-left; }
+  .calendar-table abbr { @apply no-underline; }
+  .calendar-table td { @apply border-t border-amber-200/70 p-0 align-top; }
+  .calendar-day { @apply relative flex min-h-14 flex-col items-center gap-1 px-0.5 py-2 text-slate-800 sm:min-h-28 sm:items-start sm:gap-2 sm:p-3; }
+  a.calendar-day { @apply transition-colors hover:bg-amber-100; }
+  .calendar-day[aria-current] { @apply bg-amber-100 text-amber-950; }
+  .calendar-number { @apply text-base font-medium tabular-nums; }
+  .calendar-today { @apply text-[0.6875rem] font-medium text-amber-800; }
+  .calendar-celebration { @apply hidden text-xs leading-relaxed text-slate-600 sm:line-clamp-2; }
+  .calendar-unavailable { @apply text-slate-500; }
+  .calendar-legend { @apply mt-5 flex flex-wrap gap-x-5 gap-y-2 text-xs leading-relaxed text-slate-600; }
+  .status-page { @apply reading-container py-6 sm:py-12; }
+  .status-icon { @apply mb-5 size-10 text-amber-700; }
+}
+@media (min-width:640px) { .editorial-prose { font-size: 1.125rem; } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
