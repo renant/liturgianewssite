@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { htmlToMarkdown } from "./future-liturgy-format.mjs";
 
 const baseUrl = "https://liturgia.cancaonova.com";
 const outputDirectory = path.join(process.cwd(), "liturgia-content");
@@ -61,25 +62,6 @@ function decodeHtml(value) {
     .replace(/&([a-z]+);/gi, (entity, name) => named[name.toLowerCase()] ?? entity);
 }
 
-function htmlToMarkdown(html) {
-  return decodeHtml(html
-    .replace(/<div\b[^>]*class=["'][^"']*embeds-audio[^"']*["'][^>]*>[\s\S]*?<\/div>/gi, "")
-    .replace(/<!--[\s\S]*?-->|<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
-    .replace(/<br\s*\/?>/gi, "\n")
-    .replace(/<\/(p|div|h[1-6]|section|blockquote|ul|ol)>/gi, "\n\n")
-    .replace(/<h[1-6]\b[^>]*>/gi, "\n## ")
-    .replace(/<li\b[^>]*>/gi, "\n- ")
-    .replace(/<strong\b[^>]*>|<b\b[^>]*>/gi, "**")
-    .replace(/<\/(strong|b)>/gi, "**")
-    .replace(/<em\b[^>]*>|<i\b[^>]*>/gi, "*")
-    .replace(/<\/(em|i)>/gi, "*")
-    .replace(/<[^>]+>/g, "")
-    .replace(/[\t ]+\n/g, "\n")
-    .replace(/\n[\t ]+/g, "\n")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim());
-}
-
 async function getHtml(url) {
   const response = await fetch(url, {
     headers: { "User-Agent": "LiturgiaNews/1.0 (+https://www.liturgianews.site)" },
@@ -107,7 +89,7 @@ async function sourceUrlFor(date) {
   throw new Error(`A fonte ainda não oferece link do calendário para ${isoDate(date)}.`);
 }
 
-async function buildMdx(date) {
+async function buildMdx(date, publishedAt) {
   const sourceUrl = await sourceUrlFor(date);
   const html = await getHtml(sourceUrl);
   const actualDay = Number(/<span\b[^>]*id=["']dia-calendar["'][^>]*>([\s\S]*?)<\/span>/i.exec(html)?.[1]?.replace(/<[^>]+>/g, "").trim());
@@ -131,10 +113,11 @@ async function buildMdx(date) {
   if (readings.length < 3) throw new Error(`Leituras incompletas para ${isoDate(date)}.`);
 
   const now = new Date().toISOString();
+  const originalPublication = publishedAt ?? now;
   const longDate = new Intl.DateTimeFormat("pt-BR", {
     timeZone: "UTC", weekday: "long", day: "2-digit", month: "long", year: "numeric",
   }).format(date);
-  return `export const metadata = { title: ${JSON.stringify(title)}, date: '${isoDate(date)}', publishedAt: '${now}', updatedAt: '${now}' };\n\n# ${title}\n\n${longDate}\n\n## Leituras do Dia\n\n${readings.join("\n\n")}\n`;
+  return `export const metadata = { title: ${JSON.stringify(title)}, date: '${isoDate(date)}', publishedAt: '${originalPublication}', updatedAt: '${now}' };\n\n# ${title}\n\n${longDate}\n\n## Leituras do Dia\n\n${readings.join("\n\n")}\n`;
 }
 
 async function main() {
@@ -143,21 +126,30 @@ async function main() {
   fs.mkdirSync(outputDirectory, { recursive: true });
   const failures = [];
   let created = 0;
+  let updated = 0;
 
   for (let offset = 1; offset <= daysAhead; offset += 1) {
     const date = new Date(today);
     date.setUTCDate(date.getUTCDate() + offset);
     const slug = slugFor(date);
     const filePath = path.join(outputDirectory, `${slug}.mdx`);
-    if (fs.existsSync(filePath)) {
-      console.info(`Já existe; mantendo sem alteração: ${slug}`);
-      continue;
+    const existed = fs.existsSync(filePath);
+    let publishedAt;
+    if (existed) {
+      const existing = fs.readFileSync(filePath, "utf8");
+      publishedAt = /publishedAt:\s*['"]([^'"]+)['"]/.exec(existing)?.[1];
+      const isComplete = /##\s+(reflex[aã]o|not[ií]cias)/i.test(existing);
+      if (!process.argv.includes("--refresh-existing") || isComplete) {
+        console.info(`Já existe; mantendo sem alteração: ${slug}`);
+        continue;
+      }
     }
     try {
-      const mdx = await buildMdx(date);
-      fs.writeFileSync(filePath, mdx, { flag: "wx" });
-      console.info(`Liturgia futura criada: ${slug}`);
-      created += 1;
+      const mdx = await buildMdx(date, publishedAt);
+      fs.writeFileSync(filePath, mdx);
+      console.info(`Liturgia futura ${existed ? "atualizada" : "criada"}: ${slug}`);
+      if (existed) updated += 1;
+      else created += 1;
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       console.error(`Não foi possível criar ${slug}: ${message}`);
@@ -166,7 +158,7 @@ async function main() {
     await new Promise((resolve) => setTimeout(resolve, 800));
   }
 
-  console.info(`Execução concluída: ${created} criada(s), ${failures.length} pendente(s).`);
+  console.info(`Execução concluída: ${created} criada(s), ${updated} atualizada(s), ${failures.length} pendente(s).`);
   if (failures.length > 0) process.exitCode = 1;
 }
 
