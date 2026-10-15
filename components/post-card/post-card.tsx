@@ -1,87 +1,12 @@
-import { CalendarIcon, TagIcon, UserIcon } from "lucide-react";
-
-import { PostMetadata } from "@/app/blog/actions";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import type { PostMetadata } from "@/app/blog/actions";
 import Link from "next/link";
 
 export function PostCard({ post }: { post: PostMetadata }) {
-  const formattedDate = post.formattedDate;
-
-  return (
-    <article
-      className="h-full"
-      itemScope
-      itemType="https://schema.org/BlogPosting"
-    >
-      <Link
-        href={`/blog/${post.slug}`}
-        className="block h-full focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-lg"
-        aria-label={`Ler artigo: ${post.title}`}
-      >
-        <Card className="flex flex-col h-full shadow-lg hover:shadow-xl hover:scale-105 transition-all transform duration-300 ease-in-out">
-          <CardHeader>
-            <CardTitle
-              className="text-xl font-serif text-amber-700 hover:text-amber-900 transition-colors duration-300"
-              itemProp="headline"
-            >
-              {post.title}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="flex-grow">
-            <p className="text-slate-600" itemProp="description">
-              {post.description}
-            </p>
-          </CardContent>
-          <CardFooter className="flex flex-col items-start space-y-2">
-            <div className="flex items-center space-x-2 text-sm text-slate-500">
-              <CalendarIcon className="w-4 h-4" aria-label="Data de publicação" />
-              <time
-                dateTime={post.date}
-                itemProp="datePublished"
-                aria-label={`Publicado em ${formattedDate}`}
-              >
-                {formattedDate}
-              </time>
-            </div>
-            {post.author && (
-              <div className="flex items-center space-x-2 text-sm text-slate-500">
-                <UserIcon className="w-4 h-4" aria-label="Autor" />
-                <span
-                  itemProp="author"
-                  itemScope
-                  itemType="https://schema.org/Person"
-                >
-                  <span itemProp="name">{post.author}</span>
-                </span>
-              </div>
-            )}
-            {post.tags && post.tags.length > 0 && (
-              <div className="flex flex-wrap items-center gap-2 mt-2">
-                <TagIcon className="w-4 h-4 text-slate-400" aria-label="Tags" />
-                {post.tags.slice(0, 3).map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-xs px-2 py-1 bg-amber-100 text-amber-800 rounded-full"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-          </CardFooter>
-          <meta
-            itemProp="url"
-            content={`https://www.liturgianews.site/blog/${post.slug}`}
-          />
-          <meta itemProp="inLanguage" content="pt-BR" />
-        </Card>
-      </Link>
-    </article>
-  );
+  return <article className="border-b border-amber-200/70 pb-7">
+    <time dateTime={post.date} className="text-sm text-slate-500">{post.formattedDate}</time>
+    <h2 className="mt-3 font-serif text-2xl font-semibold leading-snug text-slate-900"><Link href={`/blog/${post.slug}`} className="decoration-amber-700/50 underline-offset-4 hover:text-amber-800 hover:underline">{post.title}</Link></h2>
+    <p className="mt-3 max-w-2xl text-base leading-relaxed text-slate-600">{post.description}</p>
+    {post.author && <p className="mt-3 text-sm text-slate-600">Por {post.author}</p>}
+    {post.tags.length > 0 && <p className="mt-4 text-xs leading-relaxed text-amber-800">{post.tags.slice(0,3).join(" · ")}</p>}
+  </article>;
 }

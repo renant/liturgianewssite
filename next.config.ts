@@ -1,6 +1,7 @@
 import createMDX from "@next/mdx";
 import type { NextConfig } from "next";
 import securityHeaders from "./headers";
+import path from "node:path";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true, // Enable strict mode for better error detection
@@ -78,7 +79,7 @@ const nextConfig: NextConfig = {
 };
 
 const withMDX = createMDX({
-  // Add markdown plugins here, as desired
+  options: { remarkPlugins: [path.join(process.cwd(), "lib/remark-liturgy.mjs")] },
 });
 
 // Merge MDX config with Next.js config

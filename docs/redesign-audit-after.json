@@ -1,0 +1,898 @@
+{
+  "date": "2026-10-14",
+  "timeZone": "America/Sao_Paulo",
+  "environment": "local production build at localhost:3000",
+  "method": "19 URLs at 390x900 and 1440x900; document.readyState complete before inspection; links in closed details excluded from visible-name check",
+  "routeStatus": {
+    "checked": 472,
+    "failures": [],
+    "sitemapUrls": 484
+  },
+  "results": [
+    {
+      "route": "/",
+      "width": 390,
+      "title": "Liturgia Católica Diária e Newsletter Gratuita | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/",
+      "robots": "index, follow",
+      "h1": [
+        "Um encontro com a Palavra, em cada dia."
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 5,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/liturgia",
+      "width": 390,
+      "title": "Calendário litúrgico — Liturgia Católica Diária | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/liturgia",
+      "robots": "index, follow",
+      "h1": [
+        "Calendário litúrgico"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 4,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/liturgia/calendario/2026/outubro",
+      "width": 390,
+      "title": "Calendário litúrgico de outubro de 2026 | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/liturgia/calendario/2026/outubro",
+      "robots": "index, follow",
+      "h1": [
+        "Calendário litúrgico\nde outubro de 2026"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 4,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/liturgia/hoje",
+      "width": 390,
+      "title": "Liturgia de hoje, 14 de outubro de 2026 | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/liturgia/hoje",
+      "robots": "index, follow",
+      "h1": [
+        "Liturgia de hoje,\n14 de outubro de 2026"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "firstReadingY": 499,
+      "headingCount": 9,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/liturgia/02-setembro-2026",
+      "width": 390,
+      "title": "Liturgia de 2 de setembro de 2026: Evangelho Lc 4,38-44",
+      "canonical": "https://www.liturgianews.site/liturgia/02-setembro-2026",
+      "robots": "index, follow",
+      "h1": [
+        "Liturgia de\n2 de setembro de 2026"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "firstReadingY": 543,
+      "headingCount": 9,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/liturgia/17-outubro-2026",
+      "width": 390,
+      "title": "Liturgia de 17 de outubro de 2026: Evangelho Lc 12,8-12",
+      "canonical": "https://www.liturgianews.site/liturgia/17-outubro-2026",
+      "robots": "index, follow",
+      "h1": [
+        "Liturgia de\n17 de outubro de 2026"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "firstReadingY": 525,
+      "headingCount": 6,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/blog",
+      "width": 390,
+      "title": "Blog - Liturgia Católica Diária | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/blog",
+      "h1": [
+        "Blog da Liturgia Católica Diária"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 2,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/blog/orientacoes-catolicas-para-a-quaresma",
+      "width": 390,
+      "title": "Orientações Católicas para a Quaresma: Um Caminho de Conversão e Renovação | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/blog/orientacoes-catolicas-para-a-quaresma",
+      "robots": "index, follow",
+      "h1": [
+        "Orientações Católicas para a Quaresma: Um Caminho de Conversão e Renovação"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 12,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/sobre",
+      "width": 390,
+      "title": "Sobre a LiturgiaNews | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/sobre",
+      "robots": "index, follow",
+      "h1": [
+        "Sobre a LiturgiaNews"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 3,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/acompanhar",
+      "width": 390,
+      "title": "Como acompanhar a liturgia diária | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/acompanhar",
+      "robots": "index, follow",
+      "h1": [
+        "Como acompanhar a liturgia diária"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 4,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/lectio-divina",
+      "width": 390,
+      "title": "Lectio divina: o que é e como fazer | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/lectio-divina",
+      "robots": "index, follow",
+      "h1": [
+        "Lectio divina: o que é e como fazer"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 4,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/tempo-liturgico",
+      "width": 390,
+      "title": "O que é o tempo litúrgico | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/tempo-liturgico",
+      "robots": "index, follow",
+      "h1": [
+        "O que é o tempo litúrgico"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 4,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/contact",
+      "width": 390,
+      "title": "Entre em contato | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/contact",
+      "robots": "index, follow",
+      "h1": [
+        "Entre em contato"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 6,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/donate",
+      "width": 390,
+      "title": "Apoie nossa missão | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/donate",
+      "robots": "index, follow",
+      "h1": [
+        "Apoie Nossa Missão"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 4,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/privacidade",
+      "width": 390,
+      "title": "Política de Privacidade | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/privacidade",
+      "robots": "index, follow",
+      "h1": [
+        "Política de Privacidade"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 4,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/confirm-subscription",
+      "width": 390,
+      "title": "Confirme seu e-mail | LiturgiaNews",
+      "robots": "noindex, follow",
+      "h1": [
+        "Confirme seu e-mail"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 1,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/subscription-confirmed",
+      "width": 390,
+      "title": "Inscrição confirmada | LiturgiaNews",
+      "robots": "noindex, follow",
+      "h1": [
+        "Sua inscrição está confirmada"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 1,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/error",
+      "width": 390,
+      "title": "Não foi possível concluir | LiturgiaNews",
+      "robots": "noindex, follow",
+      "h1": [
+        "Não foi possível concluir sua solicitação"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 1,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/pagina-inexistente",
+      "width": 390,
+      "title": "Página não encontrada | LiturgiaNews",
+      "robots": "noindex",
+      "h1": [
+        "Vamos encontrar outra leitura?"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 1,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/",
+      "width": 1440,
+      "title": "Liturgia Católica Diária e Newsletter Gratuita | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/",
+      "robots": "index, follow",
+      "h1": [
+        "Um encontro com a Palavra, em cada dia."
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 5,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/liturgia",
+      "width": 1440,
+      "title": "Calendário litúrgico — Liturgia Católica Diária | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/liturgia",
+      "robots": "index, follow",
+      "h1": [
+        "Calendário litúrgico"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 4,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/liturgia/calendario/2026/outubro",
+      "width": 1440,
+      "title": "Calendário litúrgico de outubro de 2026 | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/liturgia/calendario/2026/outubro",
+      "robots": "index, follow",
+      "h1": [
+        "Calendário litúrgico\nde outubro de 2026"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 4,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/liturgia/hoje",
+      "width": 1440,
+      "title": "Liturgia de hoje, 14 de outubro de 2026 | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/liturgia/hoje",
+      "robots": "index, follow",
+      "h1": [
+        "Liturgia de hoje,\n14 de outubro de 2026"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "firstReadingY": 472,
+      "headingCount": 9,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/liturgia/02-setembro-2026",
+      "width": 1440,
+      "title": "Liturgia de 2 de setembro de 2026: Evangelho Lc 4,38-44",
+      "canonical": "https://www.liturgianews.site/liturgia/02-setembro-2026",
+      "robots": "index, follow",
+      "h1": [
+        "Liturgia de\n2 de setembro de 2026"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "firstReadingY": 472,
+      "headingCount": 9,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/liturgia/17-outubro-2026",
+      "width": 1440,
+      "title": "Liturgia de 17 de outubro de 2026: Evangelho Lc 12,8-12",
+      "canonical": "https://www.liturgianews.site/liturgia/17-outubro-2026",
+      "robots": "index, follow",
+      "h1": [
+        "Liturgia de\n17 de outubro de 2026"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "firstReadingY": 472,
+      "headingCount": 6,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/blog",
+      "width": 1440,
+      "title": "Blog - Liturgia Católica Diária | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/blog",
+      "h1": [
+        "Blog da Liturgia Católica Diária"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 2,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/blog/orientacoes-catolicas-para-a-quaresma",
+      "width": 1440,
+      "title": "Orientações Católicas para a Quaresma: Um Caminho de Conversão e Renovação | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/blog/orientacoes-catolicas-para-a-quaresma",
+      "robots": "index, follow",
+      "h1": [
+        "Orientações Católicas para a Quaresma: Um Caminho de Conversão e Renovação"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 12,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/sobre",
+      "width": 1440,
+      "title": "Sobre a LiturgiaNews | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/sobre",
+      "robots": "index, follow",
+      "h1": [
+        "Sobre a LiturgiaNews"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 3,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/acompanhar",
+      "width": 1440,
+      "title": "Como acompanhar a liturgia diária | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/acompanhar",
+      "robots": "index, follow",
+      "h1": [
+        "Como acompanhar a liturgia diária"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 4,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/lectio-divina",
+      "width": 1440,
+      "title": "Lectio divina: o que é e como fazer | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/lectio-divina",
+      "robots": "index, follow",
+      "h1": [
+        "Lectio divina: o que é e como fazer"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 4,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/tempo-liturgico",
+      "width": 1440,
+      "title": "O que é o tempo litúrgico | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/tempo-liturgico",
+      "robots": "index, follow",
+      "h1": [
+        "O que é o tempo litúrgico"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 4,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/contact",
+      "width": 1440,
+      "title": "Entre em contato | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/contact",
+      "robots": "index, follow",
+      "h1": [
+        "Entre em contato"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 6,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/donate",
+      "width": 1440,
+      "title": "Apoie nossa missão | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/donate",
+      "robots": "index, follow",
+      "h1": [
+        "Apoie Nossa Missão"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 4,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/privacidade",
+      "width": 1440,
+      "title": "Política de Privacidade | LiturgiaNews",
+      "canonical": "https://www.liturgianews.site/privacidade",
+      "robots": "index, follow",
+      "h1": [
+        "Política de Privacidade"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 4,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/confirm-subscription",
+      "width": 1440,
+      "title": "Confirme seu e-mail | LiturgiaNews",
+      "robots": "noindex, follow",
+      "h1": [
+        "Confirme seu e-mail"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 1,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/subscription-confirmed",
+      "width": 1440,
+      "title": "Inscrição confirmada | LiturgiaNews",
+      "robots": "noindex, follow",
+      "h1": [
+        "Sua inscrição está confirmada"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 1,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/error",
+      "width": 1440,
+      "title": "Não foi possível concluir | LiturgiaNews",
+      "robots": "noindex, follow",
+      "h1": [
+        "Não foi possível concluir sua solicitação"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 1,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    },
+    {
+      "route": "/pagina-inexistente",
+      "width": 1440,
+      "title": "Página não encontrada | LiturgiaNews",
+      "robots": "noindex",
+      "h1": [
+        "Vamos encontrar outra leitura?"
+      ],
+      "mainCount": 1,
+      "overflow": false,
+      "bodyFont": "Geist, \"Geist Fallback\", Arial, sans-serif",
+      "headingCount": 1,
+      "brokenAnchors": [],
+      "duplicateIds": [],
+      "unnamedVisibleLinksCount": 0
+    }
+  ],
+  "additionalChecks": {
+    "layouts": [
+      {
+        "route": "/liturgia",
+        "width": 320,
+        "overflow": false,
+        "h1": 1,
+        "main": 1
+      },
+      {
+        "route": "/liturgia/hoje",
+        "width": 320,
+        "overflow": false,
+        "h1": 1,
+        "main": 1
+      },
+      {
+        "route": "/contact",
+        "width": 320,
+        "overflow": false,
+        "h1": 1,
+        "main": 1
+      },
+      {
+        "route": "/liturgia",
+        "width": 768,
+        "overflow": false,
+        "h1": 1,
+        "main": 1
+      },
+      {
+        "route": "/liturgia/hoje",
+        "width": 768,
+        "overflow": false,
+        "h1": 1,
+        "main": 1
+      },
+      {
+        "route": "/contact",
+        "width": 768,
+        "overflow": false,
+        "h1": 1,
+        "main": 1
+      },
+      {
+        "route": "/liturgia",
+        "width": 1024,
+        "overflow": false,
+        "h1": 1,
+        "main": 1
+      },
+      {
+        "route": "/liturgia/hoje",
+        "width": 1024,
+        "overflow": false,
+        "h1": 1,
+        "main": 1
+      },
+      {
+        "route": "/contact",
+        "width": 1024,
+        "overflow": false,
+        "h1": 1,
+        "main": 1
+      }
+    ],
+    "performanceLocalUnthrottledSamples": [
+      {
+        "route": "/",
+        "width": 390,
+        "LCP_ms": 40,
+        "FCP_ms": 40,
+        "TTFB_ms": 3.1000000005587935,
+        "CLS": 0
+      },
+      {
+        "route": "/liturgia",
+        "width": 390,
+        "LCP_ms": 32,
+        "FCP_ms": 32,
+        "TTFB_ms": 3.5,
+        "CLS": 0
+      },
+      {
+        "route": "/liturgia/hoje",
+        "width": 390,
+        "LCP_ms": 56,
+        "FCP_ms": 56,
+        "TTFB_ms": 5.199999999254942,
+        "CLS": 0
+      },
+      {
+        "route": "/",
+        "width": 1440,
+        "LCP_ms": 36,
+        "FCP_ms": 36,
+        "TTFB_ms": 3.099999999627471,
+        "CLS": 0
+      },
+      {
+        "route": "/liturgia",
+        "width": 1440,
+        "LCP_ms": 44,
+        "FCP_ms": 44,
+        "TTFB_ms": 3.6000000005587935,
+        "CLS": 0
+      },
+      {
+        "route": "/liturgia/hoje",
+        "width": 1440,
+        "LCP_ms": 40,
+        "FCP_ms": 40,
+        "TTFB_ms": 3,
+        "CLS": 0
+      }
+    ]
+  },
+  "seo": {
+    "routes": {
+      "/liturgia/hoje": {
+        "status": 200,
+        "canonical": [
+          "https://www.liturgianews.site/liturgia/hoje"
+        ],
+        "robots": [
+          [
+            "robots",
+            "index, follow"
+          ],
+          [
+            "googlebot",
+            "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"
+          ]
+        ],
+        "jsonldValid": true
+      },
+      "/liturgia/17-outubro-2026": {
+        "status": 200,
+        "canonical": [
+          "https://www.liturgianews.site/liturgia/17-outubro-2026"
+        ],
+        "robots": [
+          [
+            "robots",
+            "index, follow"
+          ],
+          [
+            "googlebot",
+            "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"
+          ]
+        ],
+        "jsonldValid": true
+      },
+      "/liturgia/calendario/2026/mar%C3%A7o": {
+        "status": 200,
+        "canonical": [
+          "https://www.liturgianews.site/liturgia/calendario/2026/mar%C3%A7o"
+        ],
+        "robots": [
+          [
+            "robots",
+            "index, follow"
+          ],
+          [
+            "googlebot",
+            "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"
+          ]
+        ],
+        "jsonldValid": true
+      },
+      "/liturgia?search=teste&page=2": {
+        "status": 200,
+        "canonical": [
+          "https://www.liturgianews.site/liturgia"
+        ],
+        "robots": [
+          [
+            "robots",
+            "index, follow"
+          ],
+          [
+            "googlebot",
+            "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"
+          ]
+        ],
+        "jsonldValid": true
+      },
+      "/confirm-subscription": {
+        "status": 200,
+        "canonical": [],
+        "robots": [
+          [
+            "robots",
+            "noindex, follow"
+          ],
+          [
+            "googlebot",
+            "noindex, follow"
+          ]
+        ],
+        "jsonldValid": true
+      },
+      "/subscription-confirmed": {
+        "status": 200,
+        "canonical": [],
+        "robots": [
+          [
+            "robots",
+            "noindex, follow"
+          ],
+          [
+            "googlebot",
+            "noindex, follow"
+          ]
+        ],
+        "jsonldValid": true
+      },
+      "/error": {
+        "status": 200,
+        "canonical": [],
+        "robots": [
+          [
+            "robots",
+            "noindex, follow"
+          ],
+          [
+            "googlebot",
+            "noindex, follow"
+          ]
+        ],
+        "jsonldValid": true
+      }
+    },
+    "futureLastmod": []
+  },
+  "validation": {
+    "testsPassed": 25,
+    "lint": "passed",
+    "types": "passed",
+    "build": "passed",
+    "generatedPages": 497,
+    "emailsSentByTests": 0
+  }
+}

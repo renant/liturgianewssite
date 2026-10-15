@@ -1,22 +1,15 @@
-import { addCivilDays, civilDateToSlug, formatCivilDate } from "@/lib/liturgical-date";
-import fs from "node:fs";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import path from "node:path";
+import { getContentIndex } from "@/lib/content-metadata";
+import { addCivilDays, civilDateToSlug, formatCivilDate } from "@/lib/liturgical-date";
 
-export function AdjacentDays({ date }: { date: string }) {
-  const candidates = [
-    { label: "Dia anterior", date: addCivilDays(date, -1) },
-    { label: "Próximo dia", date: addCivilDays(date, 1) },
-  ].map((item) => ({ ...item, slug: civilDateToSlug(item.date) }));
-
-  return (
-    <nav aria-label="Navegação entre dias" className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-      {candidates.map((item) => fs.existsSync(path.join(process.cwd(), "liturgia-content", `${item.slug}.mdx`)) ? (
-        <Link key={item.label} href={`/liturgia/${item.slug}`} className="rounded-md border border-amber-200 bg-white p-3 text-amber-800 hover:bg-amber-50">
-          <span className="block font-semibold">{item.label}</span>
-          <span className="text-sm">{formatCivilDate(item.date)}</span>
-        </Link>
-      ) : <span key={item.label} />)}
-    </nav>
-  );
+export function AdjacentDays({ date, afterReading = false }: { date: string; afterReading?: boolean }) {
+  const slugs = new Set(getContentIndex("liturgia-content").map(entry => entry.slug));
+  const previous = addCivilDays(date, -1);
+  const next = addCivilDays(date, 1);
+  if (!slugs.has(civilDateToSlug(previous)) && !slugs.has(civilDateToSlug(next))) return null;
+  return <nav aria-label={afterReading ? "Continuar para outra liturgia" : "Navegação entre dias"} className={`adjacent-days${afterReading ? " after-reading" : ""}`}>
+    {slugs.has(civilDateToSlug(previous)) ? <Link href={`/liturgia/${civilDateToSlug(previous)}`} aria-label={`Dia anterior: ${formatCivilDate(previous)}`} rel="prev"><ArrowLeft className="size-4" aria-hidden="true" />Anterior</Link> : <span />}
+    {slugs.has(civilDateToSlug(next)) ? <Link href={`/liturgia/${civilDateToSlug(next)}`} aria-label={`Próximo dia: ${formatCivilDate(next)}`} rel="next">Próximo<ArrowRight className="size-4" aria-hidden="true" /></Link> : <span />}
+  </nav>;
 }

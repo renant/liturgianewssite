@@ -1,5 +1,4 @@
 import { getPosts } from "@/app/blog/actions";
-import { MetadataRoute } from "next";
 
 export async function GET() {
   const { posts } = await getPosts({ limit: 20, sort: "date_desc" });

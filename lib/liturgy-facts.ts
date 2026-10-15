@@ -1,15 +1,14 @@
+import { normalizeLiturgyText } from "./liturgy-markup.mjs";
+
 export type LiturgyFacts = { gospel?: string; firstReading?: string };
 
-function cleanReference(value: string): string {
-  return value.replace(/\*+/g, "").replace(/\s+/g, " ").trim();
-}
-
 export function extractLiturgyFacts(source: string): LiturgyFacts {
-  const gospel = /Evangelho\s*\(([^)\n]+)\)/i.exec(source)?.[1];
-  const firstReading = /Primeira Leitura[\s*]*\([\s*]*([^)\n]+)[\s*]*\)/i.exec(source)?.[1];
+  const text = normalizeLiturgyText(source);
+  const gospel = /Evangelho\s*\(([^)]+)\)/i.exec(text)?.[1];
+  const firstReading = /Primeira Leitura\s*\(([^)]+)\)/i.exec(text)?.[1];
   return {
-    gospel: gospel ? cleanReference(gospel) : undefined,
-    firstReading: firstReading ? cleanReference(firstReading) : undefined,
+    gospel: gospel?.trim(),
+    firstReading: firstReading?.trim(),
   };
 }
 

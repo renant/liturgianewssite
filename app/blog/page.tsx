@@ -65,15 +65,15 @@ export default async function BlogPage(props: {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white p-4">
-        <div className="max-w-4xl mx-auto space-y-8 py-12">
+      <div className="page-container">
+        <div className="space-y-8">
           <Breadcrumbs items={[{ label: "Blog", href: "/blog" }]} className="mb-4" />
           
-          <header className="text-center space-y-4">
-            <h1 className="text-3xl font-serif font-semibold text-slate-800">
+          <header className="page-header">
+            <h1 className="page-title">
               Blog da Liturgia Católica Diária
             </h1>
-            <p className="text-slate-600 text-lg">
+            <p className="page-description">
               Reflexões, ensinamentos e inspiração para sua jornada de fé
             </p>
           </header>
@@ -93,10 +93,10 @@ export default async function BlogPage(props: {
             </section>
           )}
 
-          <main>
+          <div>
             {posts.length > 0 ? (
               <section aria-label="Lista de artigos">
-                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-x-10 gap-y-8">
                   {posts.map((post: PostMetadata) => (
                     <PostCard key={post.slug} post={post} />
                   ))}
@@ -104,7 +104,7 @@ export default async function BlogPage(props: {
               </section>
             ) : (
               <section className="text-center py-12" aria-label="Nenhum resultado">
-                <p className="text-slate-600 text-lg">Nenhum post encontrado.</p>
+                <p className="page-description">Nenhum post encontrado.</p>
                 {searchTerm && (
                   <Link
                     href="/blog"
@@ -115,9 +115,9 @@ export default async function BlogPage(props: {
                 )}
               </section>
             )}
-          </main>
+          </div>
 
-          <nav aria-label="Paginação" className="flex justify-center mt-8">
+          {totalPages > 1 && <nav aria-label="Paginação" className="flex justify-center mt-8">
             <div className="flex space-x-2">
               {!isPreviousDisabled && (
                 <Link
@@ -151,11 +151,11 @@ export default async function BlogPage(props: {
                 </Link>
               )}
             </div>
-          </nav>
+          </nav>}
           
-          <p className="text-center text-sm text-slate-500" aria-label={`Mostrando ${posts.length} de ${totalPosts} posts`}>
-            Mostrando {posts.length} de {totalPosts} posts
-          </p>
+          {totalPages > 1 && <p className="text-center text-sm text-slate-500" aria-label={`Mostrando ${posts.length} de ${totalPosts} posts`}>
+            Mostrando {posts.length} de {totalPosts} artigos
+          </p>}
         </div>
       </div>
 

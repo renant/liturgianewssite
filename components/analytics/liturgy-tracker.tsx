@@ -12,7 +12,11 @@ export function LiturgyTracker({ slug, isToday }: { slug: string; isToday: boole
 
 export function EmailConfirmedTracker() {
   useEffect(() => {
-    // Recarregar a página conta novamente: nenhum identificador do contato é exposto ao cliente.
+    const key = "liturgianews:email-confirmed";
+    try {
+      if (sessionStorage.getItem(key)) return;
+      sessionStorage.setItem(key, "1");
+    } catch { /* Tracking remains optional when storage is unavailable. */ }
     captureEvent("newsletter_email_confirmed");
   }, []);
   return null;
