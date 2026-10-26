@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import { htmlToMarkdown } from "./future-liturgy-format.mjs";
 
 const baseUrl = "https://liturgia.cancaonova.com";
@@ -9,8 +10,8 @@ const monthNames = [
   "julho", "agosto", "setembro", "outubro", "novembro", "dezembro",
 ];
 const sourceMonths = {
-  jan: 1, fev: 2, mar: 3, abr: 4, mai: 5, jun: 6,
-  jul: 7, ago: 8, set: 9, out: 10, nov: 11, dez: 12,
+  jan: 1, fev: 2, feb: 2, mar: 3, abr: 4, apr: 4, mai: 5, may: 5, jun: 6,
+  jul: 7, ago: 8, aug: 8, set: 9, sep: 9, out: 10, oct: 10, nov: 11, dez: 12, dec: 12,
 };
 
 function todayInSaoPaulo(now = new Date()) {
@@ -62,8 +63,9 @@ function decodeHtml(value) {
     .replace(/&([a-z]+);/gi, (entity, name) => named[name.toLowerCase()] ?? entity);
 }
 
-async function getHtml(url) {
+async function getHtml(url, options = {}) {
   const response = await fetch(url, {
+    ...options,
     headers: { "User-Agent": "LiturgiaNews/1.0 (+https://www.liturgianews.site)" },
     signal: AbortSignal.timeout(15_000),
   });
@@ -72,52 +74,61 @@ async function getHtml(url) {
 }
 
 async function sourceUrlFor(date) {
-  const calendarUrl = new URL("/pb/", baseUrl);
-  calendarUrl.searchParams.set("sAno", String(date.getUTCFullYear()));
-  calendarUrl.searchParams.set("sMes", String(date.getUTCMonth() + 1));
-  const calendarHtml = await getHtml(calendarUrl);
+  // sMes/sAno na página inicial só alteram o widget. A navegação real entre
+  // meses usa esta operação, também chamada pelo calendar.js da fonte.
+  const calendarHtml = await getHtml(new URL("/wp-admin/admin-ajax.php", baseUrl), {
+    method: "POST",
+    body: new URLSearchParams({
+      action: "widget-ajax", sAno: String(date.getUTCFullYear()),
+      sMes: String(date.getUTCMonth() + 1), title: "", type: "liturgia", ajax: "true",
+    }),
+  });
   const calendar = elementById(calendarHtml, "wp-calendar", "table");
   if (!calendar) throw new Error(`Calendário da fonte não encontrado para ${isoDate(date)}.`);
 
   for (const match of calendar.matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>/gi)) {
     const url = new URL(decodeHtml(match[1]), baseUrl);
+    if (url.origin !== baseUrl || !/^\/(?:pb\/)?liturgia\/[^/]+\/$/.test(url.pathname)) continue;
     const params = url.searchParams;
     if (Number(params.get("sAno")) === date.getUTCFullYear()
       && Number(params.get("sMes")) === date.getUTCMonth() + 1
-      && Number(params.get("sDia")) === date.getUTCDate()) return url;
+      && Number(params.get("sDia")) === date.getUTCDate()) {
+      if (!url.pathname.startsWith("/pb/")) url.pathname = `/pb${url.pathname}`;
+      // A data do artigo deve vir do permalink, sem parâmetros que alterem o widget.
+      url.search = "";
+      url.hash = "";
+      return url;
+    }
   }
 
-  // O calendário visual pode continuar no mês atual mesmo quando a liturgia
-  // consultada já é de outro mês. Tenta a consulta direta por data antes de
-  // concluir que a fonte ainda não publicou o conteúdo. buildMdx valida a data
-  // retornada, então uma resposta padrão ou incorreta continua sendo rejeitada.
-  const dateUrl = new URL("/pb/", baseUrl);
-  dateUrl.searchParams.set("sDia", String(date.getUTCDate()));
-  dateUrl.searchParams.set("sMes", String(date.getUTCMonth() + 1));
-  dateUrl.searchParams.set("sAno", String(date.getUTCFullYear()));
-  console.info(`Dia ausente no calendário; tentando consulta direta: ${isoDate(date)}`);
-  return dateUrl;
+  throw new Error(`A fonte ainda não oferece link do calendário para ${isoDate(date)}.`);
 }
 
-async function buildMdx(date, publishedAt) {
+export async function buildMdx(date, publishedAt) {
   const sourceUrl = await sourceUrlFor(date);
   const html = await getHtml(sourceUrl);
-  const actualDay = Number(/<span\b[^>]*id=["']dia-calendar["'][^>]*>([\s\S]*?)<\/span>/i.exec(html)?.[1]?.replace(/<[^>]+>/g, "").trim());
-  const actualMonthKey = /<span\b[^>]*id=["']mes-calendar["'][^>]*>([\s\S]*?)<\/span>/i.exec(html)?.[1]?.replace(/<[^>]+>/g, "").trim().toLowerCase().slice(0, 3);
-  const actualYear = Number(/<span\b[^>]*id=["']ano-calendar["'][^>]*>([\s\S]*?)<\/span>/i.exec(html)?.[1]?.replace(/<[^>]+>/g, "").trim());
+  // A fonte repete id="date-post" no widget e no artigo. O conteúdo principal
+  // delimita a data publicada, independente da data selecionada no calendário.
+  const content = elementById(html, "content", "section");
+  const articleDate = content && elementById(content, "date-post");
+  const datePart = (name) => new RegExp(`<span\\b[^>]*class=["'][^"']*\\b${name}\\b[^"']*["'][^>]*>([\\s\\S]*?)<\\/span>`, "i")
+    .exec(articleDate ?? "")?.[1]?.replace(/<[^>]+>/g, "").trim();
+  const actualDay = Number(datePart("dia"));
+  const actualMonthKey = datePart("mes")?.toLowerCase().slice(0, 3);
+  const actualYear = Number(datePart("ano"));
   if (actualDay !== date.getUTCDate() || sourceMonths[actualMonthKey] !== date.getUTCMonth() + 1 || actualYear !== date.getUTCFullYear()) {
-    throw new Error(`Data da página da fonte não corresponde a ${isoDate(date)}.`);
+    throw new Error(`Data do artigo da fonte não corresponde a ${isoDate(date)}: ${sourceUrl}`);
   }
 
-  const title = /<h1\b[^>]*class=["'][^"']*entry-title[^"']*["'][^>]*>([\s\S]*?)<\/h1>/i.exec(html)?.[1]
+  const title = /<h1\b[^>]*class=["'][^"']*entry-title[^"']*["'][^>]*>([\s\S]*?)<\/h1>/i.exec(content)?.[1]
     ?.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
   if (!title) throw new Error(`Título litúrgico ausente para ${isoDate(date)}.`);
 
   const readings = [];
   for (let index = 1; index <= 8; index += 1) {
-    const section = elementById(html, `liturgia-${index}`);
+    const section = elementById(content, `liturgia-${index}`);
     if (!section) continue;
-    const markdown = htmlToMarkdown(section);
+    const markdown = htmlToMarkdown(section.replace(/\r\n?/g, "\n")).replace(/[\t ]+$/gm, "");
     if (markdown) readings.push(markdown);
   }
   if (readings.length < 3) throw new Error(`Leituras incompletas para ${isoDate(date)}.`);
@@ -172,7 +183,9 @@ async function main() {
   if (failures.length > 0) process.exitCode = 1;
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+  main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}
