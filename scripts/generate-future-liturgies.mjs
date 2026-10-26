@@ -86,7 +86,17 @@ async function sourceUrlFor(date) {
       && Number(params.get("sMes")) === date.getUTCMonth() + 1
       && Number(params.get("sDia")) === date.getUTCDate()) return url;
   }
-  throw new Error(`A fonte ainda não oferece link do calendário para ${isoDate(date)}.`);
+
+  // O calendário visual pode continuar no mês atual mesmo quando a liturgia
+  // consultada já é de outro mês. Tenta a consulta direta por data antes de
+  // concluir que a fonte ainda não publicou o conteúdo. buildMdx valida a data
+  // retornada, então uma resposta padrão ou incorreta continua sendo rejeitada.
+  const dateUrl = new URL("/pb/", baseUrl);
+  dateUrl.searchParams.set("sDia", String(date.getUTCDate()));
+  dateUrl.searchParams.set("sMes", String(date.getUTCMonth() + 1));
+  dateUrl.searchParams.set("sAno", String(date.getUTCFullYear()));
+  console.info(`Dia ausente no calendário; tentando consulta direta: ${isoDate(date)}`);
+  return dateUrl;
 }
 
 async function buildMdx(date, publishedAt) {
