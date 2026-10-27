@@ -13,6 +13,7 @@ on:
         options:
           - "7"
           - "30"
+          - "90"
 
 permissions:
   contents: write
