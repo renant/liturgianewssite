@@ -48,6 +48,8 @@ Site em Next.js que permite aos usuários se inscreverem em uma newsletter diár
 
 Ambos podem ser executados manualmente pelo GitHub Actions e compartilham o mesmo grupo de concorrência para evitar gravações simultâneas. A execução manual de 90 dias não altera o calendário das execuções agendadas.
 
-A fonte precisa disponibilizar o calendário e o artigo de cada data. Quando uma data não estiver disponível ou não corresponder ao artigo, a página existente é preservada, as demais datas continuam e o workflow sinaliza a pendência após salvar as páginas geradas com sucesso.
+A fonte precisa disponibilizar o calendário e o artigo de cada data. Na geração de 90 dias, `--allow-unavailable` trata datas sem link em um calendário válido como pendências, com aviso no GitHub Actions, sem falhar a execução. Elas serão tentadas nas próximas gerações de 90 dias ou na rotina diária quando entrarem na janela de 7 dias. A geração pode, portanto, ficar parcial enquanto a fonte não publicar todo o período.
+
+A rotina diária continua falhando se faltar qualquer um dos próximos 7 dias. Erros de conexão, calendário inválido, leituras incompletas e artigos de outra data causam falha em ambos os workflows. Páginas existentes são preservadas em caso de erro, e as demais datas continuam sendo processadas e salvas.
 
 Validação local: `node --test scripts/future-liturgy-format.test.mjs scripts/generate-future-liturgies.test.mjs`.

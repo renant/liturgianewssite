@@ -110,6 +110,67 @@ function temporaryDirectory(t) {
   return directory;
 }
 
+// Resposta minimizada do calendário real de janeiro/2027 em 27/10/2026:
+// somente o dia 1 tem artigo; o dia 2 aparece como texto sem link.
+const partialJanuaryCalendar = `<table id="wp-calendar"><tbody><tr>
+  <td><a href="https://liturgia.cancaonova.com/liturgia/santa-maria-mae-de-deus-solenidade-sexta-feira/?sDia=1&sMes=1&sAno=2027">1</a></td>
+  <td>2</td></tr></tbody></table>`;
+
+test("geração longa deixa janeiro ainda sem artigo pendente, sem falhar nem publicar leitura repetida", async (t) => {
+  t.after(() => mock.restoreAll());
+  mock.method(globalThis, "fetch", async (input, options) => {
+    if (new URL(input).pathname.endsWith("admin-ajax.php")) {
+      assert.equal(options.body.get("sAno"), "2027");
+      assert.equal(options.body.get("sMes"), "1");
+      return new Response(partialJanuaryCalendar);
+    }
+    return new Response(homepageWithSelectedDate(1)
+      .replace('<span class="dia">26</span>', '<span class="dia">1</span>')
+      .replace('<span class="mes">Oct</span>', '<span class="mes">Jan</span>')
+      .replace('<span class="ano">2026</span>', '<span class="ano">2027</span>'));
+  });
+  const directory = temporaryDirectory(t);
+  const result = await generateLiturgies({ daysAhead: 2, today: new Date("2026-12-31T00:00:00Z"), directory, delayMs: 0, allowUnavailable: true });
+  assert.equal(result.created, 1);
+  assert.deepEqual(result.failures, []);
+  assert.deepEqual(result.pending, ["02-janeiro-2027"]);
+  assert.deepEqual(fs.readdirSync(directory), ["01-janeiro-2027.mdx"]);
+});
+
+test("rotina diária continua falhando quando o calendário não oferece o dia", async (t) => {
+  t.after(() => mock.restoreAll());
+  mock.method(globalThis, "fetch", async () => new Response(partialJanuaryCalendar));
+  const directory = temporaryDirectory(t);
+  const file = path.join(directory, "02-janeiro-2027.mdx");
+  fs.writeFileSync(file, "Conteúdo anterior.");
+  const result = await generateLiturgies({ daysAhead: 1, today: new Date("2027-01-01T00:00:00Z"), directory, refreshExisting: true, delayMs: 0 });
+  assert.deepEqual(result, { created: 0, updated: 0, pending: [], failures: ["02-janeiro-2027"] });
+  assert.equal(fs.readFileSync(file, "utf8"), "Conteúdo anterior.");
+});
+
+for (const scenario of ["HTTP 503", "calendário inválido", "artigo de outro dia", "leituras incompletas"]) {
+  test(`geração longa mantém falha real para ${scenario}`, async (t) => {
+    t.after(() => mock.restoreAll());
+    mock.method(globalThis, "fetch", async (input) => {
+      if (scenario === "HTTP 503") return new Response("Falha", { status: 503 });
+      if (new URL(input).pathname.endsWith("admin-ajax.php")) {
+        return new Response(scenario === "calendário inválido" ? "Página inesperada" : calendarLink);
+      }
+      let article = homepageWithSelectedDate(1);
+      if (scenario === "leituras incompletas") {
+        article = article.replace('<span class="dia">26</span>', '<span class="dia">1</span>')
+          .replace('<span class="mes">Oct</span>', '<span class="mes">Nov</span>')
+          .replace(/<div id="liturgia-3">[\s\S]*?<\/div>/, "");
+      }
+      return new Response(article);
+    });
+    const directory = temporaryDirectory(t);
+    const result = await generateLiturgies({ daysAhead: 1, today: new Date("2026-10-31T00:00:00Z"), directory, allowUnavailable: true, delayMs: 0 });
+    assert.deepEqual(result, { created: 0, updated: 0, pending: [], failures: ["01-novembro-2026"] });
+    assert.deepEqual(fs.readdirSync(directory), []);
+  });
+}
+
 test("aceita até 90 dias e rejeita intervalos inválidos", () => {
   assert.equal(parseDaysAhead([], {}), 7);
   assert.equal(parseDaysAhead([], { DAYS_AHEAD: "90" }), 90);
@@ -132,7 +193,7 @@ test("revalida só os próximos 7 dias, corrige leituras e preserva conteúdo ed
   fs.writeFileSync(filename(8), "Fora do intervalo.");
   fs.writeFileSync(path.join(directory, "31-outubro-2026.mdx"), "Hoje.");
   const result = await generateLiturgies({ daysAhead: 7, today: new Date("2026-10-31T00:00:00Z"), directory, refreshExisting: true, delayMs: 0 });
-  assert.deepEqual(result, { created: 4, updated: 1, failures: ["03-novembro-2026"] });
+  assert.deepEqual(result, { created: 4, updated: 1, pending: [], failures: ["03-novembro-2026"] });
   const repaired = fs.readFileSync(filename(1), "utf8");
   assert.match(repaired, /Primeira leitura de segunda-feira/);
   assert.match(repaired, /publishedAt: '2026-10-20T10:00:00Z'/);
@@ -149,7 +210,7 @@ test("geração de 90 dias atravessa o ano e mantém páginas existentes", async
   const existingFile = path.join(directory, "01-novembro-2026.mdx");
   fs.writeFileSync(existingFile, "Página existente.");
   const result = await generateLiturgies({ daysAhead: 90, today: new Date("2026-10-31T00:00:00Z"), directory, refreshExisting: false, delayMs: 0 });
-  assert.deepEqual(result, { created: 89, updated: 0, failures: [] });
+  assert.deepEqual(result, { created: 89, updated: 0, pending: [], failures: [] });
   assert.equal(fs.readdirSync(directory).length, 90);
   assert.equal(fs.readFileSync(existingFile, "utf8"), "Página existente.");
   assert.ok(fs.existsSync(path.join(directory, "29-janeiro-2027.mdx")));

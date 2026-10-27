@@ -49,7 +49,7 @@ jobs:
         continue-on-error: true
         env:
           DAYS_AHEAD: "90"
-        run: node scripts/generate-future-liturgies.mjs
+        run: node scripts/generate-future-liturgies.mjs --allow-unavailable
       - name: Commit new pages
         run: |
           if [[ -z "$(git status --porcelain liturgia-content)" ]]; then

@@ -14,6 +14,8 @@ const sourceMonths = {
   jul: 7, ago: 8, aug: 8, set: 9, sep: 9, out: 10, oct: 10, nov: 11, dez: 12, dec: 12,
 };
 
+class SourceNotAvailableError extends Error {}
+
 function todayInSaoPaulo(now = new Date()) {
   const parts = new Intl.DateTimeFormat("en-CA", {
     timeZone: "America/Sao_Paulo", year: "numeric", month: "2-digit", day: "2-digit",
@@ -101,7 +103,7 @@ async function sourceUrlFor(date) {
     }
   }
 
-  throw new Error(`A fonte ainda não oferece link do calendário para ${isoDate(date)}.`);
+  throw new SourceNotAvailableError(`A fonte ainda não oferece link do calendário para ${isoDate(date)}.`);
 }
 
 export async function buildMdx(date, publishedAt) {
@@ -146,10 +148,12 @@ export async function generateLiturgies({
   today = todayInSaoPaulo(),
   directory = outputDirectory,
   refreshExisting = process.argv.includes("--refresh-existing"),
+  allowUnavailable = process.argv.includes("--allow-unavailable"),
   delayMs = 800,
 } = {}) {
   fs.mkdirSync(directory, { recursive: true });
   const failures = [];
+  const pending = [];
   let created = 0;
   let updated = 0;
 
@@ -189,18 +193,27 @@ export async function generateLiturgies({
       else created += 1;
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      console.error(`Não foi possível criar ${slug}: ${message}`);
-      failures.push(slug);
+      if (allowUnavailable && error instanceof SourceNotAvailableError) {
+        console.warn(`Pendente na fonte; tentar novamente em outra execução: ${slug}. ${message}`);
+        pending.push(slug);
+      } else {
+        console.error(`Não foi possível criar ${slug}: ${message}`);
+        failures.push(slug);
+      }
     }
     await new Promise((resolve) => setTimeout(resolve, delayMs));
   }
 
-  console.info(`Execução concluída: ${created} criada(s), ${updated} atualizada(s), ${failures.length} pendente(s).`);
-  return { created, updated, failures };
+  console.info(`Execução concluída: ${created} criada(s), ${updated} atualizada(s), ${pending.length} aguardando a fonte, ${failures.length} falha(s).`);
+  return { created, updated, pending, failures };
 }
 
 async function main() {
-  const { failures } = await generateLiturgies();
+  const { failures, pending } = await generateLiturgies();
+  if (pending.length > 0) {
+    const message = `${pending.length} liturgia(s) ainda sem link no calendário da fonte. A geração de 90 dias ficou parcial; as datas pendentes serão tentadas nas próximas execuções aplicáveis.`;
+    console.warn(process.env.GITHUB_ACTIONS === "true" ? `::warning::${message}` : message);
+  }
   if (failures.length > 0) process.exitCode = 1;
 }
 
