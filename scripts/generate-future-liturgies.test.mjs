@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import { mock, test } from "node:test";
-import { buildMdx } from "./generate-future-liturgies.mjs";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { buildMdx, generateLiturgies, parseDaysAhead } from "./generate-future-liturgies.mjs";
 
 // Reproduz a resposta real de /pb/?sDia=...: a data do widget muda,
 // mas o artigo e suas leituras continuam sendo os de 26 de outubro.
@@ -78,4 +81,78 @@ test("data ausente no artigo é rejeitada e não usa a data do widget como alter
     return new Response(url.pathname.endsWith("admin-ajax.php") ? calendarLink : article);
   });
   await assert.rejects(buildMdx(new Date("2026-11-01T00:00:00Z")), /Data do artigo da fonte não corresponde/);
+});
+
+function mockFutureSource(t, unavailableDay) {
+  t.after(() => mock.restoreAll());
+  return mock.method(globalThis, "fetch", async (input, options) => {
+    const url = new URL(input);
+    if (url.pathname.endsWith("admin-ajax.php")) {
+      const year = options.body.get("sAno");
+      const month = options.body.get("sMes");
+      return new Response(`<table id="wp-calendar">${Array.from({ length: 31 }, (_, i) =>
+        `<a href="/liturgia/dia-${year}-${month}-${i + 1}/?sDia=${i + 1}&amp;sMes=${month}&amp;sAno=${year}">${i + 1}</a>`).join("")}</table>`);
+    }
+    const [, year, month, day] = /dia-(\d+)-(\d+)-(\d+)/.exec(url.pathname);
+    if (Number(day) === unavailableDay) return new Response("Indisponível", { status: 503 });
+    const monthName = new Intl.DateTimeFormat("en-US", { month: "short", timeZone: "UTC" })
+      .format(new Date(Date.UTC(Number(year), Number(month) - 1, Number(day))));
+    return new Response(homepageWithSelectedDate(day)
+      .replace('<span class="dia">26</span>', `<span class="dia">${day}</span>`)
+      .replace('<span class="mes">Oct</span>', `<span class="mes">${monthName}</span>`)
+      .replace('<span class="ano">2026</span>', `<span class="ano">${year}</span>`));
+  });
+}
+
+function temporaryDirectory(t) {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "future-liturgies-"));
+  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+  return directory;
+}
+
+test("aceita até 90 dias e rejeita intervalos inválidos", () => {
+  assert.equal(parseDaysAhead([], {}), 7);
+  assert.equal(parseDaysAhead([], { DAYS_AHEAD: "90" }), 90);
+  assert.equal(parseDaysAhead(["--days=7"], { DAYS_AHEAD: "90" }), 7);
+  for (const input of ["0", "91", "1.5", "abc"]) {
+    assert.throws(() => parseDaysAhead([], { DAYS_AHEAD: input }), /entre 1 e 90/);
+  }
+});
+
+test("revalida só os próximos 7 dias, corrige leituras e preserva conteúdo editorial e publicação", async (t) => {
+  mockFutureSource(t, 3);
+  const directory = temporaryDirectory(t);
+  const filename = (day) => path.join(directory, `0${day}-novembro-2026.mdx`);
+  const valid = await buildMdx(new Date("2026-11-01T00:00:00Z"), "2026-10-20T10:00:00Z");
+  const editorial = "## Reflexão do Evangelho\n\nReflexão original.\n\n## Notícias do Vaticano\n\nNotícia original.\n";
+  fs.writeFileSync(filename(1), valid.replace("Primeira leitura de segunda-feira.", "Leitura incorreta.") + "\n" + editorial);
+  const unchanged = await buildMdx(new Date("2026-11-02T00:00:00Z"), "2026-10-20T10:00:00Z");
+  fs.writeFileSync(filename(2), unchanged);
+  fs.writeFileSync(filename(3), "Página preservada se a fonte falhar.");
+  fs.writeFileSync(filename(8), "Fora do intervalo.");
+  fs.writeFileSync(path.join(directory, "31-outubro-2026.mdx"), "Hoje.");
+  const result = await generateLiturgies({ daysAhead: 7, today: new Date("2026-10-31T00:00:00Z"), directory, refreshExisting: true, delayMs: 0 });
+  assert.deepEqual(result, { created: 4, updated: 1, failures: ["03-novembro-2026"] });
+  const repaired = fs.readFileSync(filename(1), "utf8");
+  assert.match(repaired, /Primeira leitura de segunda-feira/);
+  assert.match(repaired, /publishedAt: '2026-10-20T10:00:00Z'/);
+  assert.ok(repaired.endsWith(editorial));
+  assert.equal(fs.readFileSync(filename(2), "utf8"), unchanged);
+  assert.equal(fs.readFileSync(filename(3), "utf8"), "Página preservada se a fonte falhar.");
+  assert.equal(fs.readFileSync(filename(8), "utf8"), "Fora do intervalo.");
+  assert.equal(fs.readFileSync(path.join(directory, "31-outubro-2026.mdx"), "utf8"), "Hoje.");
+});
+
+test("geração de 90 dias atravessa o ano e mantém páginas existentes", async (t) => {
+  const fetchMock = mockFutureSource(t);
+  const directory = temporaryDirectory(t);
+  const existingFile = path.join(directory, "01-novembro-2026.mdx");
+  fs.writeFileSync(existingFile, "Página existente.");
+  const result = await generateLiturgies({ daysAhead: 90, today: new Date("2026-10-31T00:00:00Z"), directory, refreshExisting: false, delayMs: 0 });
+  assert.deepEqual(result, { created: 89, updated: 0, failures: [] });
+  assert.equal(fs.readdirSync(directory).length, 90);
+  assert.equal(fs.readFileSync(existingFile, "utf8"), "Página existente.");
+  assert.ok(fs.existsSync(path.join(directory, "29-janeiro-2027.mdx")));
+  assert.ok(!fs.existsSync(path.join(directory, "30-janeiro-2027.mdx")));
+  assert.equal(fetchMock.mock.callCount(), 178);
 });

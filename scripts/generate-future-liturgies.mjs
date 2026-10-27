@@ -22,12 +22,12 @@ function todayInSaoPaulo(now = new Date()) {
   return new Date(Date.UTC(get("year"), get("month") - 1, get("day")));
 }
 
-function parseDaysAhead() {
-  const argument = process.argv.find((value) => value.startsWith("--days="));
-  const input = argument?.slice("--days=".length) ?? process.env.DAYS_AHEAD ?? "7";
+export function parseDaysAhead(args = process.argv, env = process.env) {
+  const argument = args.find((value) => value.startsWith("--days="));
+  const input = argument?.slice("--days=".length) ?? env.DAYS_AHEAD ?? "7";
   const days = Number(input);
-  if (!Number.isInteger(days) || days < 1 || days > 30) {
-    throw new Error("DAYS_AHEAD deve ser um número inteiro entre 1 e 30.");
+  if (!Number.isInteger(days) || days < 1 || days > 90) {
+    throw new Error("DAYS_AHEAD deve ser um número inteiro entre 1 e 90.");
   }
   return days;
 }
@@ -141,10 +141,14 @@ export async function buildMdx(date, publishedAt) {
   return `export const metadata = { title: ${JSON.stringify(title)}, date: '${isoDate(date)}', publishedAt: '${originalPublication}', updatedAt: '${now}' };\n\n# ${title}\n\n${longDate}\n\n## Leituras do Dia\n\n${readings.join("\n\n")}\n`;
 }
 
-async function main() {
-  const daysAhead = parseDaysAhead();
-  const today = todayInSaoPaulo();
-  fs.mkdirSync(outputDirectory, { recursive: true });
+export async function generateLiturgies({
+  daysAhead = parseDaysAhead(),
+  today = todayInSaoPaulo(),
+  directory = outputDirectory,
+  refreshExisting = process.argv.includes("--refresh-existing"),
+  delayMs = 800,
+} = {}) {
+  fs.mkdirSync(directory, { recursive: true });
   const failures = [];
   let created = 0;
   let updated = 0;
@@ -153,20 +157,32 @@ async function main() {
     const date = new Date(today);
     date.setUTCDate(date.getUTCDate() + offset);
     const slug = slugFor(date);
-    const filePath = path.join(outputDirectory, `${slug}.mdx`);
+    const filePath = path.join(directory, `${slug}.mdx`);
     const existed = fs.existsSync(filePath);
     let publishedAt;
+    let existing;
     if (existed) {
-      const existing = fs.readFileSync(filePath, "utf8");
+      existing = fs.readFileSync(filePath, "utf8");
       publishedAt = /publishedAt:\s*['"]([^'"]+)['"]/.exec(existing)?.[1];
-      const isComplete = /##\s+(reflex[aã]o|not[ií]cias)/i.test(existing);
-      if (!process.argv.includes("--refresh-existing") || isComplete) {
+      if (!refreshExisting) {
         console.info(`Já existe; mantendo sem alteração: ${slug}`);
         continue;
       }
     }
     try {
-      const mdx = await buildMdx(date, publishedAt);
+      let mdx = await buildMdx(date, publishedAt);
+      if (existing) {
+        // Revalida as leituras sem descartar o conteúdo editorial da página.
+        const editorialStart = existing.search(/^##\s+(?:reflex[aã]o|not[ií]cias)\b/im);
+        if (editorialStart !== -1) mdx = `${mdx.trimEnd()}\n\n${existing.slice(editorialStart)}`;
+        const comparable = (value) => value.replace(/,?\s*(?:publishedAt|updatedAt):\s*['"][^'"]+['"]/g, "")
+          .replace(/\r\n?/g, "\n").trimEnd();
+        if (comparable(existing) === comparable(mdx)) {
+          console.info(`Revalidada; mantendo sem alteração: ${slug}`);
+          await new Promise((resolve) => setTimeout(resolve, delayMs));
+          continue;
+        }
+      }
       fs.writeFileSync(filePath, mdx);
       console.info(`Liturgia futura ${existed ? "atualizada" : "criada"}: ${slug}`);
       if (existed) updated += 1;
@@ -176,10 +192,15 @@ async function main() {
       console.error(`Não foi possível criar ${slug}: ${message}`);
       failures.push(slug);
     }
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    await new Promise((resolve) => setTimeout(resolve, delayMs));
   }
 
   console.info(`Execução concluída: ${created} criada(s), ${updated} atualizada(s), ${failures.length} pendente(s).`);
+  return { created, updated, failures };
+}
+
+async function main() {
+  const { failures } = await generateLiturgies();
   if (failures.length > 0) process.exitCode = 1;
 }
 

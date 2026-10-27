@@ -1,0 +1,66 @@
+name: Generate next 90 days of liturgies every 30 days
+
+on:
+  schedule:
+    - cron: "0 10 * * *" # 07:00 in America/Sao_Paulo; generation gated below
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: generate-future-liturgies
+  cancel-in-progress: false
+
+jobs:
+  cadence:
+    runs-on: ubuntu-latest
+    outputs:
+      generate: ${{ steps.cadence.outputs.generate }}
+    steps:
+      - name: Check 30-day interval
+        id: cadence
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          # Cron cannot express a continuous 30-day interval across months.
+          today=$(TZ=America/Sao_Paulo date +%F)
+          elapsed_days=$(( ($(date -u -d "$today" +%s) - $(date -u -d '2026-10-27' +%s)) / 86400 ))
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]] || (( elapsed_days >= 0 && elapsed_days % 30 == 0 )); then
+            echo "generate=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "generate=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  generate:
+    needs: cadence
+    if: needs.cadence.outputs.generate == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Test future liturgy source and formatting
+        run: node --test scripts/future-liturgy-format.test.mjs scripts/generate-future-liturgies.test.mjs
+      - name: Generate missing liturgies for next 90 days
+        id: generate
+        continue-on-error: true
+        env:
+          DAYS_AHEAD: "90"
+        run: node scripts/generate-future-liturgies.mjs
+      - name: Commit new pages
+        run: |
+          if [[ -z "$(git status --porcelain liturgia-content)" ]]; then
+            echo "No new liturgy pages."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add liturgia-content/*.mdx
+          git commit -m "Publica liturgias dos próximos 90 dias"
+          git push
+      - name: Report source failures
+        if: steps.generate.outcome == 'failure'
+        run: exit 1

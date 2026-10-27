@@ -1,19 +1,9 @@
-name: Generate future liturgies
+name: Revalidate next 7 days of liturgies
 
 on:
   schedule:
     - cron: "0 11 * * *" # 08:00 in America/Sao_Paulo
   workflow_dispatch:
-    inputs:
-      days_ahead:
-        description: Days ahead to publish
-        required: false
-        default: "7"
-        type: choice
-        options:
-          - "7"
-          - "30"
-          - "90"
 
 permissions:
   contents: write
@@ -33,22 +23,22 @@ jobs:
           node-version: 22
       - name: Test future liturgy source and formatting
         run: node --test scripts/future-liturgy-format.test.mjs scripts/generate-future-liturgies.test.mjs
-      - name: Generate missing future liturgies
+      - name: Revalidate and repair next 7 days
         id: generate
         continue-on-error: true
         env:
-          DAYS_AHEAD: ${{ inputs.days_ahead || '7' }}
-        run: node scripts/generate-future-liturgies.mjs
-      - name: Commit new pages
+          DAYS_AHEAD: "7"
+        run: node scripts/generate-future-liturgies.mjs --refresh-existing
+      - name: Commit new or corrected pages
         run: |
           if [[ -z "$(git status --porcelain liturgia-content)" ]]; then
-            echo "No new liturgy pages."
+            echo "No liturgy changes."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add liturgia-content/*.mdx
-          git commit -m "Publica liturgias dos próximos dias"
+          git commit -m "Revalida liturgias dos próximos 7 dias"
           git push
       - name: Report source failures
         if: steps.generate.outcome == 'failure'
