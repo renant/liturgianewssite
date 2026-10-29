@@ -27,14 +27,6 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
-  alternates: {
-    types: {
-      "application/rss+xml": [
-        { url: `${SITE_URL}/feed.xml`, title: "Blog - LiturgiaNews" },
-        { url: `${SITE_URL}/liturgia/feed.xml`, title: "Liturgia Diária - LiturgiaNews" },
-      ],
-    },
-  },
   title: {
     default: "LiturgiaNews - Liturgia Católica Diária por E-mail",
     template: "%s | LiturgiaNews",
@@ -106,6 +98,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
+      <head>
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="Blog - LiturgiaNews"
+          href={`${SITE_URL}/feed.xml`}
+        />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="Liturgia Diária - LiturgiaNews"
+          href={`${SITE_URL}/liturgia/feed.xml`}
+        />
+      </head>
       <body className={`${geistSans.variable} antialiased`}>
         <a
           href="#conteudo-principal"

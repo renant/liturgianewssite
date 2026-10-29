@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-29T12:55:58.442Z",
+  "date": "2026-10-29T13:13:00.648Z",
   "baseUrl": "http://127.0.0.1:3100",
   "thresholds": {
     "performance": 95,
@@ -11,26 +11,26 @@
     {
       "route": "/",
       "scores": {
-        "performance": 100,
+        "performance": 98,
         "accessibility": 100,
         "best-practices": 100,
         "seo": 100
       },
       "metrics": {
-        "fcpMs": 759,
-        "lcpMs": 1809,
-        "tbtMs": 21,
+        "fcpMs": 758,
+        "lcpMs": 2345,
+        "tbtMs": 17,
         "cls": 0
       },
       "failingAudits": [
         {
           "id": "largest-contentful-paint",
-          "score": 0.98,
+          "score": 0.92,
           "title": "Largest Contentful Paint"
         },
         {
           "id": "max-potential-fid",
-          "score": 0.97,
+          "score": 0.98,
           "title": "Max Potential First Input Delay"
         },
         {
@@ -45,7 +45,7 @@
         },
         {
           "id": "unused-javascript",
-          "score": 0.5,
+          "score": 0,
           "title": "Reduce unused JavaScript"
         },
         {
@@ -78,26 +78,26 @@
     {
       "route": "/liturgia",
       "scores": {
-        "performance": 100,
+        "performance": 99,
         "accessibility": 100,
         "best-practices": 100,
         "seo": 100
       },
       "metrics": {
-        "fcpMs": 904,
-        "lcpMs": 1806,
-        "tbtMs": 24,
+        "fcpMs": 950,
+        "lcpMs": 2194,
+        "tbtMs": 18,
         "cls": 0
       },
       "failingAudits": [
         {
           "id": "largest-contentful-paint",
-          "score": 0.98,
+          "score": 0.95,
           "title": "Largest Contentful Paint"
         },
         {
           "id": "max-potential-fid",
-          "score": 0.37,
+          "score": 0.98,
           "title": "Max Potential First Input Delay"
         },
         {
@@ -117,7 +117,7 @@
         },
         {
           "id": "unused-javascript",
-          "score": 0.5,
+          "score": 0,
           "title": "Reduce unused JavaScript"
         },
         {
@@ -156,70 +156,8 @@
         "seo": 100
       },
       "metrics": {
-        "fcpMs": 817,
-        "lcpMs": 2341,
-        "tbtMs": 17,
-        "cls": 0
-      },
-      "failingAudits": [
-        {
-          "id": "largest-contentful-paint",
-          "score": 0.92,
-          "title": "Largest Contentful Paint"
-        },
-        {
-          "id": "max-potential-fid",
-          "score": 0.98,
-          "title": "Max Potential First Input Delay"
-        },
-        {
-          "id": "interactive",
-          "score": 0.95,
-          "title": "Time to Interactive"
-        },
-        {
-          "id": "render-blocking-resources",
-          "score": 0.5,
-          "title": "Eliminate render-blocking resources"
-        },
-        {
-          "id": "unused-javascript",
-          "score": 0,
-          "title": "Reduce unused JavaScript"
-        },
-        {
-          "id": "legacy-javascript",
-          "score": 0.5,
-          "title": "Avoid serving legacy JavaScript to modern browsers"
-        },
-        {
-          "id": "legacy-javascript-insight",
-          "score": 0.5,
-          "title": "Legacy JavaScript"
-        },
-        {
-          "id": "network-dependency-tree-insight",
-          "score": 0,
-          "title": "Network dependency tree"
-        },
-        {
-          "id": "render-blocking-insight",
-          "score": 0.5,
-          "title": "Render blocking requests"
-        }
-      ]
-    },
-    {
-      "route": "/liturgia/29-outubro-2026",
-      "scores": {
-        "performance": 98,
-        "accessibility": 100,
-        "best-practices": 100,
-        "seo": 100
-      },
-      "metrics": {
-        "fcpMs": 911,
-        "lcpMs": 2483,
+        "fcpMs": 931,
+        "lcpMs": 2482,
         "tbtMs": 14,
         "cls": 0
       },
@@ -272,7 +210,7 @@
       ]
     },
     {
-      "route": "/acompanhar",
+      "route": "/liturgia/29-outubro-2026",
       "scores": {
         "performance": 98,
         "accessibility": 100,
@@ -280,15 +218,15 @@
         "seo": 100
       },
       "metrics": {
-        "fcpMs": 848,
-        "lcpMs": 2341,
-        "tbtMs": 17,
+        "fcpMs": 926,
+        "lcpMs": 2497,
+        "tbtMs": 20,
         "cls": 0
       },
       "failingAudits": [
         {
           "id": "largest-contentful-paint",
-          "score": 0.92,
+          "score": 0.9,
           "title": "Largest Contentful Paint"
         },
         {
@@ -298,7 +236,7 @@
         },
         {
           "id": "interactive",
-          "score": 0.96,
+          "score": 0.94,
           "title": "Time to Interactive"
         },
         {
@@ -313,7 +251,7 @@
         },
         {
           "id": "legacy-javascript",
-          "score": 0,
+          "score": 0.5,
           "title": "Avoid serving legacy JavaScript to modern browsers"
         },
         {
@@ -323,7 +261,69 @@
         },
         {
           "id": "legacy-javascript-insight",
+          "score": 0.5,
+          "title": "Legacy JavaScript"
+        },
+        {
+          "id": "network-dependency-tree-insight",
           "score": 0,
+          "title": "Network dependency tree"
+        },
+        {
+          "id": "render-blocking-insight",
+          "score": 0.5,
+          "title": "Render blocking requests"
+        }
+      ]
+    },
+    {
+      "route": "/acompanhar",
+      "scores": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "fcpMs": 900,
+        "lcpMs": 2327,
+        "tbtMs": 11,
+        "cls": 0
+      },
+      "failingAudits": [
+        {
+          "id": "largest-contentful-paint",
+          "score": 0.93,
+          "title": "Largest Contentful Paint"
+        },
+        {
+          "id": "max-potential-fid",
+          "score": 0.99,
+          "title": "Max Potential First Input Delay"
+        },
+        {
+          "id": "interactive",
+          "score": 0.97,
+          "title": "Time to Interactive"
+        },
+        {
+          "id": "render-blocking-resources",
+          "score": 0.5,
+          "title": "Eliminate render-blocking resources"
+        },
+        {
+          "id": "unused-javascript",
+          "score": 0,
+          "title": "Reduce unused JavaScript"
+        },
+        {
+          "id": "legacy-javascript",
+          "score": 0.5,
+          "title": "Avoid serving legacy JavaScript to modern browsers"
+        },
+        {
+          "id": "legacy-javascript-insight",
+          "score": 0.5,
           "title": "Legacy JavaScript"
         },
         {
@@ -347,9 +347,9 @@
         "seo": 100
       },
       "metrics": {
-        "fcpMs": 783,
-        "lcpMs": 2256,
-        "tbtMs": 16,
+        "fcpMs": 754,
+        "lcpMs": 2254,
+        "tbtMs": 12,
         "cls": 0
       },
       "failingAudits": [
@@ -365,7 +365,7 @@
         },
         {
           "id": "interactive",
-          "score": 0.95,
+          "score": 0.96,
           "title": "Time to Interactive"
         },
         {
@@ -413,26 +413,26 @@
     {
       "route": "/donate",
       "scores": {
-        "performance": 98,
+        "performance": 99,
         "accessibility": 100,
         "best-practices": 100,
         "seo": 100
       },
       "metrics": {
-        "fcpMs": 820,
-        "lcpMs": 2343,
-        "tbtMs": 17,
+        "fcpMs": 786,
+        "lcpMs": 2109,
+        "tbtMs": 28,
         "cls": 0
       },
       "failingAudits": [
         {
           "id": "largest-contentful-paint",
-          "score": 0.92,
+          "score": 0.96,
           "title": "Largest Contentful Paint"
         },
         {
           "id": "max-potential-fid",
-          "score": 0.98,
+          "score": 0.95,
           "title": "Max Potential First Input Delay"
         },
         {

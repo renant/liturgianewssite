@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { buildPageMetadata, DEFAULT_OG_IMAGE, SITE_URL } from "./seo.ts";
+import { createAnalyticsTracker } from "./analytics.ts";
 import { getLiturgicalDate } from "./liturgical-date.ts";
 import { getContentIndex, getContentSlugSet } from "./content-metadata.ts";
 import securityHeaders from "../headers.ts";
@@ -189,4 +190,35 @@ test("getContentSlugSet retorna exatamente os mesmos slugs do índice cacheado",
   for (const item of index) {
     assert.equal(slugSet.has(item.slug), true);
   }
+});
+
+test("createAnalyticsTracker enfileira eventos disparados antes da inicialização e drena em ordem", () => {
+  const tracker = createAnalyticsTracker();
+  const captured: Array<{ name: string; properties?: Record<string, string | boolean> }> = [];
+
+  tracker.capture("liturgy_view", { slug: "29-outubro-2026", is_today: true });
+  tracker.capture("newsletter_email_confirmed");
+  assert.equal(captured.length, 0);
+
+  tracker.attachClient({
+    capture(name, properties) {
+      captured.push({ name, properties });
+    },
+  });
+
+  assert.deepEqual(captured, [
+    { name: "liturgy_view", properties: { slug: "29-outubro-2026", is_today: true } },
+    { name: "newsletter_email_confirmed", properties: undefined },
+  ]);
+
+  tracker.capture("share_click", { platform: "whatsapp", slug: "hoje" });
+  assert.equal(captured.length, 3);
+  assert.deepEqual(captured[2], { name: "share_click", properties: { platform: "whatsapp", slug: "hoje" } });
+});
+
+test("RootLayout mantém links globais de descoberta RSS no head compartilhado", () => {
+  const layoutSource = fs.readFileSync(path.join(process.cwd(), "app", "layout.tsx"), "utf8");
+  assert.equal(layoutSource.includes('type="application/rss+xml"'), true);
+  assert.equal(layoutSource.includes("/feed.xml"), true);
+  assert.equal(layoutSource.includes("/liturgia/feed.xml"), true);
 });

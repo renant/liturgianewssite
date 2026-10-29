@@ -1,3 +1,5 @@
+import { attachAnalyticsClient } from "./lib/analytics";
+
 const posthogKey = process.env.NEXT_PUBLIC_POSTHOG_KEY;
 
 if (posthogKey && typeof window !== "undefined") {
@@ -10,6 +12,9 @@ if (posthogKey && typeof window !== "undefined") {
         capture_dead_clicks: false,
         disable_session_recording: true,
         disable_surveys: true,
+        loaded: (instance) => {
+          attachAnalyticsClient(instance);
+        },
       });
     });
   };

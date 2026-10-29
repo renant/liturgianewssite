@@ -7,7 +7,7 @@
     "build": "bun --bun next build",
     "start": "bun --bun next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "bun --bun next typegen && tsc --noEmit",
     "test:unit": "bun test lib",
     "test:scripts": "node --test scripts/future-liturgy-format.test.mjs scripts/generate-future-liturgies.test.mjs",
     "test": "bun run test:unit && bun run test:scripts",
