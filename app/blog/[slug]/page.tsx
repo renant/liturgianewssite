@@ -3,6 +3,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs/breadcrumbs";
 import { RelatedPosts } from "@/components/related-posts/related-posts";
 import { SocialShare } from "@/components/social-share/social-share";
 import { Button } from "@/components/ui/button";
+import { DEFAULT_OG_IMAGE, SITE_URL } from "@/lib/seo";
 import { ArrowLeftIcon } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -32,22 +33,26 @@ async function loadMdxFile(slug: string) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!params || !(await params).slug) {
-    throw new Error("Slug is required");
+    notFound();
   }
 
   const { slug } = await params;
   const mdxModule = await loadMdxFile(slug);
 
   if (!mdxModule) {
-    return {
-      title: "Post não encontrado",
-      description: "Post não encontrado",
-    };
+    notFound();
   }
 
   const { metadata } = mdxModule;
-
-  const url = `https://www.liturgianews.site/blog/${slug}`;
+  const url = `${SITE_URL}/blog/${slug}`;
+  const ogImage = metadata.image
+    ? {
+        url: metadata.image,
+        width: metadata.imageWidth || 1200,
+        height: metadata.imageHeight || 630,
+        alt: metadata.imageAlt || metadata.title,
+      }
+    : DEFAULT_OG_IMAGE;
 
   return {
     title: metadata.title,
@@ -60,20 +65,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: metadata.title,
       description: metadata.description,
-      url: url,
+      url,
       type: "article",
       publishedTime: new Date(metadata.date).toISOString(),
       modifiedTime: metadata.lastModified ? new Date(metadata.lastModified).toISOString() : undefined,
       authors: [metadata.author || "LiturgiaNews"],
       tags: metadata.tags,
-      images: [
-        {
-          url: metadata.image || "https://www.liturgianews.site/images/android-chrome-192x192.png",
-          width: metadata.imageWidth || 192,
-          height: metadata.imageHeight || 192,
-          alt: metadata.imageAlt || metadata.title,
-        },
-      ],
+      images: [ogImage],
       locale: "pt_BR",
       siteName: "LiturgiaNews",
     },
@@ -81,9 +79,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary_large_image",
       title: metadata.title,
       description: metadata.description,
-      images: [
-        metadata.image || "https://www.liturgianews.site/images/android-chrome-192x192.png",
-      ],
+      images: [ogImage.url],
     },
   };
 }
@@ -121,30 +117,13 @@ export default async function Page({
         <nav aria-label="Navegação">
           <Button asChild variant="outline" className="mb-2">
             <Link href="/blog">
-              <ArrowLeftIcon className="mr-2 h-4 w-4" aria-label="Voltar" />
+              <ArrowLeftIcon className="mr-2 h-4 w-4" aria-hidden="true" />
               Voltar para o blog
             </Link>
           </Button>
         </nav>
-        
-        <article 
-          className="editorial-prose"
-          itemScope
-          itemType="https://schema.org/BlogPosting"
-        >
-          <meta
-            itemProp="datePublished"
-            content={new Date(metadata.date).toISOString()}
-          />
-          <meta
-            itemProp="dateModified"
-            content={metadata.lastModified ? new Date(metadata.lastModified).toISOString() : new Date(metadata.date).toISOString()}
-          />
-          <meta itemProp="author" content={metadata.author || "LiturgiaNews"} />
-          <meta itemProp="publisher" content="LiturgiaNews" />
-          <meta itemProp="inLanguage" content="pt-BR" />
-          <meta itemProp="url" content={`https://www.liturgianews.site/blog/${slug}`} />
-          
+
+        <article className="editorial-prose">
           <Post />
         </article>
 
@@ -157,7 +136,7 @@ export default async function Page({
             description={metadata.description}
           />
         </div>
-        
+
         <aside className="border-t border-amber-200/70 pt-6">
           <h2 className="text-2xl font-bold mb-4">Gostou do conteúdo?</h2>
           <p className="mb-4">
@@ -174,7 +153,7 @@ export default async function Page({
         {relatedPosts.length > 0 && (
           <RelatedPosts posts={relatedPosts} currentSlug={slug} />
         )}
-        
+
         <JsonLd
           data={[{
             "@context": "https://schema.org",
@@ -186,23 +165,23 @@ export default async function Page({
             author: {
               "@type": metadata.authorType || (metadata.author ? "Person" : "Organization"),
               name: metadata.author || "LiturgiaNews",
-              url: metadata.authorUrl || "https://www.liturgianews.site"
+              url: metadata.authorUrl || SITE_URL,
             },
             publisher: {
               "@type": "Organization",
               name: "LiturgiaNews",
-              url: "https://www.liturgianews.site",
+              url: SITE_URL,
               logo: {
                 "@type": "ImageObject",
-                url: "https://www.liturgianews.site/images/android-chrome-192x192.png",
+                url: `${SITE_URL}/images/android-chrome-192x192.png`,
                 width: 192,
-                height: 192
-              }
+                height: 192,
+              },
             },
-            image: metadata.image || "https://www.liturgianews.site/images/android-chrome-192x192.png",
+            image: metadata.image || DEFAULT_OG_IMAGE.url,
             mainEntityOfPage: {
               "@type": "WebPage",
-              "@id": `https://www.liturgianews.site/blog/${slug}`,
+              "@id": `${SITE_URL}/blog/${slug}`,
             },
             articleBody: metadata.excerpt || metadata.description,
             articleSection: metadata.category || metadata.tags?.[0] || "Liturgia",
@@ -213,8 +192,8 @@ export default async function Page({
             isPartOf: {
               "@type": "Blog",
               name: "Blog da Liturgia Católica Diária",
-              url: "https://www.liturgianews.site/blog"
-            }
+              url: `${SITE_URL}/blog`,
+            },
           }]}
         />
       </div>

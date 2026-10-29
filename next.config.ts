@@ -41,10 +41,6 @@ const nextConfig: NextConfig = {
             key: "X-DNS-Prefetch-Control",
             value: "on",
           },
-          {
-            key: "Referrer-Policy",
-            value: "origin-when-cross-origin",
-          },
         ],
       },
       {

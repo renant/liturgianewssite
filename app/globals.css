@@ -54,7 +54,7 @@
   .footer-content { @apply grid gap-6 py-8 md:grid-cols-[1fr_2fr] md:gap-x-12; }
   .footer-nav { @apply flex flex-wrap items-start gap-x-6 gap-y-2 text-sm text-amber-800 md:justify-end; }
   .footer-nav a { @apply inline-flex min-h-9 items-center hover:underline; }
-  .footer-note { @apply text-xs leading-relaxed text-slate-500 md:col-span-2; }
+  .footer-note { @apply text-xs leading-relaxed text-slate-600 md:col-span-2; }
   .reading-container { @apply mx-auto w-full max-w-[44rem]; }
   .page-container { @apply mx-auto w-full max-w-4xl; }
   .page-header { @apply mb-8 space-y-4 sm:mb-10; }
@@ -113,7 +113,7 @@
   .calendar-number { @apply text-base font-medium tabular-nums; }
   .calendar-today { @apply text-[0.6875rem] font-medium text-amber-800; }
   .calendar-celebration { @apply hidden text-xs leading-relaxed text-slate-600 sm:line-clamp-2; }
-  .calendar-unavailable { @apply text-slate-500; }
+  .calendar-unavailable { @apply text-slate-600; }
   .calendar-legend { @apply mt-5 flex flex-wrap gap-x-5 gap-y-2 text-xs leading-relaxed text-slate-600; }
   .status-page { @apply reading-container py-6 sm:py-12; }
   .status-icon { @apply mb-5 size-10 text-amber-700; }

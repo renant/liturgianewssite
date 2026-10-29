@@ -13,7 +13,7 @@ export function Header() {
   const pathname = usePathname();
   return <header className="site-header">
     <div className="site-container header-content">
-      <Link href="/" className="site-brand" aria-label="LiturgiaNews — página inicial">LiturgiaNews<span>Palavra para cada dia</span></Link>
+      <Link href="/" className="site-brand">LiturgiaNews<span>Palavra para cada dia</span></Link>
       <Link href="/#newsletter" className="header-subscribe">Receber por e-mail</Link>
       <nav aria-label="Navegação principal" className="header-nav">
         {links.map(({ href, label }) => {

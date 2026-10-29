@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import { LiturgyCalendar } from "@/components/liturgy/calendar";
 import { getContentIndex } from "@/lib/content-metadata";
 import { getLiturgicalDate } from "@/lib/liturgical-date";
+import { buildPageMetadata } from "@/lib/seo";
 
 export const revalidate = 300;
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Calendário litúrgico — Liturgia Católica Diária",
   description: "Consulte a liturgia de hoje e as leituras de cada dia no calendário. Navegue entre meses e encontre liturgias passadas e futuras disponíveis.",
-  alternates: { canonical: "https://www.liturgianews.site/liturgia" },
-  openGraph: { title: "Calendário litúrgico | LiturgiaNews", description: "Escolha uma data para ler a liturgia católica diária.", url: "https://www.liturgianews.site/liturgia", type: "website" },
-};
+  path: "/liturgia",
+});
 
 export default function Page() {
   const today = getLiturgicalDate();

@@ -1,24 +1,17 @@
 import JsonLd from "@/components/jsonld/JsonLd";
 import { Button } from "@/components/ui/button";
+import { buildPageMetadata, SITE_URL } from "@/lib/seo";
 import livePixImage from "@/public/livepix.png";
 import { ExternalLink, Heart, Mail, Server } from "lucide-react";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Apoie nossa missão",
   description: "Ajude a LiturgiaNews a continuar levando a Palavra de Deus através da liturgia diária para milhares de fiéis. Faça sua doação e apoie nossa missão evangelizadora.",
-  alternates: {
-    canonical: "https://www.liturgianews.site/donate",
-  },
-  openGraph: {
-    title: "Apoie nossa missão",
-    description: "Ajude-nos a continuar nossa missão de evangelização através da liturgia diária",
-    type: "website",
-    url: "https://www.liturgianews.site/donate",
-  },
-};
+  path: "/donate",
+});
 
 export default function Donate() {
   return (
@@ -28,7 +21,7 @@ export default function Donate() {
           <h1 className="page-title">
             Apoie Nossa Missão
           </h1>
-          <p className="text-muted-foreground text-lg leading-relaxed max-w-2xl mx-auto">
+          <p className="page-description">
             Ajude-nos a continuar levando a Palavra de Deus e as leituras diárias
             da liturgia para milhares de fiéis.
           </p>
@@ -44,7 +37,7 @@ export default function Donate() {
                 <li className="flex items-start space-x-3">
                   <Server
                     className="w-5 h-5 text-amber-700 mt-1 flex-shrink-0"
-                    aria-label="Servidores"
+                    aria-hidden="true"
                   />
                   <span className="text-muted-foreground">
                     Manutenção dos servidores para garantir que as newsletters
@@ -54,7 +47,7 @@ export default function Donate() {
                 <li className="flex items-start space-x-3">
                   <Mail
                     className="w-5 h-5 text-amber-700 mt-1 flex-shrink-0"
-                    aria-label="E-mail"
+                    aria-hidden="true"
                   />
                   <span className="text-muted-foreground">
                     Custos com serviços de email para enviar newsletters
@@ -64,7 +57,7 @@ export default function Donate() {
                 <li className="flex items-start space-x-3">
                   <Heart
                     className="w-5 h-5 text-amber-700 mt-1 flex-shrink-0"
-                    aria-label="Apoio"
+                    aria-hidden="true"
                   />
                   <span className="text-muted-foreground">
                     Desenvolvimento contínuo para melhorar a experiência dos
@@ -86,8 +79,8 @@ export default function Donate() {
                 className="bg-amber-700 hover:bg-amber-800 text-white inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
                 asChild
               >
-                <Link 
-                  href="https://livepix.gg/liturgianews" 
+                <Link
+                  href="https://livepix.gg/liturgianews"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Doar agora via LivePix (abre em nova janela)"
@@ -95,7 +88,7 @@ export default function Donate() {
                   Doar Agora
                   <ExternalLink
                     className="w-4 h-4 ml-2"
-                    aria-label="Abrir em nova janela"
+                    aria-hidden="true"
                   />
                 </Link>
               </Button>
@@ -107,14 +100,12 @@ export default function Donate() {
               <Image
                 src={livePixImage}
                 alt="QR Code para doação via LivePix"
-                width={250}
-                height={250}
-                className="w-full h-auto"
-                priority
+                sizes="250px"
+                className="w-[250px] h-auto"
                 placeholder="blur"
               />
             </div>
-            <p className="text-sm text-muted-foreground" aria-label="Link do LivePix">livepix.gg/liturgianews</p>
+            <p className="text-sm text-muted-foreground">livepix.gg/liturgianews</p>
           </aside>
         </div>
 
@@ -143,12 +134,12 @@ export default function Donate() {
           "@type": "DonateAction",
           name: "Doar para LiturgiaNews",
           description: "Apoie a missão da LiturgiaNews de levar a liturgia católica diária para milhares de fiéis",
-          url: "https://www.liturgianews.site/donate",
+          url: `${SITE_URL}/donate`,
           recipient: {
             "@type": "Organization",
             name: "LiturgiaNews",
-            url: "https://www.liturgianews.site",
-            description: "Newsletter gratuita de liturgia católica diária"
+            url: SITE_URL,
+            description: "Newsletter gratuita de liturgia católica diária",
           },
           potentialAction: {
             "@type": "DonateAction",
@@ -157,10 +148,10 @@ export default function Donate() {
               urlTemplate: "https://livepix.gg/liturgianews",
               actionPlatform: [
                 "https://schema.org/DesktopWebPlatform",
-                "https://schema.org/MobileWebPlatform"
-              ]
-            }
-          }
+                "https://schema.org/MobileWebPlatform",
+              ],
+            },
+          },
         }}
       />
     </>

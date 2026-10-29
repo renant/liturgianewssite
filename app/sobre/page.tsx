@@ -1,21 +1,13 @@
+import { buildPageMetadata } from "@/lib/seo";
 import { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Sobre a LiturgiaNews",
   description:
     "Conheça a missão da LiturgiaNews, nossa equipe e o propósito da newsletter diária de liturgia católica.",
-  alternates: {
-    canonical: "https://www.liturgianews.site/sobre",
-  },
-  openGraph: {
-    title: "Sobre a LiturgiaNews",
-    description:
-      "Conheça a missão, a equipe e o propósito da newsletter diária de liturgia católica.",
-    type: "website",
-    url: "https://www.liturgianews.site/sobre",
-  },
-};
+  path: "/sobre",
+});
 
 export default function Sobre() {
   return (

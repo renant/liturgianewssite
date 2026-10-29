@@ -1,6 +1,7 @@
 import JsonLd from "@/components/jsonld/JsonLd";
 import { Breadcrumbs } from "@/components/breadcrumbs/breadcrumbs";
 import { PostCard } from "@/components/post-card/post-card";
+import { buildPageMetadata, SITE_URL } from "@/lib/seo";
 import { Metadata } from "next";
 import Link from "next/link";
 import { getPosts, type PostMetadata } from "./actions";
@@ -20,16 +21,13 @@ export async function generateMetadata({ searchParams }: { searchParams: SearchP
   const hasFilters = Boolean(getFirstValue(query.search)) ||
     (Boolean(getFirstValue(query.sort)) && getFirstValue(query.sort) !== "date_desc") ||
     (Boolean(getFirstValue(query.limit)) && Number(getFirstValue(query.limit)) !== 6);
-  const canonical = hasFilters || page === 1
-    ? "https://www.liturgianews.site/blog"
-    : `https://www.liturgianews.site/blog?page=${page}`;
-  return {
+  const path = hasFilters || page === 1 ? "/blog" : `/blog?page=${page}`;
+  return buildPageMetadata({
     title: "Blog - Liturgia Católica Diária",
     description: blogDescription,
-    alternates: { canonical },
+    path,
     robots: hasFilters ? { index: false, follow: true } : undefined,
-    openGraph: { title: "Blog - Liturgia Católica Diária | LiturgiaNews", description: blogDescription, type: "website", url: canonical },
-  };
+  });
 }
 
 function paginationHref(page: number, limit: number, search: string, sort: string) {
@@ -68,7 +66,7 @@ export default async function BlogPage(props: {
       <div className="page-container">
         <div className="space-y-8">
           <Breadcrumbs items={[{ label: "Blog", href: "/blog" }]} className="mb-4" />
-          
+
           <header className="page-header">
             <h1 className="page-title">
               Blog da Liturgia Católica Diária
@@ -124,26 +122,25 @@ export default async function BlogPage(props: {
                   href={paginationHref(currentPage - 1, postsPerPage, searchTerm, sort)}
                   className={`${
                     isPreviousDisabled ? disabledLinkStyle : ""
-                  } inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-amber-200 rounded-md shadow-sm hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500`}
+                  } inline-flex min-h-11 items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-amber-200 rounded-md shadow-sm hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500`}
                   aria-disabled={isPreviousDisabled}
                   tabIndex={isPreviousDisabled ? -1 : undefined}
                 >
                   Anterior
                 </Link>
               )}
-              <span 
-                className="inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-amber-50 border border-amber-200 rounded-md"
+              <span
+                className="inline-flex min-h-11 items-center px-4 py-2 text-sm font-medium text-slate-700 bg-amber-50 border border-amber-200 rounded-md"
                 aria-current="page"
-                aria-label={`Página ${currentPage} de ${totalPages}`}
               >
-                {currentPage} de {totalPages}
+                Página {currentPage} de {totalPages}
               </span>
               {!isNextDisabled && (
                 <Link
                   href={paginationHref(currentPage + 1, postsPerPage, searchTerm, sort)}
                   className={`${
                     isNextDisabled ? disabledLinkStyle : ""
-                  } inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-amber-200 rounded-md shadow-sm hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500`}
+                  } inline-flex min-h-11 items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-amber-200 rounded-md shadow-sm hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500`}
                   aria-disabled={isNextDisabled}
                   tabIndex={isNextDisabled ? -1 : undefined}
                 >
@@ -152,8 +149,8 @@ export default async function BlogPage(props: {
               )}
             </div>
           </nav>}
-          
-          {totalPages > 1 && <p className="text-center text-sm text-slate-500" aria-label={`Mostrando ${posts.length} de ${totalPosts} posts`}>
+
+          {totalPages > 1 && <p className="text-center text-sm text-slate-600">
             Mostrando {posts.length} de {totalPosts} artigos
           </p>}
         </div>
@@ -165,24 +162,24 @@ export default async function BlogPage(props: {
           "@type": "Blog",
           name: "Blog da Liturgia Católica Diária",
           description: "Reflexões, ensinamentos e inspiração católica para sua jornada de fé",
-          url: "https://www.liturgianews.site/blog",
+          url: `${SITE_URL}/blog`,
           inLanguage: "pt-BR",
           publisher: {
             "@type": "Organization",
             name: "LiturgiaNews",
-            url: "https://www.liturgianews.site"
+            url: SITE_URL,
           },
           blogPost: posts.map((post) => ({
             "@type": "BlogPosting",
             headline: post.title,
             description: post.description,
             datePublished: post.date,
-            url: `https://www.liturgianews.site/blog/${post.slug}`,
+            url: `${SITE_URL}/blog/${post.slug}`,
             author: {
               "@type": "Organization",
-              name: "LiturgiaNews"
-            }
-          }))
+              name: "LiturgiaNews",
+            },
+          })),
         }}
       />
     </>
