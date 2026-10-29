@@ -5,6 +5,7 @@ import { getContentIndex } from "@/lib/content-metadata";
 import { calendarHref, calendarMonthLabel, getCalendarMonths } from "@/lib/liturgy-calendar";
 import { getLiturgicalDate, MONTH_NAMES } from "@/lib/liturgical-date";
 import { decodeRouteSegment } from "@/lib/route-segment";
+import { buildPageMetadata } from "@/lib/seo";
 
 type Props = { params: Promise<{ ano: string; mes: string }> };
 export const revalidate = 300;
@@ -24,10 +25,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { ano, mes } = await params;
   const { year, month } = resolveMonth(ano, mes);
   const label = calendarMonthLabel(year, month);
-  const title = `Calendário litúrgico de ${label}`;
-  const description = `Consulte as leituras das liturgias disponíveis em ${label}. Escolha uma data no calendário para abrir a liturgia.`;
-  const url = `https://www.liturgianews.site${calendarHref({ year, month })}`;
-  return { title, description, alternates: { canonical: url }, openGraph: { title, description, type: "website", url } };
+  return buildPageMetadata({
+    title: `Calendário litúrgico de ${label}`,
+    description: `Consulte as leituras das liturgias disponíveis em ${label}. Escolha uma data no calendário para abrir a liturgia.`,
+    path: calendarHref({ year, month }),
+  });
 }
 
 export default async function Page({ params }: Props) {

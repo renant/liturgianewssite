@@ -30,10 +30,10 @@ export function LiturgyCalendar({ year, month, entries, today, isIndex = false }
     <section aria-label={`Dias de ${label}`}>
       <div className="calendar-toolbar">
         <div className="flex items-center gap-2 sm:gap-4">
-          <h2 className="calendar-month"><span className="capitalize">{MONTH_NAMES[month - 1]}</span> <span className="font-normal text-slate-500">{year}</span></h2>
+          <h2 className="calendar-month"><span className="capitalize">{MONTH_NAMES[month - 1]}</span> <span className="font-normal text-slate-600">{year}</span></h2>
           <nav aria-label="Navegação entre meses" className="calendar-navigation">
-            {available(previous) ? <Link className="calendar-arrow" href={calendarHref(previous)} aria-label={`Mês anterior: ${calendarMonthLabel(previous.year, previous.month)}`}><ChevronLeft className="size-5" aria-hidden="true" /></Link> : <span className="calendar-arrow" aria-disabled="true" aria-label="Mês anterior indisponível"><ChevronLeft className="size-5" aria-hidden="true" /></span>}
-            {available(next) ? <Link className="calendar-arrow" href={calendarHref(next)} aria-label={`Próximo mês: ${calendarMonthLabel(next.year, next.month)}`}><ChevronRight className="size-5" aria-hidden="true" /></Link> : <span className="calendar-arrow" aria-disabled="true" aria-label="Próximo mês indisponível"><ChevronRight className="size-5" aria-hidden="true" /></span>}
+            {available(previous) ? <Link className="calendar-arrow" href={calendarHref(previous)} aria-label={`Mês anterior: ${calendarMonthLabel(previous.year, previous.month)}`}><ChevronLeft className="size-5" aria-hidden="true" /></Link> : <span className="calendar-arrow" aria-disabled="true"><ChevronLeft className="size-5" aria-hidden="true" /><span className="sr-only">Mês anterior indisponível</span></span>}
+            {available(next) ? <Link className="calendar-arrow" href={calendarHref(next)} aria-label={`Próximo mês: ${calendarMonthLabel(next.year, next.month)}`}><ChevronRight className="size-5" aria-hidden="true" /></Link> : <span className="calendar-arrow" aria-disabled="true"><ChevronRight className="size-5" aria-hidden="true" /><span className="sr-only">Próximo mês indisponível</span></span>}
           </nav>
         </div>
         <details className="calendar-picker"><summary>Mês e ano<ChevronDown className="size-4" aria-hidden="true" /></summary><nav aria-label="Escolher mês e ano">
@@ -51,7 +51,7 @@ export function LiturgyCalendar({ year, month, entries, today, isIndex = false }
           const content = <><time dateTime={iso} className="calendar-number">{date.day}</time>{isToday && <span className="calendar-today">Hoje</span>}{entry && <span className="calendar-celebration">{entry.title.split("|")[0].trim()}</span>}</>;
           return <td key={iso}>{entry
             ? <Link href={`/liturgia/${entry.slug}`} className="calendar-day" aria-label={`${formatCivilDate(date)} — ${entry.title}`} aria-current={isToday ? "date" : undefined}>{content}</Link>
-            : <span className="calendar-day calendar-unavailable" aria-label={`${formatCivilDate(date)} — liturgia indisponível`} aria-current={isToday ? "date" : undefined}>{content}</span>}</td>;
+            : <span className="calendar-day calendar-unavailable" aria-current={isToday ? "date" : undefined}>{content}<span className="sr-only"> — liturgia de {formatCivilDate(date)} indisponível</span></span>}</td>;
         })}</tr>)}</tbody>
       </table>
       <p className="calendar-legend"><span>Hoje está destacado em âmbar.</span><span>Dias sem link ainda não têm liturgia disponível.</span></p>

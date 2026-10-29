@@ -11,6 +11,7 @@ import { formatCivilDate, parseCivilDate } from "@/lib/liturgical-date";
 import { calendarHref, calendarMonthLabel } from "@/lib/liturgy-calendar";
 import { buildLiturgyDescription, extractLiturgyFacts } from "@/lib/liturgy-facts";
 import { contentPublishedAt, contentModifiedAt } from "@/lib/content-dates";
+import { SITE_URL } from "@/lib/seo";
 import { AdjacentDays } from "./adjacent-days";
 
 export function LiturgyPage({ entry, source, children, isToday, todayRoute = false }: {
@@ -30,7 +31,8 @@ export function LiturgyPage({ entry, source, children, isToday, todayRoute = fal
     { id: "noticias", label: "Notícias", available: /^##\s+Notícias do Vaticano\s*$/m.test(source) },
   ].filter(section => section.available);
   const slug = todayRoute ? "hoje" : entry.slug;
-  const url = `https://www.liturgianews.site/liturgia/${slug}`;
+  const url = `${SITE_URL}/liturgia/${slug}`;
+  const imageUrl = `${url}/opengraph-image`;
   return <div className="reading-container">
     <LiturgyTracker slug={entry.slug} isToday={isToday} />
     <div className="liturgy-topline"><Link href={monthUrl}><ArrowLeft className="size-4" aria-hidden="true" />Calendário de {calendarMonthLabel(date.year, date.month)}</Link>{!isToday && <TrackedTodayLink>Liturgia de hoje</TrackedTodayLink>}</div>
@@ -42,11 +44,33 @@ export function LiturgyPage({ entry, source, children, isToday, todayRoute = fal
     <section className="my-8 border-t border-amber-200/70 pt-6" aria-labelledby="share-title"><h2 id="share-title" className="mb-4 text-sm font-medium text-slate-600">Compartilhe esta liturgia</h2><SocialShare title={title} description={description} slug={slug} imagePath={`/liturgia/${slug}/opengraph-image`} /></section>
     <NewsletterPanel source={todayRoute ? "liturgia_hoje" : "liturgia_datada"} />
     <JsonLd data={[
-      { "@context": "https://schema.org", "@type": "Article", headline: title, description, datePublished: contentPublishedAt(entry), dateModified: contentModifiedAt(entry), author: { "@type": "Organization", name: "LiturgiaNews" }, publisher: { "@type": "Organization", name: "LiturgiaNews" }, mainEntityOfPage: url, inLanguage: "pt-BR" },
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: title,
+        description,
+        image: [imageUrl],
+        datePublished: contentPublishedAt(entry),
+        dateModified: contentModifiedAt(entry),
+        author: { "@type": "Organization", name: "LiturgiaNews", url: SITE_URL },
+        publisher: {
+          "@type": "Organization",
+          name: "LiturgiaNews",
+          url: SITE_URL,
+          logo: {
+            "@type": "ImageObject",
+            url: `${SITE_URL}/images/android-chrome-192x192.png`,
+            width: 192,
+            height: 192,
+          },
+        },
+        mainEntityOfPage: url,
+        inLanguage: "pt-BR",
+      },
       { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Início", item: "https://www.liturgianews.site" },
-        { "@type": "ListItem", position: 2, name: "Calendário", item: "https://www.liturgianews.site/liturgia" },
-        { "@type": "ListItem", position: 3, name: calendarMonthLabel(date.year, date.month), item: `https://www.liturgianews.site${monthUrl}` },
+        { "@type": "ListItem", position: 1, name: "Início", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Calendário", item: `${SITE_URL}/liturgia` },
+        { "@type": "ListItem", position: 3, name: calendarMonthLabel(date.year, date.month), item: `${SITE_URL}${monthUrl}` },
         { "@type": "ListItem", position: 4, name: todayRoute ? "Liturgia de hoje" : title, item: url },
       ] },
     ]} />

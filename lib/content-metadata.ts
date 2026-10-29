@@ -18,12 +18,25 @@ export type ContentIndexEntry = ContentMetadata & {
   dayOfWeek: string;
 };
 
+const HEADER_READ_BYTES = 2560;
+
 function quotedField(source: string, field: string): string | undefined {
   return new RegExp(`${field}\\s*:\\s*(["'])([\\s\\S]*?)\\1`).exec(source)?.[2];
 }
 
+function readHeaderSlice(filePath: string): string {
+  const fd = fs.openSync(filePath, "r");
+  try {
+    const buffer = Buffer.allocUnsafe(HEADER_READ_BYTES);
+    const bytesRead = fs.readSync(fd, buffer, 0, HEADER_READ_BYTES, 0);
+    return buffer.toString("utf8", 0, bytesRead);
+  } finally {
+    fs.closeSync(fd);
+  }
+}
+
 export function parseExportedMetadata(source: string): ContentMetadata | null {
-  const header = source.slice(0, 2500);
+  const header = source.slice(0, HEADER_READ_BYTES);
   const title = quotedField(header, "title");
   const date = quotedField(header, "date");
   if (!title || !date) return null;
@@ -48,6 +61,7 @@ export function readContentSource(directory: "liturgia-content" | "content", slu
 }
 
 const indexCache = new Map<string, ContentIndexEntry[]>();
+const slugSetCache = new Map<string, Set<string>>();
 
 export function getContentIndex(directory: "liturgia-content" | "content"): ContentIndexEntry[] {
   const cached = indexCache.get(directory);
@@ -59,8 +73,8 @@ export function getContentIndex(directory: "liturgia-content" | "content"): Cont
     .filter((file) => file.endsWith(".mdx"))
     .flatMap((file) => {
       const slug = file.replace(/\.mdx$/, "");
-      const source = fs.readFileSync(path.join(directoryPath, file), "utf8");
-      const metadata = parseExportedMetadata(source);
+      const header = readHeaderSlice(path.join(directoryPath, file));
+      const metadata = parseExportedMetadata(header);
       if (!metadata) return [];
       const weekday = formatter.format(new Date(`${metadata.date}T12:00:00Z`));
       return [{
@@ -72,7 +86,15 @@ export function getContentIndex(directory: "liturgia-content" | "content"): Cont
     });
 
   indexCache.set(directory, index);
+  slugSetCache.set(directory, new Set(index.map((entry) => entry.slug)));
   return index;
+}
+
+export function getContentSlugSet(directory: "liturgia-content" | "content"): ReadonlySet<string> {
+  const cached = slugSetCache.get(directory);
+  if (cached) return cached;
+  getContentIndex(directory);
+  return slugSetCache.get(directory)!;
 }
 
 export function getLiturgyEntry(slug: string) {

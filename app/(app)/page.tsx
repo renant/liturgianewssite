@@ -1,14 +1,15 @@
 import JsonLd from "@/components/jsonld/JsonLd";
 import { NewsletterPanel } from "@/components/newsletter-panel";
+import { buildPageMetadata, SITE_URL } from "@/lib/seo";
 import { ArrowRight, BookOpen, CalendarDays } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Liturgia Católica Diária e Newsletter Gratuita",
   description: "Leia a liturgia de hoje, consulte as leituras de outras datas no calendário e receba gratuitamente a liturgia católica diária por e-mail.",
-  alternates: { canonical: "https://www.liturgianews.site" },
-};
+  path: "/",
+});
 
 export default function Home() {
   return <>
@@ -25,7 +26,23 @@ export default function Home() {
       </section>
       <NewsletterPanel />
     </div>
-    <section className="mt-10 border-t border-amber-200/70 pt-8 md:mt-14" aria-labelledby="start-title"><h2 id="start-title" className="font-serif text-2xl font-semibold text-slate-900">Para acompanhar com calma</h2><div className="mt-5 grid gap-6 sm:grid-cols-2"><Link className="group space-y-2" href="/acompanhar"><h3 className="font-serif text-xl font-semibold text-amber-800 group-hover:underline">Como acompanhar a liturgia diária</h3><p className="text-sm leading-relaxed text-slate-600">Um caminho simples para ler as leituras com atenção e constância.</p></Link><Link className="group space-y-2" href="/lectio-divina"><h3 className="font-serif text-xl font-semibold text-amber-800 group-hover:underline">Lectio divina: leitura e oração</h3><p className="text-sm leading-relaxed text-slate-600">Conheça a leitura, a meditação, a oração e a contemplação da Palavra.</p></Link></div></section>
-    <JsonLd data={{ "@context": "https://schema.org", "@type": "WebPage", name: "Liturgia Católica Diária e Newsletter Gratuita", url: "https://www.liturgianews.site", description: "Leituras da liturgia católica diária e newsletter gratuita.", inLanguage: "pt-BR" }} />
+    <section className="mt-10 border-t border-amber-200/70 pt-8 md:mt-14" aria-labelledby="start-title">
+      <h2 id="start-title" className="font-serif text-2xl font-semibold text-slate-900">Para acompanhar com calma</h2>
+      <div className="mt-5 grid gap-6 sm:grid-cols-3">
+        <Link className="group space-y-2" href="/acompanhar">
+          <h3 className="font-serif text-xl font-semibold text-amber-800 group-hover:underline">Como acompanhar a liturgia diária</h3>
+          <p className="text-sm leading-relaxed text-slate-600">Um caminho simples para ler as leituras com atenção e constância.</p>
+        </Link>
+        <Link className="group space-y-2" href="/lectio-divina">
+          <h3 className="font-serif text-xl font-semibold text-amber-800 group-hover:underline">Lectio divina: leitura e oração</h3>
+          <p className="text-sm leading-relaxed text-slate-600">Conheça a leitura, a meditação, a oração e a contemplação da Palavra.</p>
+        </Link>
+        <Link className="group space-y-2" href="/tempo-liturgico">
+          <h3 className="font-serif text-xl font-semibold text-amber-800 group-hover:underline">O que é o tempo litúrgico</h3>
+          <p className="text-sm leading-relaxed text-slate-600">Entenda o ritmo do ano litúrgico e como as leituras caminham com a Igreja.</p>
+        </Link>
+      </div>
+    </section>
+    <JsonLd data={{ "@context": "https://schema.org", "@type": "WebPage", name: "Liturgia Católica Diária e Newsletter Gratuita", url: SITE_URL, description: "Leituras da liturgia católica diária e newsletter gratuita.", inLanguage: "pt-BR" }} />
   </>;
 }

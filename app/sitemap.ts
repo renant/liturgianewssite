@@ -1,11 +1,10 @@
 import { getContentIndex } from "@/lib/content-metadata";
 import { getLiturgicalDate, MONTH_NAMES } from "@/lib/liturgical-date";
 import { contentModifiedAt } from "@/lib/content-dates";
+import { SITE_URL } from "@/lib/seo";
 import type { MetadataRoute } from "next";
 
 export const revalidate = 300;
-
-const baseUrl = "https://www.liturgianews.site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const today = getLiturgicalDate();
@@ -20,69 +19,75 @@ export default function sitemap(): MetadataRoute.Sitemap {
     if (!months.has(route) || (modified && (!months.get(route) || modified > months.get(route)!))) months.set(route, modified);
   }
 
+  const latestBlogModified = blogPosts
+    .map((entry) => contentModifiedAt(entry))
+    .filter((value): value is string => Boolean(value))
+    .sort()
+    .at(-1) ?? "2026-10-14";
+
   const staticRoutes: MetadataRoute.Sitemap = [
     {
-      url: baseUrl,
-      lastModified: "2026-10-14",
+      url: SITE_URL,
+      lastModified: today.iso,
       changeFrequency: "daily",
       priority: 1,
     },
     {
-      url: `${baseUrl}/liturgia`,
+      url: `${SITE_URL}/liturgia`,
       lastModified: today.iso,
       changeFrequency: "daily",
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/blog`,
-      lastModified: "2026-10-14",
-      changeFrequency: "daily",
+      url: `${SITE_URL}/blog`,
+      lastModified: latestBlogModified,
+      changeFrequency: "weekly",
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/liturgia/hoje`,
+      url: `${SITE_URL}/liturgia/hoje`,
       lastModified: today.iso,
       changeFrequency: "daily",
       priority: 1,
     },
     {
-      url: `${baseUrl}/acompanhar`,
-      lastModified: "2026-10-14",
+      url: `${SITE_URL}/acompanhar`,
+      lastModified: "2026-10-29",
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/lectio-divina`,
-      lastModified: "2026-10-14",
+      url: `${SITE_URL}/lectio-divina`,
+      lastModified: "2026-10-29",
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/tempo-liturgico`,
-      lastModified: "2026-10-14",
+      url: `${SITE_URL}/tempo-liturgico`,
+      lastModified: "2026-10-29",
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/sobre`,
+      url: `${SITE_URL}/sobre`,
       lastModified: "2026-10-14",
       changeFrequency: "yearly",
       priority: 0.5,
     },
     {
-      url: `${baseUrl}/privacidade`,
+      url: `${SITE_URL}/privacidade`,
       lastModified: "2026-10-14",
       changeFrequency: "yearly",
       priority: 0.4,
     },
     {
-      url: `${baseUrl}/contact`,
+      url: `${SITE_URL}/contact`,
       lastModified: "2026-10-14",
       changeFrequency: "yearly",
       priority: 0.5,
     },
     {
-      url: `${baseUrl}/donate`,
+      url: `${SITE_URL}/donate`,
       lastModified: "2026-10-14",
       changeFrequency: "yearly",
       priority: 0.5,
@@ -90,7 +95,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   const liturgyRoutes: MetadataRoute.Sitemap = liturgies.map((entry) => ({
-    url: `${baseUrl}/liturgia/${entry.slug}`,
+    url: `${SITE_URL}/liturgia/${entry.slug}`,
     lastModified: contentModifiedAt(entry),
     changeFrequency:
       entry.date === today.iso
@@ -102,7 +107,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   const blogRoutes: MetadataRoute.Sitemap = blogPosts.map((entry) => ({
-    url: `${baseUrl}/blog/${entry.slug}`,
+    url: `${SITE_URL}/blog/${entry.slug}`,
     lastModified: contentModifiedAt(entry),
     changeFrequency: "yearly",
     priority: 0.7,
@@ -111,7 +116,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const calendarRoutes: MetadataRoute.Sitemap = Array.from(
     months,
     ([route, lastModified]) => ({
-      url: `${baseUrl}/liturgia/calendario/${route}`,
+      url: `${SITE_URL}/liturgia/calendario/${route}`,
       lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.6,

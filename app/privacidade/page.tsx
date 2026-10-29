@@ -1,21 +1,13 @@
+import { buildPageMetadata } from "@/lib/seo";
 import { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Política de Privacidade",
   description:
     "Entenda como coletamos, armazenamos e utilizamos os dados dos inscritos na LiturgiaNews e como solicitar remoção.",
-  alternates: {
-    canonical: "https://www.liturgianews.site/privacidade",
-  },
-  openGraph: {
-    title: "Política de Privacidade",
-    description:
-      "Saiba como seus dados são tratados na LiturgiaNews e como solicitar remoção.",
-    type: "website",
-    url: "https://www.liturgianews.site/privacidade",
-  },
-};
+  path: "/privacidade",
+});
 
 export default function Privacidade() {
   return (

@@ -1,27 +1,32 @@
 import JsonLd from "@/components/jsonld/JsonLd";
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Analytics } from "@vercel/analytics/next";
+import { DEFAULT_OG_IMAGE, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
-  display: "swap", // Add font-display: swap for better performance
-  preload: true,
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  display: "swap", // Add font-display: swap for better performance
+  display: "swap",
   preload: true,
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.liturgianews.site"),
+  metadataBase: new URL(SITE_URL),
+  manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/images/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/images/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [{ url: "/images/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
+  formatDetection: {
+    telephone: false,
+  },
   title: {
     default: "LiturgiaNews - Liturgia Católica Diária por E-mail",
     template: "%s | LiturgiaNews",
@@ -60,30 +65,20 @@ export const metadata: Metadata = {
     title: "LiturgiaNews - Liturgia Católica Diária por E-mail",
     description:
       "Receba gratuitamente a liturgia católica diária em seu e-mail todas as manhãs. Leituras, salmos e reflexões para fortalecer sua fé diariamente.",
-    url: "https://www.liturgianews.site",
+    url: SITE_URL,
     siteName: "LiturgiaNews",
-    images: [
-      {
-        url: "https://www.liturgianews.site/images/android-chrome-192x192.png",
-        width: 192,
-        height: 192,
-        alt: "LiturgiaNews Logo",
-      },
-    ],
+    images: [DEFAULT_OG_IMAGE],
     locale: "pt_BR",
     type: "website",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     site: "@liturgianews",
     creator: "@liturgianews",
     title: "LiturgiaNews - Liturgia Católica Diária por E-mail",
     description:
       "Receba gratuitamente a liturgia católica diária em seu e-mail todas as manhãs.",
-    images: {
-      url: "https://www.liturgianews.site/images/android-chrome-192x192.png",
-      alt: "LiturgiaNews Logo",
-    },
+    images: [DEFAULT_OG_IMAGE.url],
   },
   // Quando houver um código real do Search Console (método tag HTML), adicione-o em verification.google.
   category: "religion",
@@ -93,6 +88,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
+  themeColor: "#fffbeb",
 };
 
 export default function RootLayout({
@@ -103,35 +99,20 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <head>
-        {/* Manifest e ícones */}
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
-
-        {/* RSS Feeds */}
         <link
           rel="alternate"
           type="application/rss+xml"
           title="Blog - LiturgiaNews"
-          href="https://www.liturgianews.site/feed.xml"
+          href={`${SITE_URL}/feed.xml`}
         />
         <link
           rel="alternate"
           type="application/rss+xml"
           title="Liturgia Diária - LiturgiaNews"
-          href="https://www.liturgianews.site/liturgia/feed.xml"
+          href={`${SITE_URL}/liturgia/feed.xml`}
         />
-
-        {/* Meta tags PWA */}
-        <meta name="theme-color" content="#fffbeb" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="LiturgiaNews" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="format-detection" content="telephone=no" />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} antialiased`}>
         <a
           href="#conteudo-principal"
           className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-sm focus:text-amber-800 focus:shadow"
@@ -149,17 +130,17 @@ export default function RootLayout({
             "@type": "WebSite",
             name: "LiturgiaNews",
             alternateName: "Liturgia News",
-            url: "https://www.liturgianews.site",
+            url: SITE_URL,
             description:
               "Receba a liturgia católica diária em seu e-mail todas as manhãs. Newsletter gratuita com leituras, salmos e reflexões.",
             inLanguage: "pt-BR",
             publisher: {
               "@type": "Organization",
               name: "LiturgiaNews",
-              url: "https://www.liturgianews.site",
+              url: SITE_URL,
               logo: {
                 "@type": "ImageObject",
-                url: "https://www.liturgianews.site/images/android-chrome-192x192.png",
+                url: `${SITE_URL}/images/android-chrome-192x192.png`,
                 width: 192,
                 height: 192,
               },
@@ -167,12 +148,12 @@ export default function RootLayout({
                 "@type": "ContactPoint",
                 contactType: "customer service",
                 availableLanguage: "Portuguese",
-                url: "https://www.liturgianews.site/contact",
+                url: `${SITE_URL}/contact`,
               },
             },
           }}
         />
-        <Analytics />
+        {Boolean(process.env.VERCEL) && <Analytics />}
       </body>
     </html>
   );

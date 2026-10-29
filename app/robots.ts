@@ -1,15 +1,14 @@
+import { SITE_URL } from "@/lib/seo";
 import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      allow: ["/", "/blog/", "/contact/", "/donate/", "/liturgia/", "/liturgia/hoje"],
-      disallow: [
-        "/api/",
-      ],
+      allow: "/",
+      disallow: ["/api/"],
     },
-    sitemap: "https://www.liturgianews.site/sitemap.xml",
-    host: "https://www.liturgianews.site",
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }
