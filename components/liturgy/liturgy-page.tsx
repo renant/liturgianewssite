@@ -1,11 +1,15 @@
-import type { ReactNode } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
+import type { MDXComponents } from "mdx/types";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { AdUnit } from "@/components/ads/ad-unit";
+import { AdSenseScript } from "@/components/ads/adsense-script";
 import { LiturgyTracker } from "@/components/analytics/liturgy-tracker";
 import { TrackedTodayLink } from "@/components/analytics/tracked-today-link";
 import JsonLd from "@/components/jsonld/JsonLd";
 import { SocialShare } from "@/components/social-share/social-share";
 import { NewsletterPanel } from "@/components/newsletter-panel";
+import { getAdSenseConfig } from "@/lib/adsense";
 import type { ContentIndexEntry } from "@/lib/content-metadata";
 import { formatCivilDate, parseCivilDate } from "@/lib/liturgical-date";
 import { calendarHref, calendarMonthLabel } from "@/lib/liturgy-calendar";
@@ -13,6 +17,23 @@ import { buildLiturgyDescription, extractLiturgyFacts } from "@/lib/liturgy-fact
 import { contentPublishedAt, contentModifiedAt } from "@/lib/content-dates";
 import { SITE_URL } from "@/lib/seo";
 import { AdjacentDays } from "./adjacent-days";
+
+export function buildLiturgyMdxComponents(slug: string): MDXComponents {
+  const { midSlot } = getAdSenseConfig();
+  return {
+    h2: ({ id, children, ...props }: HTMLAttributes<HTMLHeadingElement>) => {
+      if (id === "noticias") {
+        return (
+          <>
+            <AdUnit key={`${slug}-mid`} slot={midSlot} position="after-reflection" />
+            <h2 id={id} {...props}>{children}</h2>
+          </>
+        );
+      }
+      return <h2 id={id} {...props}>{children}</h2>;
+    },
+  };
+}
 
 export function LiturgyPage({ entry, source, children, isToday, todayRoute = false }: {
   entry: ContentIndexEntry; source: string; children: ReactNode; isToday: boolean; todayRoute?: boolean;
@@ -33,7 +54,9 @@ export function LiturgyPage({ entry, source, children, isToday, todayRoute = fal
   const slug = todayRoute ? "hoje" : entry.slug;
   const url = `${SITE_URL}/liturgia/${slug}`;
   const imageUrl = `${url}/opengraph-image`;
+  const { bottomSlot } = getAdSenseConfig();
   return <div className="reading-container">
+    <AdSenseScript />
     <LiturgyTracker slug={entry.slug} isToday={isToday} />
     <div className="liturgy-topline"><Link href={monthUrl}><ArrowLeft className="size-4" aria-hidden="true" />Calendário de {calendarMonthLabel(date.year, date.month)}</Link>{!isToday && <TrackedTodayLink>Liturgia de hoje</TrackedTodayLink>}</div>
     <header className="liturgy-header"><h1>{todayRoute ? "Liturgia de hoje," : "Liturgia de"}{" "}<span className="block">{formatted}</span></h1><p className="liturgy-context">{context}</p></header>
@@ -42,6 +65,7 @@ export function LiturgyPage({ entry, source, children, isToday, todayRoute = fal
     <article className="editorial-prose liturgy-prose" aria-label={title}>{children}</article>
     <AdjacentDays date={entry.date} afterReading />
     <section className="my-8 border-t border-amber-200/70 pt-6" aria-labelledby="share-title"><h2 id="share-title" className="mb-4 text-sm font-medium text-slate-600">Compartilhe esta liturgia</h2><SocialShare title={title} description={description} slug={slug} imagePath={`/liturgia/${slug}/opengraph-image`} /></section>
+    <AdUnit key={`${entry.slug}-bottom`} slot={bottomSlot} position="after-reading" />
     <NewsletterPanel source={todayRoute ? "liturgia_hoje" : "liturgia_datada"} />
     <JsonLd data={[
       {

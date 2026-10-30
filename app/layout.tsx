@@ -4,8 +4,11 @@ import { Geist } from "next/font/google";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Analytics } from "@vercel/analytics/next";
+import { buildAdSenseMetaOther, getAdSenseConfig } from "@/lib/adsense";
 import { DEFAULT_OG_IMAGE, SITE_URL } from "@/lib/seo";
 import "./globals.css";
+
+const adsenseOther = buildAdSenseMetaOther(getAdSenseConfig().clientId);
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -82,6 +85,7 @@ export const metadata: Metadata = {
   },
   // Quando houver um código real do Search Console (método tag HTML), adicione-o em verification.google.
   category: "religion",
+  ...(adsenseOther ? { other: adsenseOther } : {}),
 };
 
 export const viewport: Viewport = {

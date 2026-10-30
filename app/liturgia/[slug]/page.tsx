@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { LiturgyPage } from "@/components/liturgy/liturgy-page";
+import { buildLiturgyMdxComponents, LiturgyPage } from "@/components/liturgy/liturgy-page";
 import { contentPublishedAt, contentModifiedAt } from "@/lib/content-dates";
 import { getContentIndex } from "@/lib/content-metadata";
 import { currentLiturgyDate, loadLiturgy } from "@/lib/liturgy-data";
@@ -29,7 +29,7 @@ export default async function Page({ params }: Props) {
   const liturgy = await loadLiturgy(slug);
   if (!liturgy) notFound();
   const { entry, source, Content } = liturgy;
-  return <LiturgyPage entry={entry} source={source} isToday={entry.slug === currentLiturgyDate().slug}><Content /></LiturgyPage>;
+  return <LiturgyPage entry={entry} source={source} isToday={entry.slug === currentLiturgyDate().slug}><Content components={buildLiturgyMdxComponents(entry.slug)} /></LiturgyPage>;
 }
 
 export function generateStaticParams() { return getContentIndex("liturgia-content").map(({ slug }) => ({ slug })); }

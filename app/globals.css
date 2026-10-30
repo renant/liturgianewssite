@@ -70,6 +70,13 @@
   .newsletter-panel { @apply rounded-lg border border-amber-200/70 bg-white/80 p-5 sm:p-8; }
   .newsletter-panel h2 { @apply font-serif text-2xl font-semibold leading-snug text-slate-900; }
   .newsletter-panel p { @apply text-sm leading-relaxed text-slate-600; }
+  .ad-unit-wrapper { @apply my-8 rounded-lg border border-amber-200/60 bg-white/60 px-3 py-3 sm:px-4; }
+  .ad-unit-wrapper:has(ins.adsbygoogle[data-ad-status="unfilled"]) { display: none; }
+  html[data-ads-blocked="true"] .ad-unit-wrapper { display: none; }
+  .ad-unit-label { @apply mb-2 text-center font-sans text-[0.6875rem] font-medium uppercase tracking-widest text-slate-600; }
+  .ad-unit-frame { @apply mx-auto flex min-h-[250px] w-full max-w-full items-center justify-center overflow-hidden; }
+  .ad-unit-frame ins.adsbygoogle[data-ad-status="unfilled"] { display: none !important; }
+  .ad-unit-preview { @apply flex min-h-[250px] w-full items-center justify-center rounded border border-dashed border-amber-300 bg-amber-50/70 px-4 text-center text-xs text-slate-600; }
   .liturgy-header { @apply mb-5; }
   .liturgy-header h1 { @apply font-serif text-[1.875rem] font-semibold leading-tight tracking-tight text-slate-900 sm:text-4xl; }
   .liturgy-context { @apply mt-3 text-base leading-relaxed text-amber-800; }

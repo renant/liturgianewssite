@@ -51,8 +51,48 @@ export default function Privacidade() {
           contatos e registros necessários para o envio seguro.
         </p>
         <p className="text-muted-foreground leading-relaxed">
-          Não vendemos, compartilhamos ou utilizamos seus dados para fins
-          publicitários de terceiros.
+          Não vendemos, alugamos nem compartilhamos seu e-mail ou os dados
+          informados nos formulários de newsletter e contato com anunciantes ou
+          terceiros para fins comerciais.
+        </p>
+      </section>
+
+      <section className="space-y-4" aria-label="Publicidade e cookies">
+        <h2 className="text-2xl font-serif font-semibold text-foreground">
+          Publicidade e cookies (Google AdSense)
+        </h2>
+        <p className="text-muted-foreground leading-relaxed">
+          Para manter o acesso à liturgia diária gratuito, as páginas de leitura
+          exibem blocos discretos de publicidade fornecidos pelo Google AdSense.
+          Terceiros, incluindo o Google, podem utilizar cookies e
+          identificadores de navegador para exibir anúncios com base em visitas
+          anteriores a este ou a outros sites na internet, ou anúncios
+          contextuais relacionados ao conteúdo exibido.
+        </p>
+        <p className="text-muted-foreground leading-relaxed">
+          Nas regiões aplicáveis (como Brasil, nos termos da LGPD, e Espaço
+          Econômico Europeu, nos termos do GDPR), você pode gerenciar suas
+          preferências de consentimento diretamente pelo aviso de privacidade
+          apresentado no site. Você também pode desativar a publicidade
+          personalizada a qualquer momento acessando as{" "}
+          <a
+            href="https://adssettings.google.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-link"
+          >
+            Configurações de anúncios do Google
+          </a>{" "}
+          e consultar{" "}
+          <a
+            href="https://policies.google.com/technologies/partner-sites"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-link"
+          >
+            como o Google utiliza dados em sites e aplicativos parceiros
+          </a>
+          .
         </p>
       </section>
 
