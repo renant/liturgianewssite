@@ -8,6 +8,7 @@ const BASE_URL = process.env.AUDIT_BASE_URL || `http://127.0.0.1:${DEFAULT_PORT}
 const ROUTES = (process.env.AUDIT_ROUTES?.split(",").map((r) => r.trim()).filter(Boolean)) || [
   "/",
   "/liturgia",
+  "/liturgia/calendario/2026/novembro",
   "/liturgia/hoje",
   "/liturgia/29-outubro-2026",
   "/acompanhar",
