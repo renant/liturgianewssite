@@ -84,6 +84,7 @@ export default function Donate() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Doar agora via LivePix (abre em nova janela)"
+                  data-ph-capture-attribute-cta="donate_livepix"
                 >
                   Doar Agora
                   <ExternalLink

@@ -29,6 +29,22 @@ const nextConfig: NextConfig = {
     optimizeCss: true, // Enable CSS optimization
     optimizePackageImports: ["lucide-react", "@radix-ui/react-slot", "@radix-ui/react-label"],
   },
+
+  skipTrailingSlashRedirect: true,
+
+  // Proxy reverso do PostHog para reduzir bloqueio por adblock e conexões de terceiros
+  async rewrites() {
+    return [
+      {
+        source: "/ingest/static/:path*",
+        destination: "https://us-assets.i.posthog.com/static/:path*",
+      },
+      {
+        source: "/ingest/:path*",
+        destination: "https://us.i.posthog.com/:path*",
+      },
+    ];
+  },
   
   // Headers for better caching and security
   async headers() {

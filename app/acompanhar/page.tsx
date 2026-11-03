@@ -25,7 +25,7 @@ export default function Page() {
         <h2>Crie continuidade</h2>
         <p>Retomar as leituras todos os dias permite reconhecer temas e movimentos que uma leitura isolada não mostra. Para receber esse lembrete pela manhã, <Link href="#newsletter">assine gratuitamente a newsletter</Link>.</p>
       </article>
-      <NewsletterPanel />
+      <NewsletterPanel source="acompanhar" />
       <JsonLd
         data={{
           "@context": "https://schema.org",

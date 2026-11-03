@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { ensureAdSenseScript } from "@/components/ads/adsense-script";
 import { getAdSenseConfig, isLocalHostname } from "@/lib/adsense";
 
 declare global {
@@ -52,7 +53,7 @@ export function AdUnit({
           setNearViewport(true);
         }
       },
-      { rootMargin: "350px 0px" },
+      { rootMargin: "600px 0px" },
     );
 
     observer.observe(wrapper);
@@ -71,12 +72,13 @@ export function AdUnit({
     }
 
     try {
+      ensureAdSenseScript(clientId);
       pushedRef.current = true;
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch {
       // Bloqueadores de conteúdo podem interceptar o AdSense; falha silenciosa preserva a leitura.
     }
-  }, [isLiveConfigured, nearViewport]);
+  }, [clientId, isLiveConfigured, nearViewport]);
 
   if (!isLiveConfigured && !previewEnabled) {
     return null;

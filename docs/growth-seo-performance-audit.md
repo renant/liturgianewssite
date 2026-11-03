@@ -337,3 +337,23 @@ Dá para fazer em poucas horas, sem conteúdo novo:
 19. P3-01 uma frase no e-mail, só se o template do envio diário aparecer no repositório. O de confirmação pode levar a frase; não criar um sistema de envio.
 
 P2 e P3 não começam sozinhos. O ganho de busca e de assinatura está na lista até o item 13.
+
+---
+
+## Linha de base e diagnóstico — 03 de novembro de 2026
+
+Base consolidada em `03/11/2026` no commit `28e42dac` com dados do PostHog (projeto `120630`) e Lighthouse 12 local:
+
+- **Performance e indexação:** Lighthouse home 95+ mobile e 100 desktop, página do dia 98 mobile e 100 desktop, sitemap com 559 URLs, canonical em `www` correto.
+- **Tráfego sintético:** desde 09/07/2026 um robô em Chrome desktop (`$viewport_width = 1920`, sem referrer, `$virt_is_bot = false`) acessa `/donate`, `/` e `/liturgia/hoje` às 06:00–06:05 e 12:00–12:05 BRT (09:00 e 15:00 UTC) a partir de datacenters (Boydton, Des Moines, San Jose, Dublin, Amsterdam, Campinas). Em 120 dias gerou 450 pageviews em `/donate`, 195 na home e 146 em `/liturgia/hoje` (em setembro: 234 visitantes sintéticos contra 100 humanos). Também distorce o LCP de campo (`/donate` no robô: 12026 ms, `/liturgia/hoje`: 3686 ms, home: 3462 ms).
+- **Pageviews client-side perdidos:** sessões com dezenas de navegações registravam apenas 1 `$pageview` porque `posthog.init` não tinha `capture_pageview: "history_change"`.
+- **Funil da newsletter (desde 05/10/2026):** 303 humanos, 9 iniciaram (3,0%), 8 concluíram (2,6%), 7 confirmaram.
+  - Home: 34 visitantes e 8 inícios (23,5%).
+  - Páginas de liturgia: 273 visitantes e **1 início (0,4%)** (o `NewsletterPanel` ficava apenas no fim da página, em ~89% da rolagem).
+  - Confirmação em outro dispositivo: 2 das 7 confirmações chegaram com outro `distinct_id` (app de e-mail ou outro aparelho), impedindo fechar o funil sem `signup_ref`.
+- **Seletor "Mês e ano" no celular:** em 27/10/2026 enviou o usuário para 2025 três vezes por engano em tela de 360 px; 11 rage clicks nas setas do calendário e em "Próximo".
+- **Web Vitals humanos (p75, 90 dias):**
+  - `/liturgia/hoje` mobile: LCP 3633 ms (`n=8`, amostra pequena — reavaliar após filtrar tráfego sintético quando `n > 30`).
+  - `/liturgia/[slug]` mobile: LCP 1496 ms e INP 72 ms (`n=101`).
+  - `/` mobile: LCP 1928 ms.
+- **Tráfego (30 dias) e retenção:** Google 250 visitantes (bounce 21,7%), direto 177 (bounce 77,1%, inflado pelo robô), Instagram 4, Facebook 4, TabNews 4. Mobile ~220, desktop ~79. Apenas 18 de 303 humanos (6,0%) retornaram em 2 ou mais dias.

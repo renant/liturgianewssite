@@ -91,7 +91,7 @@ test("buildAdSenseMetaOther e RootLayout expõem google-adsense-account sem inje
   assert.equal(layoutSource.includes("AdSenseScript"), false);
 });
 
-test("LiturgyPage carrega AdSenseScript e posiciona blocos apenas nas páginas de leitura", () => {
+test("LiturgyPage carrega AdSenseScript e posiciona blocos apenas nas páginas de leitura, injetando script sob demanda perto da tela", () => {
   const liturgyPageSource = fs.readFileSync(
     path.join(process.cwd(), "components", "liturgy", "liturgy-page.tsx"),
     "utf8",
@@ -99,6 +99,13 @@ test("LiturgyPage carrega AdSenseScript e posiciona blocos apenas nas páginas d
   assert.equal(liturgyPageSource.includes("<AdSenseScript />"), true);
   assert.equal(liturgyPageSource.includes('position="after-reflection"'), true);
   assert.equal(liturgyPageSource.includes('position="after-reading"'), true);
+
+  const adUnitSource = fs.readFileSync(
+    path.join(process.cwd(), "components", "ads", "ad-unit.tsx"),
+    "utf8",
+  );
+  assert.equal(adUnitSource.includes("ensureAdSenseScript(clientId)"), true);
+  assert.equal(adUnitSource.includes('rootMargin: "600px 0px"'), true);
 });
 
 test("Política de Privacidade divulga uso do Google AdSense e links oficiais de controle de anúncios", () => {

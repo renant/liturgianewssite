@@ -1,5 +1,18 @@
 import { civilDateToIso, MONTH_NAMES, type CivilDate } from "./liturgical-date";
 
+export type CalendarMonthItem = {
+  year: number;
+  month: number;
+  key: string;
+  label: string;
+  href: string;
+};
+
+export type CalendarYearGroup = {
+  year: number;
+  months: CalendarMonthItem[];
+};
+
 export function calendarHref(date: Pick<CivilDate, "year" | "month">) {
   return `/liturgia/calendario/${date.year}/${MONTH_NAMES[date.month - 1]}`;
 }
@@ -18,12 +31,30 @@ export function buildMonthWeeks(year: number, month: number): Array<Array<CivilD
   }));
 }
 
-export function getCalendarMonths(entries: Array<{ date: string }>) {
+export function getCalendarMonths(entries: Array<{ date: string }>): CalendarMonthItem[] {
   const keys = [...new Set(entries.map(({ date }) => date.slice(0, 7)))].sort();
   return keys.map(key => {
     const [year, month] = key.split("-").map(Number);
     return { year, month, key, label: calendarMonthLabel(year, month), href: calendarHref({ year, month }) };
   });
+}
+
+export function groupCalendarMonthsByYear(months: CalendarMonthItem[]): CalendarYearGroup[] {
+  const byYear = new Map<number, CalendarMonthItem[]>();
+  for (const item of months) {
+    const group = byYear.get(item.year);
+    if (group) {
+      group.push(item);
+    } else {
+      byYear.set(item.year, [item]);
+    }
+  }
+  return [...byYear.entries()]
+    .sort(([a], [b]) => b - a)
+    .map(([year, items]) => ({
+      year,
+      months: [...items].sort((a, b) => a.month - b.month),
+    }));
 }
 
 export function adjacentMonth(year: number, month: number, offset: number) {

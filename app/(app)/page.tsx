@@ -24,7 +24,7 @@ export default function Home() {
         </nav>
         <p className="mt-6 max-w-md text-sm leading-relaxed text-slate-600">Reserve alguns minutos para ler, meditar e levar a Palavra de Deus para o seu dia.</p>
       </section>
-      <NewsletterPanel />
+      <NewsletterPanel source="home" />
     </div>
     <section className="mt-10 border-t border-amber-200/70 pt-8 md:mt-14" aria-labelledby="start-title">
       <h2 id="start-title" className="font-serif text-2xl font-semibold text-slate-900">Para acompanhar com calma</h2>
