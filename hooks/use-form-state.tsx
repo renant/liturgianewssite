@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useRef, useState, useTransition } from "react";
+import { captureError } from "@/lib/analytics";
 
 type ValidationError = Record<string, string[]>;
 
@@ -56,7 +57,8 @@ export function useFormState<T = null>(
         if (result.success && onSuccess) {
           await onSuccess(result.data ?? undefined);
         }
-      } catch {
+      } catch (err) {
+        captureError(err, { context: "use_form_state" });
         setFormState({ success: false, message: "Não foi possível concluir o envio. Verifique sua conexão e tente novamente.", errors: null, data: null });
       }
     });
