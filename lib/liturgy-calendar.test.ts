@@ -1,6 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { adjacentMonth, buildMonthWeeks, calendarHref, getCalendarMonths } from "./liturgy-calendar.ts";
+import {
+  adjacentMonth,
+  buildMonthWeeks,
+  calendarHref,
+  getCalendarMonths,
+  groupCalendarMonthsByYear,
+} from "./liturgy-calendar.ts";
 import { getLiturgicalDate } from "./liturgical-date.ts";
 
 test("fevereiro bissexto mantém dias alinhados e não cria dia 30", () => {
@@ -24,6 +30,25 @@ test("navegação e slugs existentes são preservados em viradas de ano e meses 
   assert.equal(calendarHref(adjacentMonth(2026, 1, -1)), "/liturgia/calendario/2025/dezembro");
   assert.equal(calendarHref({ year: 2026, month: 3 }), "/liturgia/calendario/2026/março");
   assert.deepEqual(getCalendarMonths([{ date: "2026-10-14" }, { date: "2026-10-21" }, { date: "2025-07-21" }]).map(month => month.key), ["2025-07", "2026-10"]);
+});
+
+test("groupCalendarMonthsByYear agrupa por ano em ordem decrescente e meses em ordem crescente", () => {
+  const months = getCalendarMonths([
+    { date: "2025-12-01" },
+    { date: "2025-07-21" },
+    { date: "2026-11-03" },
+    { date: "2026-01-15" },
+    { date: "2027-01-02" },
+  ]);
+  const grouped = groupCalendarMonthsByYear(months);
+  assert.deepEqual(
+    grouped.map(g => ({ year: g.year, keys: g.months.map(m => m.key) })),
+    [
+      { year: 2027, keys: ["2027-01"] },
+      { year: 2026, keys: ["2026-01", "2026-11"] },
+      { year: 2025, keys: ["2025-07", "2025-12"] },
+    ],
+  );
 });
 
 test("mês corrente de Brasília só avança na meia-noite local", () => {
