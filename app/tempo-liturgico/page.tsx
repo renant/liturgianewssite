@@ -25,7 +25,7 @@ export default function Page() {
         <h2>Acompanhe o dia presente</h2>
         <p>A maneira mais concreta de perceber esse ritmo é acompanhar a <Link href="/liturgia/hoje">liturgia de hoje</Link>. Se desejar criar o hábito, <Link href="#newsletter">assine a newsletter gratuita</Link> para receber a leitura de cada manhã.</p>
       </article>
-      <NewsletterPanel />
+      <NewsletterPanel source="tempo_liturgico" />
       <JsonLd
         data={{
           "@context": "https://schema.org",

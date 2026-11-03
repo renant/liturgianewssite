@@ -18,12 +18,40 @@
   ],
   "theme_color": "#fffbeb",
   "background_color": "#fffbeb",
-  "start_url": "/",
+  "start_url": "/liturgia/hoje?utm_source=pwa",
   "display": "standalone",
   "orientation": "portrait",
   "scope": "/",
   "lang": "pt-BR",
   "categories": ["religion", "books", "education"],
   "dir": "ltr",
-  "prefer_related_applications": false
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Liturgia de hoje",
+      "short_name": "Hoje",
+      "description": "Abrir as leituras e o Evangelho de hoje",
+      "url": "/liturgia/hoje?utm_source=pwa",
+      "icons": [
+        {
+          "src": "/images/android-chrome-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Calendário",
+      "short_name": "Calendário",
+      "description": "Consultar o calendário litúrgico mensal",
+      "url": "/liturgia?utm_source=pwa",
+      "icons": [
+        {
+          "src": "/images/android-chrome-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
 }

@@ -25,7 +25,7 @@ export default function Page() {
         <h2>Levar a Palavra para o dia</h2>
         <p>Conclua escolhendo uma atitude possível, coerente com o que leu. Se a regularidade ajudar, você pode <Link href="#newsletter">receber a liturgia diária por e-mail</Link> e reservar esse encontro para o começo da manhã.</p>
       </article>
-      <NewsletterPanel />
+      <NewsletterPanel source="lectio_divina" />
       <JsonLd
         data={{
           "@context": "https://schema.org",

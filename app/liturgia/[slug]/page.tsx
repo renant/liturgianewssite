@@ -29,7 +29,8 @@ export default async function Page({ params }: Props) {
   const liturgy = await loadLiturgy(slug);
   if (!liturgy) notFound();
   const { entry, source, Content } = liturgy;
-  return <LiturgyPage entry={entry} source={source} isToday={entry.slug === currentLiturgyDate().slug}><Content components={buildLiturgyMdxComponents(entry.slug)} /></LiturgyPage>;
+  const hasReflection = /^##\s+Reflexão do Evangelho\s*$/m.test(source);
+  return <LiturgyPage entry={entry} source={source} isToday={entry.slug === currentLiturgyDate().slug}><Content components={buildLiturgyMdxComponents(entry.slug, { todayRoute: false, hasReflection })} /></LiturgyPage>;
 }
 
 export function generateStaticParams() { return getContentIndex("liturgia-content").map(({ slug }) => ({ slug })); }
