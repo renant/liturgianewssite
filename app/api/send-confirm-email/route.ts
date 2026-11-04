@@ -3,6 +3,7 @@ import {
   buildConfirmSubscriptionUrl,
   isValidNewsletterSource,
   isValidSignupRef,
+  resolvePublicOrigin,
 } from "@/lib/newsletter";
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
@@ -68,7 +69,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Corpo inválido" }, { status: 400 });
   }
 
-  return sendConfirmationEmail(request.nextUrl.origin, {
+  const origin = resolvePublicOrigin({
+    nextUrlOrigin: request.nextUrl.origin,
+    headers: request.headers,
+  });
+
+  return sendConfirmationEmail(origin, {
     id: typeof body.id === "string" ? body.id : request.nextUrl.searchParams.get("id"),
     email:
       typeof body.email === "string"
@@ -86,7 +92,12 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
-  return sendConfirmationEmail(request.nextUrl.origin, {
+  const origin = resolvePublicOrigin({
+    nextUrlOrigin: request.nextUrl.origin,
+    headers: request.headers,
+  });
+
+  return sendConfirmationEmail(origin, {
     id: request.nextUrl.searchParams.get("id"),
     email: request.nextUrl.searchParams.get("email"),
     ref: request.nextUrl.searchParams.get("ref"),

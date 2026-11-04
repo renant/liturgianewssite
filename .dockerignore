@@ -1,0 +1,28 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.*
+
+# Build outputs
+.next
+out
+build
+coverage
+*.tsbuildinfo
+
+# Local env files
+.env
+.env.*
+!.env.example
+
+# Git & CI
+.git
+.gitignore
+.github
+.vercel
+
+# Docs & IDE
+docs
+.agents
+.cursorrules
+README.md

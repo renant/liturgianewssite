@@ -6,6 +6,7 @@ import {
   hasLocalNewsletterAnchor,
   isValidNewsletterSource,
   isValidSignupRef,
+  resolvePublicOrigin,
 } from "./newsletter.ts";
 
 test("isValidNewsletterSource valida todos os sources permitidos e rejeita desconhecidos", () => {
@@ -70,4 +71,44 @@ test("hasLocalNewsletterAnchor identifica rotas com #newsletter na própria pág
   assert.equal(hasLocalNewsletterAnchor("/liturgia/calendario/2026/novembro"), false);
   assert.equal(hasLocalNewsletterAnchor("/donate"), false);
   assert.equal(hasLocalNewsletterAnchor("/blog"), false);
+});
+
+test("resolvePublicOrigin nunca retorna localhost/0.0.0.0 e respeita x-forwarded-host e fallback SITE_URL", () => {
+  // Container sem headers forwarded (ex.: request.nextUrl.origin = http://0.0.0.0:3000)
+  assert.equal(
+    resolvePublicOrigin({
+      nextUrlOrigin: "http://0.0.0.0:3000",
+      headers: new Headers(),
+    }),
+    "https://www.liturgianews.site",
+  );
+
+  assert.equal(
+    resolvePublicOrigin({
+      nextUrlOrigin: "http://localhost:3000",
+      headers: new Headers(),
+    }),
+    "https://www.liturgianews.site",
+  );
+
+  // Proxy reverso (Traefik / Dokploy) enviando x-forwarded-host e x-forwarded-proto
+  assert.equal(
+    resolvePublicOrigin({
+      nextUrlOrigin: "http://0.0.0.0:3000",
+      headers: new Headers({
+        "x-forwarded-host": "www.liturgianews.site",
+        "x-forwarded-proto": "https",
+      }),
+    }),
+    "https://www.liturgianews.site",
+  );
+
+  // Variável de ambiente explícita tem prioridade
+  assert.equal(
+    resolvePublicOrigin({
+      nextUrlOrigin: "http://0.0.0.0:3000",
+      envSiteUrl: "https://liturgianews.site/caminho-ignorado",
+    }),
+    "https://liturgianews.site",
+  );
 });

@@ -1,9 +1,12 @@
-import { buildConfirmedRedirectPath } from "@/lib/newsletter";
+import { buildConfirmedRedirectPath, resolvePublicOrigin } from "@/lib/newsletter";
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
 export async function GET(request: NextRequest) {
-  const redirectUrl = request.nextUrl.clone();
+  const publicOrigin = resolvePublicOrigin({
+    nextUrlOrigin: request.nextUrl.origin,
+    headers: request.headers,
+  });
   const resend = new Resend(process.env.RESEND_API_KEY);
 
   const id = request.nextUrl.searchParams.get("id");
@@ -17,11 +20,9 @@ export async function GET(request: NextRequest) {
   });
 
   if (response.error) {
-    redirectUrl.pathname = "/error";
-    redirectUrl.search = "";
-    return NextResponse.redirect(redirectUrl);
+    return NextResponse.redirect(new URL("/error", publicOrigin));
   }
 
   const confirmedPath = buildConfirmedRedirectPath({ ref, source });
-  return NextResponse.redirect(new URL(confirmedPath, request.nextUrl.origin));
+  return NextResponse.redirect(new URL(confirmedPath, publicOrigin));
 }
