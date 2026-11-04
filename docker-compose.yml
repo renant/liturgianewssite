@@ -1,0 +1,44 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://www.liturgianews.site}
+        NEXT_PUBLIC_POSTHOG_KEY: ${NEXT_PUBLIC_POSTHOG_KEY:-}
+        NEXT_PUBLIC_POSTHOG_HOST: ${NEXT_PUBLIC_POSTHOG_HOST:-/ingest}
+        NEXT_PUBLIC_ADSENSE_CLIENT_ID: ${NEXT_PUBLIC_ADSENSE_CLIENT_ID:-ca-pub-5687166760452328}
+        NEXT_PUBLIC_ADSENSE_SLOT_LITURGY_MID: ${NEXT_PUBLIC_ADSENSE_SLOT_LITURGY_MID:-8844638148}
+        NEXT_PUBLIC_ADSENSE_SLOT_LITURGY_BOTTOM: ${NEXT_PUBLIC_ADSENSE_SLOT_LITURGY_BOTTOM:-1840942702}
+        NEXT_PUBLIC_ADSENSE_PREVIEW: ${NEXT_PUBLIC_ADSENSE_PREVIEW:-}
+    restart: unless-stopped
+    expose:
+      - "3000"
+    environment:
+      NODE_ENV: production
+      TZ: America/Sao_Paulo
+      PORT: "3000"
+      HOSTNAME: "0.0.0.0"
+      SITE_URL: ${SITE_URL:-https://www.liturgianews.site}
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://www.liturgianews.site}
+      RESEND_API_KEY: ${RESEND_API_KEY:?Defina RESEND_API_KEY no Dokploy}
+      RESEND_AUDIENCE_ID: ${RESEND_AUDIENCE_ID:?Defina RESEND_AUDIENCE_ID no Dokploy}
+      CONTACT_EMAIL: ${CONTACT_EMAIL:?Defina CONTACT_EMAIL no Dokploy}
+      NEXT_PUBLIC_POSTHOG_KEY: ${NEXT_PUBLIC_POSTHOG_KEY:-}
+      NEXT_PUBLIC_POSTHOG_HOST: ${NEXT_PUBLIC_POSTHOG_HOST:-/ingest}
+      NEXT_PUBLIC_ADSENSE_CLIENT_ID: ${NEXT_PUBLIC_ADSENSE_CLIENT_ID:-ca-pub-5687166760452328}
+      NEXT_PUBLIC_ADSENSE_SLOT_LITURGY_MID: ${NEXT_PUBLIC_ADSENSE_SLOT_LITURGY_MID:-8844638148}
+      NEXT_PUBLIC_ADSENSE_SLOT_LITURGY_BOTTOM: ${NEXT_PUBLIC_ADSENSE_SLOT_LITURGY_BOTTOM:-1840942702}
+      NEXT_PUBLIC_ADSENSE_PREVIEW: ${NEXT_PUBLIC_ADSENSE_PREVIEW:-}
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "bun",
+          "-e",
+          "fetch('http://127.0.0.1:3000/robots.txt').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s

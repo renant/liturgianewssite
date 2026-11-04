@@ -26,3 +26,5 @@ docs
 .agents
 .cursorrules
 README.md
+docker-compose.yml
+
