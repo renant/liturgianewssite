@@ -79,7 +79,7 @@ test("isLocalHostname identifica ambientes locais sem bloquear domínios públic
   assert.equal(isLocalHostname("liturgianews.site"), false);
 });
 
-test("buildAdSenseMetaOther e RootLayout expõem google-adsense-account sem injetar script global", () => {
+test("buildAdSenseMetaOther e RootLayout expõem google-adsense-account e o script oficial adsbygoogle.js no head", () => {
   assert.deepEqual(buildAdSenseMetaOther(DEFAULT_ADSENSE_CLIENT_ID), {
     "google-adsense-account": "ca-pub-9729996201347510",
   });
@@ -87,8 +87,8 @@ test("buildAdSenseMetaOther e RootLayout expõem google-adsense-account sem inje
 
   const layoutSource = fs.readFileSync(path.join(process.cwd(), "app", "layout.tsx"), "utf8");
   assert.equal(layoutSource.includes("buildAdSenseMetaOther"), true);
-  assert.equal(layoutSource.includes("adsbygoogle.js"), false);
-  assert.equal(layoutSource.includes("AdSenseScript"), false);
+  assert.equal(layoutSource.includes("adsbygoogle.js"), true);
+  assert.equal(layoutSource.includes('data-adsense-loader="true"'), true);
 });
 
 test("LiturgyPage carrega AdSenseScript e posiciona blocos apenas nas páginas de leitura, injetando script sob demanda perto da tela", () => {

@@ -100,7 +100,7 @@ export function AdUnit({
             Prévia local AdSense · {labelText}
             {slot ? ` (slot ${slot})` : ""}
           </div>
-        ) : isLiveConfigured && nearViewport ? (
+        ) : isLiveConfigured ? (
           <ins
             ref={insRef}
             className="adsbygoogle block w-full"

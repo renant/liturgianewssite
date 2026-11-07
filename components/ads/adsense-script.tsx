@@ -3,7 +3,8 @@
 import { useEffect } from "react";
 import { getAdSenseConfig, isLocalHostname } from "@/lib/adsense";
 
-const SCRIPT_SELECTOR = 'script[data-adsense-loader="true"]';
+const SCRIPT_SELECTOR =
+  'script[data-adsense-loader="true"], script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]';
 
 export function ensureAdSenseScript(clientId: string | null | undefined) {
   if (!clientId || typeof window === "undefined") return;

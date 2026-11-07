@@ -8,7 +8,8 @@ import { buildAdSenseMetaOther, getAdSenseConfig } from "@/lib/adsense";
 import { DEFAULT_OG_IMAGE, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
-const adsenseOther = buildAdSenseMetaOther(getAdSenseConfig().clientId);
+const adsenseConfig = getAdSenseConfig();
+const adsenseOther = buildAdSenseMetaOther(adsenseConfig.clientId);
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -115,6 +116,14 @@ export default function RootLayout({
           title="Liturgia Diária - LiturgiaNews"
           href={`${SITE_URL}/liturgia/feed.xml`}
         />
+        {adsenseConfig.clientId && (
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseConfig.clientId}`}
+            crossOrigin="anonymous"
+            data-adsense-loader="true"
+          />
+        )}
       </head>
       <body className={`${geistSans.variable} antialiased`}>
         <a

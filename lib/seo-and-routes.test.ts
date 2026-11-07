@@ -20,6 +20,7 @@ import { metadata as sobreMetadata } from "../app/sobre/page.tsx";
 import { metadata as contactMetadata } from "../app/contact/page.tsx";
 import { metadata as donateMetadata } from "../app/donate/page.tsx";
 import { metadata as privacidadeMetadata } from "../app/privacidade/page.tsx";
+import { metadata as termosMetadata } from "../app/termos/page.tsx";
 import { generateMetadata as generateBlogMetadata } from "../app/blog/page.tsx";
 
 test("buildPageMetadata preenche canonical, OpenGraph 1200x630 e Twitter card sem perder propriedades", () => {
@@ -59,6 +60,7 @@ test("todas as rotas estáticas exportam OpenGraph 1200x630 e canonical próprio
     { meta: contactMetadata, url: `${SITE_URL}/contact` },
     { meta: donateMetadata, url: `${SITE_URL}/donate` },
     { meta: privacidadeMetadata, url: `${SITE_URL}/privacidade` },
+    { meta: termosMetadata, url: `${SITE_URL}/termos` },
   ];
 
   for (const { meta, url } of pages) {
@@ -110,6 +112,7 @@ test("sitemap inclui rotas principais/guias, exclui rotas noindex e nunca emite 
     `${SITE_URL}/contact`,
     `${SITE_URL}/donate`,
     `${SITE_URL}/privacidade`,
+    `${SITE_URL}/termos`,
   ]) {
     assert.equal(urls.has(required), true, `Faltando ${required} no sitemap`);
   }
@@ -221,4 +224,29 @@ test("RootLayout mantém links globais de descoberta RSS no head compartilhado",
   assert.equal(layoutSource.includes('type="application/rss+xml"'), true);
   assert.equal(layoutSource.includes("/feed.xml"), true);
   assert.equal(layoutSource.includes("/liturgia/feed.xml"), true);
+});
+
+test("todas as liturgias possuem seção de Reflexão do Evangelho e zero entidades HTML não decodificadas", () => {
+  const dir = path.join(process.cwd(), "liturgia-content");
+  const files = fs.readdirSync(dir).filter((f) => f.endsWith(".mdx"));
+  assert.equal(files.length >= 500, true);
+
+  for (const file of files) {
+    const content = fs.readFileSync(path.join(dir, file), "utf8");
+    assert.equal(
+      content.includes("## Reflexão do Evangelho"),
+      true,
+      `Arquivo ${file} está sem '## Reflexão do Evangelho'`,
+    );
+    assert.equal(
+      /&[a-zA-Z]+;/.test(content),
+      false,
+      `Arquivo ${file} contém entidades HTML não decodificadas`,
+    );
+  }
+});
+
+test("blog possui pelo menos 6 artigos originais indexados em content/", () => {
+  const blogPosts = getContentIndex("content");
+  assert.equal(blogPosts.length >= 6, true);
 });

@@ -5,6 +5,7 @@ const links = [
   { href: "/contact", label: "Contato" },
   { href: "/donate", label: "Apoiar" },
   { href: "/privacidade", label: "Privacidade" },
+  { href: "/termos", label: "Termos de Uso" },
   { href: "/acompanhar", label: "Como acompanhar" },
   { href: "/lectio-divina", label: "Lectio divina" },
   { href: "/tempo-liturgico", label: "Tempo litúrgico" },

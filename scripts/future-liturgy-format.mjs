@@ -1,9 +1,50 @@
 function decodeHtml(value) {
-  const named = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " " };
+  const named = {
+    amp: "&",
+    lt: "<",
+    gt: ">",
+    quot: '"',
+    apos: "'",
+    nbsp: " ",
+    oacute: "ó",
+    Oacute: "Ó",
+    aacute: "á",
+    Aacute: "Á",
+    eacute: "é",
+    Eacute: "É",
+    iacute: "í",
+    Iacute: "Í",
+    uacute: "ú",
+    Uacute: "Ú",
+    ccedil: "ç",
+    Ccedil: "Ç",
+    atilde: "ã",
+    Atilde: "Ã",
+    otilde: "õ",
+    Otilde: "Õ",
+    acirc: "â",
+    Acirc: "Â",
+    ecirc: "ê",
+    Ecirc: "Ê",
+    ocirc: "ô",
+    Ocirc: "Ô",
+    agrave: "à",
+    Agrave: "À",
+    uuml: "ü",
+    Uuml: "Ü",
+    ordf: "ª",
+    ordm: "º",
+    mdash: "—",
+    ndash: "–",
+    ldquo: "“",
+    rdquo: "”",
+    lsquo: "‘",
+    rsquo: "’",
+  };
   return value
     .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)))
     .replace(/&#x([\da-f]+);/gi, (_, code) => String.fromCodePoint(parseInt(code, 16)))
-    .replace(/&([a-z]+);/gi, (entity, name) => named[name.toLowerCase()] ?? entity);
+    .replace(/&([a-zA-Z]+);/g, (entity, name) => named[name] ?? named[name.toLowerCase()] ?? entity);
 }
 
 export function htmlToMarkdown(html) {

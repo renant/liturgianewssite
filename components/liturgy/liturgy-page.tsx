@@ -81,11 +81,13 @@ export function LiturgyPage({
   const monthUrl = calendarHref(date);
   const formatted = formatCivilDate(date);
   const title = `Liturgia de ${formatted}`;
+  const facts = extractLiturgyFacts(source);
   const description = buildLiturgyDescription(
     entry.title,
     formatted,
-    extractLiturgyFacts(source),
+    facts,
   );
+  const hasNews = /^##\s+Notícias do Vaticano\s*$/m.test(source);
   const celebration = entry.title
     .split("|")
     .map((part) => part.trim())
@@ -109,7 +111,7 @@ export function LiturgyPage({
     {
       id: "evangelho",
       label: "Evangelho",
-      available: Boolean(extractLiturgyFacts(source).gospel),
+      available: Boolean(facts.gospel),
     },
     {
       id: "reflexao",
@@ -119,13 +121,13 @@ export function LiturgyPage({
     {
       id: "noticias",
       label: "Notícias",
-      available: /^##\s+Notícias do Vaticano\s*$/m.test(source),
+      available: hasNews,
     },
   ].filter((section) => section.available);
   const slug = todayRoute ? "hoje" : entry.slug;
   const url = `${SITE_URL}/liturgia/${slug}`;
   const imageUrl = `${url}/opengraph-image`;
-  const { bottomSlot } = getAdSenseConfig();
+  const { midSlot, bottomSlot } = getAdSenseConfig();
   return (
     <div className="reading-container">
       <AdSenseScript />
@@ -162,6 +164,60 @@ export function LiturgyPage({
       <article className="editorial-prose liturgy-prose" aria-label={title}>
         {children}
       </article>
+      {!hasNews && (
+        <AdUnit
+          key={`${entry.slug}-mid-fallback`}
+          slot={midSlot}
+          position="after-reflection"
+        />
+      )}
+      <section
+        className="my-8 rounded-lg border border-amber-200/80 bg-amber-50/40 p-5 sm:p-6"
+        aria-labelledby="prayer-guide-title"
+      >
+        <h2
+          id="prayer-guide-title"
+          className="font-serif text-xl font-semibold text-slate-900"
+        >
+          Como rezar e meditar esta liturgia
+        </h2>
+        <p className="mt-2 text-sm leading-relaxed text-slate-700">
+          Para acolher com profundidade a Palavra proclamada nesta celebração (
+          <strong className="font-medium text-slate-900">{context}</strong>
+          {facts.firstReading ? `, primeira leitura ${facts.firstReading}` : ""}
+          {facts.gospel ? ` e Evangelho ${facts.gospel}` : ""}), reserve alguns
+          minutos de silêncio seguindo os passos da{" "}
+          <Link href="/lectio-divina" className="text-link">
+            Lectio Divina
+          </Link>
+          :
+        </p>
+        <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-slate-700">
+          <li>
+            <strong className="font-medium text-slate-900">
+              Leitura (Lectio):
+            </strong>{" "}
+            Releia com calma o Evangelho{" "}
+            {facts.gospel ? `(${facts.gospel})` : "do dia"} e observe as
+            palavras, gestos e atitudes de Jesus diante dos seus interlocutores.
+          </li>
+          <li>
+            <strong className="font-medium text-slate-900">
+              Meditação (Meditatio):
+            </strong>{" "}
+            Identifique uma frase ou convite que toca sua realidade hoje e
+            conecte-o com a reflexão do Evangelho acima.
+          </li>
+          <li>
+            <strong className="font-medium text-slate-900">
+              Oração e Ação (Oratio &amp; Actio):
+            </strong>{" "}
+            Converse com Deus com confiança filial, agradecendo pela luz da
+            Palavra, e escolha um gesto concreto de caridade, paciência ou
+            fidelidade para viver ao longo deste dia.
+          </li>
+        </ol>
+      </section>
       <AdjacentDays date={entry.date} afterReading />
       <section
         className="my-8 border-t border-amber-200/70 pt-6"
