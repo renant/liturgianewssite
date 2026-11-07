@@ -238,6 +238,14 @@ test("todas as liturgias possuem seção de Reflexão do Evangelho e zero entida
       true,
       `Arquivo ${file} está sem '## Reflexão do Evangelho'`,
     );
+    const afterRefl = content.split("## Reflexão do Evangelho")[1] || "";
+    const reflBody = afterRefl.split("## Notícias do Vaticano")[0].trim();
+    const wordCount = reflBody.split(/\s+/).filter(Boolean).length;
+    assert.equal(
+      wordCount >= 40,
+      true,
+      `Arquivo ${file} possui reflexão muito curta ou vazia (${wordCount} palavras)`,
+    );
     assert.equal(
       /&[a-zA-Z]+;/.test(content),
       false,
