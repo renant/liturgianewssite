@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { htmlToMarkdown } from "./future-liturgy-format.mjs";
+import { DEFAULT_REFLECTION_MODEL, REFLECTION_PROMPT_VERSION, generateLiturgyReflection, sha256, validateReflection } from "./generate-liturgy-reflection.mjs";
 
 const baseUrl = "https://liturgia.cancaonova.com";
 const outputDirectory = path.join(process.cwd(), "liturgia-content");
@@ -140,7 +141,87 @@ export async function buildMdx(date, publishedAt) {
   const longDate = new Intl.DateTimeFormat("pt-BR", {
     timeZone: "UTC", weekday: "long", day: "2-digit", month: "long", year: "numeric",
   }).format(date);
-  return `export const metadata = { title: ${JSON.stringify(title)}, date: '${isoDate(date)}', publishedAt: '${originalPublication}', updatedAt: '${now}' };\n\n# ${title}\n\n${longDate}\n\n## Leituras do Dia\n\n${readings.join("\n\n")}\n`;
+  return renderMdx({ title, date: isoDate(date), publishedAt: originalPublication, updatedAt: now,
+    body: `# ${title}\n\n${longDate}\n\n## Leituras do Dia\n\n${readings.join("\n\n")}\n` });
+}
+
+function metadataValue(mdx, field) {
+  return new RegExp(`\\b${field}:\\s*(['"])(.*?)\\1`).exec(mdx)?.[2];
+}
+
+function reflectionSection(mdx) {
+  const lines = mdx.split(/\r?\n/);
+  const start = lines.findIndex((line) => /^##\s+Reflexão do Evangelho\s*$/.test(line));
+  if (start === -1) return "";
+  const next = lines.findIndex((line, index) => index > start && /^##\s/.test(line));
+  return lines.slice(start + 1, next === -1 ? undefined : next).join("\n").trim();
+}
+
+function bodyWithoutMetadata(mdx) {
+  return mdx.replace(/^export const metadata = \{[^\n]*\};\s*\n*/m, "");
+}
+
+function renderMdx({ title, date, publishedAt, updatedAt, body, reflectionMeta }) {
+  const metadata = { title, date, publishedAt, updatedAt, ...reflectionMeta };
+  const entries = Object.entries(metadata).map(([key, value]) => `${key}: ${JSON.stringify(value)}`);
+  return `export const metadata = { ${entries.join(", ")} };\n\n${body.trimEnd()}\n`;
+}
+
+export async function attachReflection(baseMdx, existing, { reflectionGenerator = generateLiturgyReflection } = {}) {
+  const body = bodyWithoutMetadata(baseMdx);
+  const priorBody = existing ? bodyWithoutMetadata(existing) : "";
+  const existingReflection = reflectionSection(existing ?? "");
+  const storedTextHash = metadataValue(existing ?? "", "reflectionTextHash");
+  const storedInputHash = metadataValue(existing ?? "", "reflectionInputHash");
+  const isGenerated = Boolean(existingReflection && storedTextHash && storedInputHash
+    && sha256(existingReflection) === storedTextHash);
+  const existingReadings = priorBody.match(/^## Leituras do Dia\s*\n([\s\S]*?)(?=^##\s|\s*$)/im)?.[1]?.trim();
+  const currentReadings = body.match(/^## Leituras do Dia\s*\n([\s\S]*?)(?=^##\s|\s*$)/im)?.[1]?.trim();
+  const inputHash = sha256(`${REFLECTION_PROMPT_VERSION}\n${metadataValue(baseMdx, "date")}\n${metadataValue(baseMdx, "title")}\n${currentReadings}`);
+  const readingsChanged = Boolean(existing && existingReadings !== currentReadings);
+
+  if (existingReflection && !isGenerated) {
+    if (readingsChanged) console.warn("A liturgia foi atualizada, mas a reflexão editorial foi preservada; revisar se necessário.");
+    const editorial = priorBody.match(/^##\s+(?:Reflexão do Evangelho|Notícias do Vaticano)\s*\n[\s\S]*$/im)?.[0] ?? "";
+    const untouched = editorial ? body.replace(/\s*$/, "\n\n") + editorial : `${body.trimEnd()}\n`;
+    const fields = Object.fromEntries(["title", "date", "publishedAt", "updatedAt"].map((field) => {
+      const raw = new RegExp(`\\b${field}:\\s*("(?:[^"\\\\]|\\\\.)*"|'[^']*')`).exec(baseMdx)?.[1];
+      return [field, raw?.startsWith('"') ? JSON.parse(raw) : raw?.slice(1, -1)];
+    }));
+    return renderMdx({ ...fields, body: untouched });
+  }
+
+  const shouldGenerate = !existingReflection || (isGenerated && (storedInputHash !== inputHash || readingsChanged));
+  if (!shouldGenerate) return existing;
+
+  const readings = currentReadings;
+  let generated;
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      generated = await reflectionGenerator({
+        date: metadataValue(baseMdx, "date"),
+        title: JSON.parse(baseMdx.match(/\btitle:\s*("(?:[^"\\]|\\.)*")/)?.[1] ?? '""'),
+        readings,
+      });
+      generated.text = validateReflection(generated.text.split(/\n\n+/));
+      break;
+    } catch (error) {
+      if (error?.status >= 400 && error.status < 500 && error.status !== 429) throw error;
+      if (attempt === 1) throw error;
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+  }
+
+  const existingNews = priorBody.match(/^## Notícias do Vaticano\s*\n[\s\S]*$/im)?.[0];
+  const withoutEditorial = body.replace(/\s*$/, "\n\n");
+  const completedBody = `${withoutEditorial}## Reflexão do Evangelho\n\n${generated.text}\n${existingNews ? `\n${existingNews}` : ""}`;
+  const fields = Object.fromEntries(["title", "date", "publishedAt", "updatedAt"].map((field) => [field, metadataValue(baseMdx, field)]));
+  return renderMdx({ ...fields, body: completedBody, reflectionMeta: {
+    reflectionProvider: "openai",
+    reflectionModel: generated.model || process.env.OPENAI_REFLECTION_MODEL || DEFAULT_REFLECTION_MODEL,
+    reflectionInputHash: inputHash,
+    reflectionTextHash: sha256(generated.text),
+  } });
 }
 
 export async function generateLiturgies({
@@ -149,6 +230,7 @@ export async function generateLiturgies({
   directory = outputDirectory,
   refreshExisting = process.argv.includes("--refresh-existing"),
   allowUnavailable = process.argv.includes("--allow-unavailable"),
+  reflectionGenerator = generateLiturgyReflection,
   delayMs = 800,
 } = {}) {
   fs.mkdirSync(directory, { recursive: true });
@@ -167,18 +249,17 @@ export async function generateLiturgies({
     let existing;
     if (existed) {
       existing = fs.readFileSync(filePath, "utf8");
-      publishedAt = /publishedAt:\s*['"]([^'"]+)['"]/.exec(existing)?.[1];
-      if (!refreshExisting) {
+      publishedAt = metadataValue(existing, "publishedAt");
+      const hasReflection = Boolean(reflectionSection(existing));
+      if (!refreshExisting && hasReflection) {
         console.info(`Já existe; mantendo sem alteração: ${slug}`);
         continue;
       }
     }
     try {
       let mdx = await buildMdx(date, publishedAt);
+      mdx = await attachReflection(mdx, existing, { reflectionGenerator });
       if (existing) {
-        // Revalida as leituras sem descartar o conteúdo editorial da página.
-        const editorialStart = existing.search(/^##\s+(?:reflex[aã]o|not[ií]cias)\b/im);
-        if (editorialStart !== -1) mdx = `${mdx.trimEnd()}\n\n${existing.slice(editorialStart)}`;
         const comparable = (value) => value.replace(/,?\s*(?:publishedAt|updatedAt):\s*['"][^'"]+['"]/g, "")
           .replace(/\r\n?/g, "\n").trimEnd();
         if (comparable(existing) === comparable(mdx)) {
@@ -199,6 +280,7 @@ export async function generateLiturgies({
       } else {
         console.error(`Não foi possível criar ${slug}: ${message}`);
         failures.push(slug);
+        if (message.includes("OPENAI_API_KEY")) break;
       }
     }
     await new Promise((resolve) => setTimeout(resolve, delayMs));

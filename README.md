@@ -52,4 +52,10 @@ A fonte precisa disponibilizar o calendário e o artigo de cada data. Na geraç�
 
 A rotina diária continua falhando se faltar qualquer um dos próximos 7 dias. Erros de conexão, calendário inválido, leituras incompletas e artigos de outra data causam falha em ambos os workflows. Páginas existentes são preservadas em caso de erro, e as demais datas continuam sendo processadas e salvas.
 
+Os dois workflows geram `## Reflexão do Evangelho` a partir das leituras usando a OpenAI Responses API e o modelo `gpt-5.6-terra`. Antes da primeira execução, cadastre `OPENAI_API_KEY` nos Secrets do GitHub. O modelo pode ser alterado pela variável `OPENAI_REFLECTION_MODEL`. Cada reflexão tem de 2 a 3 parágrafos e entre 150 e 260 palavras, relacionando o Evangelho, as outras leituras e o contexto litúrgico. O workflow valida o formato e a extensão; isso não substitui revisão editorial e doutrinal.
+
+Reflexões geradas recebem hashes das leituras e do texto nos metadados para evitar novas chamadas quando o conteúdo não muda. Reflexões editoriais existentes são preservadas; se as leituras mudarem, o workflow avisa que a revisão pode ser necessária. Páginas futuras já existentes sem reflexão são completadas nas janelas de 7 ou 90 dias.
+
+Estimativa da OpenAI para `gpt-5.6-terra` (US$ 2 por milhão de tokens de entrada e US$ 12 por milhão de tokens de saída): aproximadamente **US$ 0,65–2,40 para 90 reflexões** ou **US$ 0,05–0,19 para 7**, assumindo 1.500–5.000 tokens de leitura/contexto e cerca de 350 tokens gerados por reflexão. O custo varia com o tamanho das leituras e só ocorre para reflexões novas ou regeneradas. Consulte os [preços oficiais do modelo](https://developers.openai.com/api/docs/models/gpt-5.6-terra).
+
 Validação local: `node --test scripts/future-liturgy-format.test.mjs scripts/generate-future-liturgies.test.mjs`.

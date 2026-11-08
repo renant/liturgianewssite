@@ -4,6 +4,11 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { buildMdx, generateLiturgies, parseDaysAhead } from "./generate-future-liturgies.mjs";
+import { attachReflection } from "./generate-future-liturgies.mjs";
+import { generateLiturgyReflection, validateReflection } from "./generate-liturgy-reflection.mjs";
+
+const validReflection = `${Array.from({ length: 80 }, (_, index) => `palavra${index}`).join(" ")}\n\n${Array.from({ length: 80 }, (_, index) => `texto${index}`).join(" ")}`;
+const fakeReflectionGenerator = async () => ({ text: validReflection, model: "test-model" });
 
 // Reproduz a resposta real de /pb/?sDia=...: a data do widget muda,
 // mas o artigo e suas leituras continuam sendo os de 26 de outubro.
@@ -67,8 +72,8 @@ test("consulta o mês pelo AJAX e usa o permalink em português com a data do ar
   });
   const mdx = await buildMdx(new Date("2026-11-01T00:00:00Z"), "2026-10-26T10:00:00Z");
   assert.match(mdx, /# Todos os Santos, Solenidade \| Domingo/);
-  assert.match(mdx, /date: '2026-11-01'/);
-  assert.match(mdx, /publishedAt: '2026-10-26T10:00:00Z'/);
+  assert.match(mdx, /date: "2026-11-01"/);
+  assert.match(mdx, /publishedAt: "2026-10-26T10:00:00Z"/);
   assert.doesNotMatch(mdx, /\r|[\t ]+\n/);
   assert.equal(requests.length, 2);
 });
@@ -130,7 +135,7 @@ test("geração longa deixa janeiro ainda sem artigo pendente, sem falhar nem pu
       .replace('<span class="ano">2026</span>', '<span class="ano">2027</span>'));
   });
   const directory = temporaryDirectory(t);
-  const result = await generateLiturgies({ daysAhead: 2, today: new Date("2026-12-31T00:00:00Z"), directory, delayMs: 0, allowUnavailable: true });
+  const result = await generateLiturgies({ daysAhead: 2, today: new Date("2026-12-31T00:00:00Z"), directory, delayMs: 0, allowUnavailable: true, reflectionGenerator: fakeReflectionGenerator });
   assert.equal(result.created, 1);
   assert.deepEqual(result.failures, []);
   assert.deepEqual(result.pending, ["02-janeiro-2027"]);
@@ -192,28 +197,62 @@ test("revalida só os próximos 7 dias, corrige leituras e preserva conteúdo ed
   fs.writeFileSync(filename(3), "Página preservada se a fonte falhar.");
   fs.writeFileSync(filename(8), "Fora do intervalo.");
   fs.writeFileSync(path.join(directory, "31-outubro-2026.mdx"), "Hoje.");
-  const result = await generateLiturgies({ daysAhead: 7, today: new Date("2026-10-31T00:00:00Z"), directory, refreshExisting: true, delayMs: 0 });
-  assert.deepEqual(result, { created: 4, updated: 1, pending: [], failures: ["03-novembro-2026"] });
+  const result = await generateLiturgies({ daysAhead: 7, today: new Date("2026-10-31T00:00:00Z"), directory, refreshExisting: true, delayMs: 0, reflectionGenerator: fakeReflectionGenerator });
+  assert.deepEqual(result, { created: 4, updated: 2, pending: [], failures: ["03-novembro-2026"] });
   const repaired = fs.readFileSync(filename(1), "utf8");
   assert.match(repaired, /Primeira leitura de segunda-feira/);
-  assert.match(repaired, /publishedAt: '2026-10-20T10:00:00Z'/);
+  assert.match(repaired, /publishedAt: "2026-10-20T10:00:00Z"/);
   assert.ok(repaired.endsWith(editorial));
-  assert.equal(fs.readFileSync(filename(2), "utf8"), unchanged);
+  assert.match(fs.readFileSync(filename(2), "utf8"), /## Reflexão do Evangelho/);
+  assert.match(fs.readFileSync(filename(2), "utf8"), /publishedAt: "2026-10-20T10:00:00Z"/);
   assert.equal(fs.readFileSync(filename(3), "utf8"), "Página preservada se a fonte falhar.");
   assert.equal(fs.readFileSync(filename(8), "utf8"), "Fora do intervalo.");
   assert.equal(fs.readFileSync(path.join(directory, "31-outubro-2026.mdx"), "utf8"), "Hoje.");
 });
 
-test("geração de 90 dias atravessa o ano e mantém páginas existentes", async (t) => {
+test("geração de 90 dias atravessa o ano e completa páginas sem reflexão", async (t) => {
   const fetchMock = mockFutureSource(t);
   const directory = temporaryDirectory(t);
   const existingFile = path.join(directory, "01-novembro-2026.mdx");
   fs.writeFileSync(existingFile, "Página existente.");
-  const result = await generateLiturgies({ daysAhead: 90, today: new Date("2026-10-31T00:00:00Z"), directory, refreshExisting: false, delayMs: 0 });
-  assert.deepEqual(result, { created: 89, updated: 0, pending: [], failures: [] });
+  const result = await generateLiturgies({ daysAhead: 90, today: new Date("2026-10-31T00:00:00Z"), directory, refreshExisting: false, delayMs: 0, reflectionGenerator: fakeReflectionGenerator });
+  assert.deepEqual(result, { created: 89, updated: 1, pending: [], failures: [] });
   assert.equal(fs.readdirSync(directory).length, 90);
-  assert.equal(fs.readFileSync(existingFile, "utf8"), "Página existente.");
+  assert.match(fs.readFileSync(existingFile, "utf8"), /## Reflexão do Evangelho/);
   assert.ok(fs.existsSync(path.join(directory, "29-janeiro-2027.mdx")));
   assert.ok(!fs.existsSync(path.join(directory, "30-janeiro-2027.mdx")));
-  assert.equal(fetchMock.mock.callCount(), 178);
+  assert.equal(fetchMock.mock.callCount(), 180);
+});
+
+test("valida reflexão e chama a Responses API com saída estruturada", async () => {
+  assert.equal(validateReflection(validReflection.split("\n\n")), validReflection);
+  assert.throws(() => validateReflection(["curta", "texto curto"]), /150 a 260 palavras/);
+  assert.throws(() => validateReflection([validReflection, validReflection, validReflection]), /150 a 260 palavras/);
+  let request;
+  const result = await generateLiturgyReflection({
+    date: "2026-11-09", title: "Memória", readings: "Evangelho e salmo", apiKey: "test-key",
+    fetchImpl: async (url, options) => {
+      request = { url, options };
+      return new Response(JSON.stringify({ status: "completed", output: [{ content: [{ type: "output_text", text: JSON.stringify({ paragraphs: validReflection.split("\n\n") }) }] }] }));
+    },
+  });
+  assert.equal(result.text, validReflection);
+  assert.equal(request.url, "https://api.openai.com/v1/responses");
+  assert.equal(request.options.headers.Authorization, "Bearer test-key");
+  assert.equal(JSON.parse(request.options.body).text.format.type, "json_schema");
+});
+
+test("completa reflexão ausente, reaproveita a gerada e preserva reflexão editorial", async () => {
+  const base = `export const metadata = { title: "Memória", date: '2026-11-01', publishedAt: '2026-10-20T10:00:00Z', updatedAt: '2026-10-20T10:00:00Z' };\n\n# Memória\n\n## Leituras do Dia\n\n<strong>Evangelho</strong> (Lc 1,1-4)\n\nTexto do Evangelho.\n\nSalmo responsorial.`;
+  let calls = 0;
+  const generator = async () => { calls += 1; return fakeReflectionGenerator(); };
+  const generated = await attachReflection(base, null, { reflectionGenerator: generator });
+  assert.match(generated, /## Reflexão do Evangelho/);
+  assert.match(generated, /reflectionInputHash:/);
+  assert.equal((await attachReflection(base, generated, { reflectionGenerator: generator }).then((value) => value.replace(/updatedAt: "[^"]+"/, 'updatedAt: "timestamp"'))), generated.replace(/updatedAt: "[^"]+"/, 'updatedAt: "timestamp"'));
+  assert.equal(calls, 1);
+  const editorial = `${base}\n\n## Reflexão do Evangelho\n\nReflexão escrita pela equipe.\n`;
+  const preserved = await attachReflection(base, editorial, { reflectionGenerator: generator });
+  assert.match(preserved, /Reflexão escrita pela equipe/);
+  assert.equal(calls, 1);
 });

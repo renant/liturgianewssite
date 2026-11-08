@@ -15,7 +15,7 @@ concurrency:
 jobs:
   generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -28,6 +28,8 @@ jobs:
         continue-on-error: true
         env:
           DAYS_AHEAD: "7"
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_REFLECTION_MODEL: gpt-5.6-terra
         run: node scripts/generate-future-liturgies.mjs --refresh-existing
       - name: Commit new or corrected pages
         run: |
