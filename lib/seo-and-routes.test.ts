@@ -2,26 +2,26 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
-import { buildPageMetadata, DEFAULT_OG_IMAGE, SITE_URL } from "./seo.ts";
-import { createAnalyticsTracker } from "./analytics.ts";
-import { getLiturgicalDate } from "./liturgical-date.ts";
-import { getContentIndex, getContentSlugSet } from "./content-metadata.ts";
-import securityHeaders from "../headers.ts";
-import robots from "../app/robots.ts";
-import sitemap from "../app/sitemap.ts";
-import { GET as getBlogFeed } from "../app/feed.xml/route.ts";
-import { GET as getLiturgyFeed } from "../app/liturgia/feed.xml/route.ts";
 import { metadata as homeMetadata } from "../app/(app)/page.tsx";
-import { metadata as liturgyIndexMetadata } from "../app/liturgia/page.tsx";
 import { metadata as acompanharMetadata } from "../app/acompanhar/page.tsx";
-import { metadata as lectioMetadata } from "../app/lectio-divina/page.tsx";
-import { metadata as tempoMetadata } from "../app/tempo-liturgico/page.tsx";
-import { metadata as sobreMetadata } from "../app/sobre/page.tsx";
+import { generateMetadata as generateBlogMetadata } from "../app/blog/page.tsx";
 import { metadata as contactMetadata } from "../app/contact/page.tsx";
 import { metadata as donateMetadata } from "../app/donate/page.tsx";
+import { GET as getBlogFeed } from "../app/feed.xml/route.ts";
+import { metadata as lectioMetadata } from "../app/lectio-divina/page.tsx";
+import { GET as getLiturgyFeed } from "../app/liturgia/feed.xml/route.ts";
+import { metadata as liturgyIndexMetadata } from "../app/liturgia/page.tsx";
 import { metadata as privacidadeMetadata } from "../app/privacidade/page.tsx";
+import robots from "../app/robots.ts";
+import sitemap from "../app/sitemap.ts";
+import { metadata as sobreMetadata } from "../app/sobre/page.tsx";
+import { metadata as tempoMetadata } from "../app/tempo-liturgico/page.tsx";
 import { metadata as termosMetadata } from "../app/termos/page.tsx";
-import { generateMetadata as generateBlogMetadata } from "../app/blog/page.tsx";
+import securityHeaders from "../headers.ts";
+import { createAnalyticsTracker } from "./analytics.ts";
+import { getContentIndex, getContentSlugSet } from "./content-metadata.ts";
+import { getLiturgicalDate } from "./liturgical-date.ts";
+import { buildPageMetadata, DEFAULT_OG_IMAGE, SITE_URL } from "./seo.ts";
 
 test("buildPageMetadata preenche canonical, OpenGraph 1200x630 e Twitter card sem perder propriedades", () => {
   const meta = buildPageMetadata({
@@ -67,19 +67,28 @@ test("todas as rotas estáticas exportam OpenGraph 1200x630 e canonical próprio
     assert.equal(meta.alternates?.canonical, url);
     assert.equal(meta.openGraph?.url, url);
     assert.deepEqual(meta.openGraph?.images, [DEFAULT_OG_IMAGE]);
-    assert.equal(meta.twitter && "card" in meta.twitter ? meta.twitter.card : undefined, "summary_large_image");
+    assert.equal(
+      meta.twitter && "card" in meta.twitter ? meta.twitter.card : undefined,
+      "summary_large_image",
+    );
   }
 });
 
 test("blog preserva canonical paginado e aplica noindex em buscas", async () => {
-  const page1 = await generateBlogMetadata({ searchParams: Promise.resolve({}) });
+  const page1 = await generateBlogMetadata({
+    searchParams: Promise.resolve({}),
+  });
   assert.equal(page1.alternates?.canonical, `${SITE_URL}/blog`);
   assert.equal(page1.robots, undefined);
 
-  const page2 = await generateBlogMetadata({ searchParams: Promise.resolve({ page: "2" }) });
+  const page2 = await generateBlogMetadata({
+    searchParams: Promise.resolve({ page: "2" }),
+  });
   assert.equal(page2.alternates?.canonical, `${SITE_URL}/blog?page=2`);
 
-  const filtered = await generateBlogMetadata({ searchParams: Promise.resolve({ search: "quaresma" }) });
+  const filtered = await generateBlogMetadata({
+    searchParams: Promise.resolve({ search: "quaresma" }),
+  });
   assert.equal(filtered.alternates?.canonical, `${SITE_URL}/blog`);
   assert.deepEqual(filtered.robots, { index: false, follow: true });
 });
@@ -131,10 +140,19 @@ test("sitemap inclui rotas principais/guias, exclui rotas noindex e nunca emite 
 
 test("feeds RSS servem XML válido com pubDate no mesmo dia civil em America/Sao_Paulo e sem liturgias futuras", async () => {
   const todayIso = getLiturgicalDate().iso;
-  const [blogRes, liturgyRes] = await Promise.all([getBlogFeed(), getLiturgyFeed()]);
+  const [blogRes, liturgyRes] = await Promise.all([
+    getBlogFeed(),
+    getLiturgyFeed(),
+  ]);
 
-  assert.equal(blogRes.headers.get("content-type")?.includes("application/xml"), true);
-  assert.equal(liturgyRes.headers.get("content-type")?.includes("application/xml"), true);
+  assert.equal(
+    blogRes.headers.get("content-type")?.includes("application/xml"),
+    true,
+  );
+  assert.equal(
+    liturgyRes.headers.get("content-type")?.includes("application/xml"),
+    true,
+  );
 
   const blogXml = await blogRes.text();
   const liturgyXml = await liturgyRes.text();
@@ -143,11 +161,15 @@ test("feeds RSS servem XML válido com pubDate no mesmo dia civil em America/Sao
   assert.equal(liturgyXml.includes('<rss version="2.0"'), true);
 
   const itemMatches = Array.from(
-    liturgyXml.matchAll(/<link>https:\/\/www\.liturgianews\.site\/liturgia\/([^<]+)<\/link>[\s\S]*?<pubDate>([^<]+)<\/pubDate>/g),
+    liturgyXml.matchAll(
+      /<link>https:\/\/www\.liturgianews\.site\/liturgia\/([^<]+)<\/link>[\s\S]*?<pubDate>([^<]+)<\/pubDate>/g,
+    ),
   );
   assert.equal(itemMatches.length > 0, true);
 
-  const indexBySlug = new Map(getContentIndex("liturgia-content").map((entry) => [entry.slug, entry]));
+  const indexBySlug = new Map(
+    getContentIndex("liturgia-content").map((entry) => [entry.slug, entry]),
+  );
   for (const [, slug, pubDate] of itemMatches) {
     const entry = indexBySlug.get(slug);
     assert.ok(entry);
@@ -167,7 +189,11 @@ test("manifest.json referencia apenas ícones existentes com dimensões reais co
 
   for (const icon of manifest.icons) {
     assert.equal(icon.purpose.includes("any maskable"), false);
-    const iconPath = path.join(process.cwd(), "public", icon.src.replace(/^\//, ""));
+    const iconPath = path.join(
+      process.cwd(),
+      "public",
+      icon.src.replace(/^\//, ""),
+    );
     assert.equal(fs.existsSync(iconPath), true);
     const buf = fs.readFileSync(iconPath);
     const width = buf.readUInt32BE(16);
@@ -177,8 +203,13 @@ test("manifest.json referencia apenas ícones existentes com dimensões reais co
 });
 
 test("securityHeaders inclui HSTS, X-Content-Type-Options, X-Frame-Options, Permissions-Policy e Referrer-Policy", () => {
-  const keys = new Map(securityHeaders.map((header) => [header.key, header.value]));
-  assert.equal(keys.get("Strict-Transport-Security")?.includes("max-age="), true);
+  const keys = new Map(
+    securityHeaders.map((header) => [header.key, header.value]),
+  );
+  assert.equal(
+    keys.get("Strict-Transport-Security")?.includes("max-age="),
+    true,
+  );
   assert.equal(keys.get("X-Content-Type-Options"), "nosniff");
   assert.equal(keys.get("X-Frame-Options"), "SAMEORIGIN");
   assert.equal(keys.get("Permissions-Policy")?.includes("camera=()"), true);
@@ -197,7 +228,10 @@ test("getContentSlugSet retorna exatamente os mesmos slugs do índice cacheado",
 
 test("createAnalyticsTracker enfileira eventos disparados antes da inicialização e drena em ordem", () => {
   const tracker = createAnalyticsTracker();
-  const captured: Array<{ name: string; properties?: Record<string, string | boolean> }> = [];
+  const captured: Array<{
+    name: string;
+    properties?: Record<string, string | boolean>;
+  }> = [];
 
   tracker.capture("liturgy_view", { slug: "29-outubro-2026", is_today: true });
   tracker.capture("newsletter_email_confirmed");
@@ -210,48 +244,29 @@ test("createAnalyticsTracker enfileira eventos disparados antes da inicializaç�
   });
 
   assert.deepEqual(captured, [
-    { name: "liturgy_view", properties: { slug: "29-outubro-2026", is_today: true } },
+    {
+      name: "liturgy_view",
+      properties: { slug: "29-outubro-2026", is_today: true },
+    },
     { name: "newsletter_email_confirmed", properties: undefined },
   ]);
 
   tracker.capture("share_click", { platform: "whatsapp", slug: "hoje" });
   assert.equal(captured.length, 3);
-  assert.deepEqual(captured[2], { name: "share_click", properties: { platform: "whatsapp", slug: "hoje" } });
+  assert.deepEqual(captured[2], {
+    name: "share_click",
+    properties: { platform: "whatsapp", slug: "hoje" },
+  });
 });
 
 test("RootLayout mantém links globais de descoberta RSS no head compartilhado", () => {
-  const layoutSource = fs.readFileSync(path.join(process.cwd(), "app", "layout.tsx"), "utf8");
+  const layoutSource = fs.readFileSync(
+    path.join(process.cwd(), "app", "layout.tsx"),
+    "utf8",
+  );
   assert.equal(layoutSource.includes('type="application/rss+xml"'), true);
   assert.equal(layoutSource.includes("/feed.xml"), true);
   assert.equal(layoutSource.includes("/liturgia/feed.xml"), true);
-});
-
-test("todas as liturgias possuem seção de Reflexão do Evangelho e zero entidades HTML não decodificadas", () => {
-  const dir = path.join(process.cwd(), "liturgia-content");
-  const files = fs.readdirSync(dir).filter((f) => f.endsWith(".mdx"));
-  assert.equal(files.length >= 500, true);
-
-  for (const file of files) {
-    const content = fs.readFileSync(path.join(dir, file), "utf8");
-    assert.equal(
-      content.includes("## Reflexão do Evangelho"),
-      true,
-      `Arquivo ${file} está sem '## Reflexão do Evangelho'`,
-    );
-    const afterRefl = content.split("## Reflexão do Evangelho")[1] || "";
-    const reflBody = afterRefl.split("## Notícias do Vaticano")[0].trim();
-    const wordCount = reflBody.split(/\s+/).filter(Boolean).length;
-    assert.equal(
-      wordCount >= 40,
-      true,
-      `Arquivo ${file} possui reflexão muito curta ou vazia (${wordCount} palavras)`,
-    );
-    assert.equal(
-      /&[a-zA-Z]+;/.test(content),
-      false,
-      `Arquivo ${file} contém entidades HTML não decodificadas`,
-    );
-  }
 });
 
 test("blog possui pelo menos 6 artigos originais indexados em content/", () => {

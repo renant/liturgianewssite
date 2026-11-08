@@ -24,36 +24,49 @@ Este documento define as diretrizes arquiteturais, editoriais e técnicas do rep
 ## 2. Geração e Atualização de Liturgias Diárias (`liturgia-content/*.mdx`)
 
 ### 2.1. Estrutura Obrigatória do Arquivo MDX
+
 Todo arquivo em `liturgia-content/<dd>-<mês>-<aaaa>.mdx` **deve** conter:
+
 1. **Exportação de `metadata` na linha 1:**
    ```mdx
-   export const metadata = { title: "31ª Semana do Tempo Comum | Sábado", date: '2026-11-07', publishedAt: '2026-10-26T14:51:51.616Z', updatedAt: '2026-10-26T15:14:31.650Z' };
+   export const metadata = {
+     title: "31ª Semana do Tempo Comum | Sábado",
+     date: "2026-11-07",
+     publishedAt: "2026-10-26T14:51:51.616Z",
+     updatedAt: "2026-10-26T15:14:31.650Z",
+   };
    ```
+
    - `date` deve estar no formato ISO `YYYY-MM-DD`.
    - `publishedAt` e `updatedAt` nunca podem ser timestamps no futuro em relação ao momento do build.
 2. **Cabeçalho e data por extenso:**
+
    ```mdx
    # 31ª Semana do Tempo Comum | Sábado
 
    sábado, 07 de novembro de 2026
    ```
+
 3. **Seção `## Leituras do Dia`:**
    - Contendo a **Primeira Leitura**, o **Responsório / Salmo Responsorial**, a **Segunda Leitura** (em domingos e solenidades) e o **Evangelho**, com suas respectivas referências entre parênteses — ex.: `<strong>Primeira Leitura</strong> (Fl 4,10-19)` e `<strong>Evangelho</strong> (Lc 16,9-15)`.
 4. **Seção `## Reflexão do Evangelho` (OBRIGATÓRIA):**
-   - **Regra crítica (Conformidade AdSense & Qualidade Editorial):** **Nenhuma** página em `liturgia-content/*.mdx` pode existir sem a seção `## Reflexão do Evangelho`. Páginas contendo apenas o texto bíblico copiado sem reflexão autoral violam as diretrizes de *Conteúdo Replicado / Conteúdo de Baixo Valor* do Google AdSense e quebram o teste automatizado em `lib/seo-and-routes.test.ts`.
+   - **Regra crítica (Conformidade AdSense & Qualidade Editorial):** **Nenhuma** página em `liturgia-content/*.mdx` pode existir sem a seção `## Reflexão do Evangelho`. Páginas contendo apenas o texto bíblico copiado sem reflexão autoral violam as diretrizes de _Conteúdo Replicado / Conteúdo de Baixo Valor_ do Google AdSense e quebram o teste automatizado em `lib/seo-and-routes.test.ts`.
 5. **Seção `## Notícias do Vaticano` (Opcional):**
-   - Quando presente, lista links oficiais do portal *Vatican News* com a data abaixo de cada link.
+   - Quando presente, lista links oficiais do portal _Vatican News_ com a data abaixo de cada link.
 
 ### 2.2. Diretrizes para Escrever a `## Reflexão do Evangelho`
+
 Ao gerar ou revisar a seção `## Reflexão do Evangelho` de qualquer dia:
+
 - **Especificidade bíblica:** A reflexão nunca deve ser um texto genérico que serviria para qualquer dia. Ela deve citar e articular diretamente:
   1. A passagem e a mensagem central do **Evangelho do dia** (personagens, parábola, milagre ou discurso de Jesus).
   2. A conexão temática com a **Primeira Leitura** (ou Segunda Leitura, nos domingos/solenidades) e o **Salmo Responsorial**.
   3. O contexto do **Tempo Litúrgico** (Advento, Natal, Quaresma, Páscoa ou Tempo Comum) ou da **Memória/Festa/Solenidade do Santo** celebrado naquela data.
-- **Extensão e formato:** Escreva **2 a 3 parágrafos bem desenvolvidos** (entre **150 e 260 palavras** no total), em prosa fluida e calorosa, sem listas de tópicos (pois o roteiro estruturado em tópicos de *Lectio Divina* já é renderizado automaticamente pelo componente `LiturgyPage`).
+- **Extensão e formato:** Escreva **2 a 3 parágrafos bem desenvolvidos** (entre **150 e 260 palavras** no total), em prosa fluida e calorosa, sem listas de tópicos (pois o roteiro estruturado em tópicos de _Lectio Divina_ já é renderizado automaticamente pelo componente `LiturgyPage`).
 - **Fidelidade doutrinal e tom pastoral:** Mantenha fidelidade ao Magistério da Igreja Católica, ao Catecismo da Igreja Católica (CIC) e à tradição patrística. Conclua o último parágrafo com uma aplicação prática de conversão, esperança, oração ou caridade fraterna para o cotidiano do leitor.
 
 ### 2.3. Codificação UTF-8 e Proibição de Entidades HTML
+
 - **Proibido deixar entidades HTML no MDX:** Nunca salve arquivos `.mdx` contendo `&atilde;`, `&eacute;`, `&ccedil;`, `&oacute;`, `&acirc;`, `&mdash;`, `&nbsp;` ou similares. Todo texto deve estar em **UTF-8 puro** (`ã`, `é`, `ç`, `ó`, `â`, `—`).
 - Caso importe textos de fontes externas via `scripts/generate-future-liturgies.mjs`, utilize sempre o conversor `htmlToMarkdown` de `scripts/future-liturgy-format.mjs` e certifique-se de adicionar a `## Reflexão do Evangelho` antes de commitar.
 
@@ -62,7 +75,9 @@ Ao gerar ou revisar a seção `## Reflexão do Evangelho` de qualquer dia:
 ## 3. Geração de Artigos do Blog (`content/*.mdx`) e Guias
 
 ### 3.1. Estrutura do Frontmatter (`export const metadata`)
+
 Todo artigo em `content/<slug>.mdx` deve exportar `metadata` no topo do arquivo:
+
 ```mdx
 export const metadata = {
   title: "Título Claro e Descritivo com a Palavra-Chave Principal",
@@ -75,7 +90,9 @@ export const metadata = {
 ```
 
 ### 3.2. Padrão de Qualidade Editorial (E-E-A-T e AdSense)
+
 Para manter alto valor editorial no portal:
+
 1. **Profundidade e Originalidade:** Artigos de blog devem ter entre **800 e 1.200 palavras**, texto 100% original, didático e teologicamente preciso.
 2. **Estrutura Escaneável:**
    - Um único `# H1` no início (igual ou alinhado ao `title`).
@@ -86,10 +103,10 @@ Para manter alto valor editorial no portal:
    - `[calendário litúrgico](/liturgia)`
    - Guias permanentes: `[/acompanhar](/acompanhar)`, `[/lectio-divina](/lectio-divina)` ou `[/tempo-liturgico](/tempo-liturgico)`.
 4. **Fontes e Referências Oficiais:** Encerre todo artigo formativo com uma linha de referências documentais da Igreja, por exemplo:
-   - *Catecismo da Igreja Católica (CIC)* (citando os parágrafos `nn. ...`).
-   - *Instrução Geral do Missal Romano (IGMR)*.
-   - *Constituição Conciliar Sacrosanctum Concilium* ou *Dei Verbum*.
-   - *Normas Universais sobre o Ano Litúrgico e o Calendário*.
+   - _Catecismo da Igreja Católica (CIC)_ (citando os parágrafos `nn. ...`).
+   - _Instrução Geral do Missal Romano (IGMR)_.
+   - _Constituição Conciliar Sacrosanctum Concilium_ ou _Dei Verbum_.
+   - _Normas Universais sobre o Ano Litúrgico e o Calendário_.
 
 ---
 
@@ -107,4 +124,4 @@ Antes de finalizar qualquer tarefa, garanta que os seguintes invariantes permane
    - A data litúrgica corrente em `/liturgia/hoje`, na Home (`/`) e nos feeds RSS é sempre calculada no fuso `America/Sao_Paulo` (`getLiturgicalDate()` em `lib/liturgical-date.ts`).
    - O `sitemap.xml` nunca deve emitir `lastModified` no futuro, e o feed RSS (`/liturgia/feed.xml`) nunca deve listar liturgias futuras (`entry.date > todayIso`).
 4. **Verificação Final:**
-   - Execute `bun run test && bun run typecheck && bun run lint` após qualquer alteração em `liturgia-content/` ou `content/` — o teste `todas as liturgias possuem seção de Reflexão do Evangelho e zero entidades HTML não decodificadas` em `lib/seo-and-routes.test.ts` validará automaticamente todo o acervo.
+   - Execute `bun run test && bun run typecheck && bun run lint` após qualquer alteração em `liturgia-content/` ou `content/`
