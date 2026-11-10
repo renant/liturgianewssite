@@ -144,7 +144,7 @@ export default async function Page({
             diretamente no seu e-mail.
           </p>
           <Button asChild variant="default">
-            <Link href="/#newsletter" aria-label="Assinar newsletter da LiturgiaNews">
+            <Link href="/#newsletter">
               Assinar Newsletter
             </Link>
           </Button>

@@ -25,9 +25,9 @@ export function RelatedPosts({
   return (
     <section
       className={`mt-12 pt-8 border-t border-amber-200 ${className}`}
-      aria-label="Posts relacionados"
+      aria-labelledby="related-posts-title"
     >
-      <h2 className="text-2xl font-serif font-semibold text-slate-800 mb-6">
+      <h2 id="related-posts-title" className="text-2xl font-serif font-semibold text-slate-800 mb-6">
         Artigos relacionados
       </h2>
       <div className="space-y-6">
@@ -38,7 +38,7 @@ export function RelatedPosts({
       <div className="mt-6 text-center">
         <Link
           href="/blog"
-          className="text-amber-700 hover:text-amber-900 underline font-medium focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded"
+          className="text-link font-medium rounded"
         >
           Ver todos os posts →
         </Link>

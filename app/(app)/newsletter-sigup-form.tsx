@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { useFormState } from "@/hooks/use-form-state";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useId, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 import { subscribe } from "./actions";
 import { captureError, captureEvent } from "@/lib/analytics";
 import type { NewsletterSource } from "@/lib/newsletter";
@@ -17,14 +17,19 @@ export default function NewsletterFormSignup({
   source,
   submitLabel = "Receber a liturgia diária",
   compact = false,
+  formLabel,
+  ariaLabelledBy,
 }: {
   source: NewsletterSource;
   submitLabel?: string;
   compact?: boolean;
+  formLabel?: string;
+  ariaLabelledBy?: string;
 }) {
   const router = useRouter();
   const id = useId();
   const started = useRef(false);
+  const emailInputRef = useRef<HTMLInputElement | null>(null);
   const captureStart = () => {
     if (started.current) return;
     started.current = true;
@@ -66,11 +71,19 @@ export default function NewsletterFormSignup({
     }
   });
   const error = formState.errors?.email?.[0];
+
+  useEffect(() => {
+    if (error) {
+      emailInputRef.current?.focus();
+    }
+  }, [error]);
+
   return (
     <form
       onSubmit={handleSubmit}
       className={compact ? "space-y-3" : "space-y-4"}
-      aria-label="Inscrição na newsletter"
+      aria-label={ariaLabelledBy ? undefined : (formLabel ?? "Inscrição na newsletter")}
+      aria-labelledby={ariaLabelledBy}
       noValidate
     >
       <div className={compact ? "flex flex-col gap-2.5 sm:flex-row sm:items-start" : "space-y-2"}>
@@ -79,11 +92,15 @@ export default function NewsletterFormSignup({
             Seu e-mail
           </Label>
           <Input
+            ref={emailInputRef}
             id={`${id}-email`}
             name="email"
             type="email"
             autoComplete="email"
             inputMode="email"
+            autoCorrect="off"
+            autoCapitalize="none"
+            enterKeyHint="send"
             spellCheck={false}
             placeholder="voce@exemplo.com"
             className="min-h-12 bg-white text-base"
@@ -95,7 +112,7 @@ export default function NewsletterFormSignup({
             onChange={captureStart}
           />
           {error && (
-            <p id={`${id}-error`} className="text-sm text-red-700">
+            <p id={`${id}-error`} role="alert" className="text-sm text-red-700">
               {error}
             </p>
           )}

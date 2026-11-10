@@ -120,7 +120,7 @@ export function CalendarPicker({
             {activeGroup && (
               <div>
                 <h3 className="sr-only">{activeGroup.year}</h3>
-                <ul>
+                <ul role="list">
                   {activeGroup.months.map((item) => {
                     const monthName = MONTH_NAMES[item.month - 1];
                     const isCurrent =
@@ -152,7 +152,7 @@ export function CalendarPicker({
           groups.map((group) => (
             <div key={group.year}>
               <h3>{group.year}</h3>
-              <ul>
+              <ul role="list">
                 {group.months.map((item) => {
                   const monthName = MONTH_NAMES[item.month - 1];
                   const isCurrent =

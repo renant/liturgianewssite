@@ -86,7 +86,10 @@ export const metadata: Metadata = {
   },
   // Quando houver um código real do Search Console (método tag HTML), adicione-o em verification.google.
   category: "religion",
-  ...(adsenseOther ? { other: adsenseOther } : {}),
+  other: {
+    "text-scale": "scale",
+    ...(adsenseOther ?? {}),
+  },
 };
 
 export const viewport: Viewport = {
@@ -117,12 +120,19 @@ export default function RootLayout({
           href={`${SITE_URL}/liturgia/feed.xml`}
         />
         {adsenseConfig.clientId && (
-          <script
-            async
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseConfig.clientId}`}
-            crossOrigin="anonymous"
-            data-adsense-loader="true"
-          />
+          <>
+            <link
+              rel="preconnect"
+              href="https://pagead2.googlesyndication.com"
+              crossOrigin="anonymous"
+            />
+            <script
+              async
+              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseConfig.clientId}`}
+              crossOrigin="anonymous"
+              data-adsense-loader="true"
+            />
+          </>
         )}
       </head>
       <body className={`${geistSans.variable} antialiased`}>

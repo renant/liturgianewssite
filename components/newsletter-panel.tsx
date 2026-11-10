@@ -14,7 +14,7 @@ export function NewsletterPanel({ source }: { source: NewsletterSource }) {
           ? "Crie o hábito diário: leituras, salmo e Evangelho gratuitamente no seu e-mail antes do dia começar."
           : "Receba a liturgia diária gratuitamente por e-mail."}
       </p>
-      <NewsletterFormSignup source={source} />
+      <NewsletterFormSignup source={source} ariaLabelledBy="newsletter-title" />
       <p className="mt-4 text-xs">
         Gratuita. Cancele quando quiser.{" "}
         <Link className="text-link" href="/privacidade">

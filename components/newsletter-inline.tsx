@@ -12,6 +12,7 @@ export function NewsletterInline({ source }: { source: NewsletterSource }) {
       <NewsletterFormSignup
         source={source}
         submitLabel="Receber o Evangelho todo dia"
+        formLabel="Inscrição rápida na newsletter"
         compact
       />
     </aside>

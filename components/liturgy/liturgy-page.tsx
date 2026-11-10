@@ -172,7 +172,7 @@ export function LiturgyPage({
         />
       )}
       <section
-        className="my-8 rounded-lg border border-amber-200/80 bg-amber-50/40 p-5 sm:p-6"
+        className="below-fold-section my-8 rounded-lg border border-amber-200/80 bg-amber-50/40 p-5 sm:p-6"
         aria-labelledby="prayer-guide-title"
       >
         <h2

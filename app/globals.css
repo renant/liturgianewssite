@@ -75,10 +75,11 @@
   .ad-unit-wrapper { @apply my-8 rounded-lg border border-amber-200/60 bg-white/60 px-3 py-3 sm:px-4; }
   .ad-unit-wrapper:has(ins.adsbygoogle[data-ad-status="unfilled"]) { display: none; }
   html[data-ads-blocked="true"] .ad-unit-wrapper { display: none; }
-  .ad-unit-label { @apply mb-2 text-center font-sans text-[0.6875rem] font-medium uppercase tracking-widest text-slate-600; }
+  .ad-unit-label { @apply mb-2 text-center font-sans text-xs font-medium uppercase tracking-widest text-slate-600; }
   .ad-unit-frame { @apply mx-auto flex min-h-[250px] w-full max-w-full items-center justify-center overflow-hidden; }
   .ad-unit-frame ins.adsbygoogle[data-ad-status="unfilled"] { display: none !important; }
   .ad-unit-preview { @apply flex min-h-[250px] w-full items-center justify-center rounded border border-dashed border-amber-300 bg-amber-50/70 px-4 text-center text-xs text-slate-600; }
+  .below-fold-section { content-visibility: auto; contain-intrinsic-size: auto 320px; }
   .liturgy-header { @apply mb-5; }
   .liturgy-header h1 { @apply font-serif text-[1.875rem] font-semibold leading-tight tracking-tight text-slate-900 sm:text-4xl; }
   .liturgy-context { @apply mt-3 text-base leading-relaxed text-amber-800; }
@@ -96,6 +97,7 @@
   .editorial-prose h3 { @apply mt-8 text-xl font-semibold; }
   .editorial-prose a { @apply break-words underline-offset-4; }
   .editorial-prose p { line-height: 1.8; }
+  .editorial-prose :where(p, li, blockquote) { text-wrap: pretty; }
   .editorial-prose :where(img) { @apply max-w-full; }
   .liturgy-prose > h2:first-child { @apply mt-7; }
   .calendar-heading { @apply mb-8 flex flex-col items-start justify-between gap-5 md:flex-row md:items-end; }
@@ -130,7 +132,7 @@
   .status-page { @apply reading-container py-6 sm:py-12; }
   .status-icon { @apply mb-5 size-10 text-amber-700; }
 }
-@media (min-width:640px) { .editorial-prose { font-size: 1.125rem; } }
+@media (min-width: 40em) { .editorial-prose { font-size: 1.125rem; } }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }

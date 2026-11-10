@@ -214,7 +214,7 @@ export default function Home() {
                     href={`/blog/${post.slug}`}
                     className="text-xs font-medium text-amber-800 underline underline-offset-4 hover:text-amber-950"
                   >
-                    Ler artigo completo
+                    Ler artigo completo<span className="sr-only">: {post.title}</span>
                   </Link>
                 </div>
               </article>

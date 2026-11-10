@@ -59,7 +59,6 @@ export default async function BlogPage(props: {
 
   const isPreviousDisabled = currentPage <= 1;
   const isNextDisabled = currentPage >= totalPages;
-  const disabledLinkStyle = "opacity-50 cursor-not-allowed pointer-events-none";
 
   return (
     <>
@@ -84,7 +83,7 @@ export default async function BlogPage(props: {
               </p>
               <Link
                 href="/blog"
-                className="text-amber-700 hover:text-amber-900 underline text-sm mt-2 inline-block focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+                className="text-link text-sm mt-2 inline-block"
               >
                 Limpar busca
               </Link>
@@ -106,7 +105,7 @@ export default async function BlogPage(props: {
                 {searchTerm && (
                   <Link
                     href="/blog"
-                    className="text-amber-700 hover:text-amber-900 underline mt-4 inline-block focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+                    className="text-link mt-4 inline-block"
                   >
                     Ver todos os posts
                   </Link>
@@ -120,11 +119,7 @@ export default async function BlogPage(props: {
               {!isPreviousDisabled && (
                 <Link
                   href={paginationHref(currentPage - 1, postsPerPage, searchTerm, sort)}
-                  className={`${
-                    isPreviousDisabled ? disabledLinkStyle : ""
-                  } inline-flex min-h-11 items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-amber-200 rounded-md shadow-sm hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500`}
-                  aria-disabled={isPreviousDisabled}
-                  tabIndex={isPreviousDisabled ? -1 : undefined}
+                  className="inline-flex min-h-11 items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-amber-200 rounded-md shadow-sm hover:bg-amber-50"
                 >
                   Anterior
                 </Link>
@@ -138,11 +133,7 @@ export default async function BlogPage(props: {
               {!isNextDisabled && (
                 <Link
                   href={paginationHref(currentPage + 1, postsPerPage, searchTerm, sort)}
-                  className={`${
-                    isNextDisabled ? disabledLinkStyle : ""
-                  } inline-flex min-h-11 items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-amber-200 rounded-md shadow-sm hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500`}
-                  aria-disabled={isNextDisabled}
-                  tabIndex={isNextDisabled ? -1 : undefined}
+                  className="inline-flex min-h-11 items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-amber-200 rounded-md shadow-sm hover:bg-amber-50"
                 >
                   Próximo
                 </Link>
