@@ -299,6 +299,15 @@ test("liturgias não contêm Notícias do Vaticano nem entidades HTML, e todas d
       false,
       `Liturgia ${entry.slug} contém entidades HTML`,
     );
+    for (const [idx, line] of source.split(/\r?\n/).entries()) {
+      const strongOpens = (line.match(/<strong>/g) ?? []).length;
+      const strongCloses = (line.match(/<\/strong>/g) ?? []).length;
+      assert.equal(
+        strongOpens,
+        strongCloses,
+        `Tag <strong> desbalanceada na linha ${idx + 1} de ${entry.slug}`,
+      );
+    }
     const refMatch = /##\s+Reflexão do Evangelho\s*\n+([\s\S]*?)(?=\n##\s|$)/.exec(source);
     assert.ok(refMatch, `Liturgia ${entry.slug} sem Reflexão do Evangelho`);
     if (entry.date >= "2026-10-15") {

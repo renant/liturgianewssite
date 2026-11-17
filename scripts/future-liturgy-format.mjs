@@ -66,6 +66,11 @@ export function htmlToMarkdown(html) {
     .replace(/\uE000STRONG_CLOSE\uE000/g, "</strong>")
     .replace(/\uE000EM_OPEN\uE000/g, "<em>")
     .replace(/\uE000EM_CLOSE\uE000/g, "</em>")
+    .replace(/<(strong|em)>([^<]*?)<\/\1>/g, (_, tag, inner) => {
+      const cleaned = inner.replace(/\s+/g, " ").trim();
+      return cleaned ? `<${tag}>${cleaned}</${tag}>` : "";
+    })
+    .replace(/<strong>\s*(Primeira Leitura|Segunda Leitura|Evangelho)\s*\(([^)<]+)\)\s*<\/strong>/gi, "<strong>$1</strong> ($2)")
     .replace(/[\t ]+\n/g, "\n")
     .replace(/\n[\t ]+/g, "\n")
     .replace(/\n{3,}/g, "\n\n")
