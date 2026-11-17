@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { buildLiturgyMdxComponents, LiturgyPage } from "@/components/liturgy/liturgy-page";
 import { contentPublishedAt, contentModifiedAt } from "@/lib/content-dates";
-import { getContentIndex } from "@/lib/content-metadata";
+import { getContentIndex, isOriginalLiturgyEntry } from "@/lib/content-metadata";
 import { currentLiturgyDate, loadLiturgy } from "@/lib/liturgy-data";
 import { buildLiturgyDescription, extractLiturgyFacts } from "@/lib/liturgy-facts";
 
@@ -18,7 +18,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = facts.gospel ? `Liturgia de ${entry.formattedDate}: Evangelho ${facts.gospel}` : `Liturgia de ${entry.formattedDate}`;
   const description = buildLiturgyDescription(entry.title, entry.formattedDate, facts);
   const url = `https://www.liturgianews.site/liturgia/${entry.slug}`;
-  return { title: { absolute: title }, description, alternates: { canonical: url },
+  return {
+    title: { absolute: title },
+    description,
+    alternates: { canonical: url },
+    robots: isOriginalLiturgyEntry(entry) ? undefined : { index: false, follow: true },
     openGraph: { title, description, url, type: "article", publishedTime: contentPublishedAt(entry), modifiedTime: contentModifiedAt(entry), locale: "pt_BR", siteName: "LiturgiaNews" },
     twitter: { card: "summary_large_image", title, description },
   };

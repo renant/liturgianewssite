@@ -68,12 +68,44 @@ export default function Page() {
           <Link href="/liturgia">calendário litúrgico</Link>, é possível percorrer essas datas e observar sua continuidade.
         </p>
 
+        <h2>As Cores Litúrgicas e o seu Sentido Espiritual</h2>
+        <p>
+          A mudança dos tempos e celebrações ao longo do ano litúrgico torna-se visível nos paramentos do altar e das vestes sagradas segundo o capítulo VI da <em>Instrução Geral do Missal Romano</em> (n. 346):
+        </p>
+        <ul>
+          <li>
+            <strong>Branco:</strong> Utilizado no Tempo Pascal, no Tempo do Natal, nas Solenidades e Festas do Senhor (exceto as da Paixão), da Virgem Maria, dos Anjos e dos Santos não mártires. Simboliza a luz divina, a alegria da Ressurreição, a pureza e a glória celeste.
+          </li>
+          <li>
+            <strong>Verde:</strong> Utilizado nos domingos e dias de semana do Tempo Comum. Simboliza a esperança cristã, a vitalidade da fé e o crescimento perseverante da semente do Evangelho no cotidiano.
+          </li>
+          <li>
+            <strong>Roxo (ou Violeta):</strong> Utilizado no Tempo do Advento e no Tempo da Quaresma, bem como nas celebrações penitenciais e nas Missas pelos fiéis defuntos. Recorda a vigilância, a conversão do coração, a humildade e a expectativa confiante.
+          </li>
+          <li>
+            <strong>Vermelho:</strong> Utilizado no Domingo de Ramos, na Sexta-Feira Santa, no Domingo de Pentecostes, nas festas da Paixão do Senhor e nas celebrações dos Apóstolos, Evangelistas e Santos Mártires. Evoca o fogo abrasador do Espírito Santo e o amor supremo testemunhado pelo sangue derramado por Cristo.
+          </li>
+          <li>
+            <strong>Rosa:</strong> Pode ser utilizado em dois domingos específicos de alegria no meio da preparação: o 3º Domingo do Advento (<em>Gaudete</em>) e o 4º Domingo da Quaresma (<em>Laetare</em>), anunciando que a grande festa já se aproxima.
+          </li>
+        </ul>
+
+        <h2>O Domingo como fundamento e núcleo de todo o Ano Litúrgico</h2>
+        <p>
+          Segundo a Constituição Conciliar <em>Sacrosanctum Concilium</em> (n. 106), por tradição apostólica que nasce do próprio dia da Ressurreição de Cristo, a Igreja celebra o mistério pascal a cada oitavo dia, justamente chamado <strong>Dia do Senhor</strong> ou <strong>Domingo</strong>. Por isso, o domingo é a festa primordial de preceito proposta à piedade dos fiéis, o alicerce sobre o qual se estrutura todo o calendário anual da Igreja.
+        </p>
+
         <h2>Acompanhe o dia presente</h2>
         <p>
           A maneira mais concreta de perceber esse ritmo espiritual é acompanhar diariamente a{" "}
-          <Link href="/liturgia/hoje">liturgia de hoje</Link> e consultar os nossos artigos de formação no{" "}
+          <Link href="/liturgia/hoje">liturgia de hoje</Link>, praticar a{" "}
+          <Link href="/lectio-divina">Lectio divina</Link> e consultar os nossos artigos de formação no{" "}
           <Link href="/blog">blog da LiturgiaNews</Link>. Se desejar criar o hábito de oração matinal,{" "}
           <Link href="#newsletter">assine a newsletter gratuita</Link> para receber a leitura de cada manhã diretamente em seu e-mail.
+        </p>
+        <hr />
+        <p className="text-xs text-slate-600">
+          <em>Referências documentais: Normas Universais sobre o Ano Litúrgico e o Calendário (nn. 1-61), Constituição Conciliar Sacrosanctum Concilium (nn. 102-111), Instrução Geral do Missal Romano (IGMR, n. 346), Catecismo da Igreja Católica (nn. 1163-1173).</em>
         </p>
       </article>
       <NewsletterPanel source="tempo_liturgico" />

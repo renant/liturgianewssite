@@ -57,10 +57,50 @@ export default function Page() {
         <p>
           A tradição espiritual acrescenta um fruto indispensável aos quatro degraus: a <strong>ação (actio)</strong>. A verdadeira escuta da Palavra gera conversão e caridade fraterna (cf. Tg 1,22). Conclua seu momento de <em>Lectio divina</em> escolhendo uma atitude concreta e possível, coerente com o que leu — um gesto de paciência em casa, uma reconciliação, uma ajuda a quem precisa ou a retidão no trabalho.
         </p>
+
+        <h2>Exemplo Prático: Aplicando os 4 Degraus no Evangelho</h2>
+        <p>
+          Para visualizar como a <em>Lectio divina</em> funciona na prática sem complicações, imagine que o Evangelho do dia proclame o encontro de Jesus com o cego de Jericó (Lc 18,35-43):
+        </p>
+        <ul>
+          <li>
+            <strong>Na Leitura (Lectio):</strong> Você lê o texto devagar e repara nos personagens: o mendigo sentado à beira do caminho, a multidão que tenta calá-lo, Jesus que para, manda chamá-lo e pergunta: <em>&ldquo;O que queres que eu faça por ti?&rdquo;</em>.
+          </li>
+          <li>
+            <strong>Na Meditação (Meditatio):</strong> Você traz essa pergunta de Cristo para o seu próprio coração: hoje, diante das minhas preocupações e cegueiras interiores, o que eu realmente preciso pedir a Jesus para enxergar com fé?
+          </li>
+          <li>
+            <strong>Na Oração (Oratio):</strong> Você faz sua a súplica humilde do cego — <em>&ldquo;Senhor, que eu veja!&rdquo;</em> —, entregando a Deus uma decisão difícil ou pedindo luz para compreender uma pessoa próxima.
+          </li>
+          <li>
+            <strong>Na Contemplação e Ação (Contemplatio &amp; Actio):</strong> Você permanece um minuto em silêncio agradecendo a proximidade de Cristo e decide caminhar naquele dia louvando a Deus através da paciência e da atenção a quem precisa de ajuda.
+          </li>
+        </ul>
+
+        <h2>Conselhos da Tradição Espiritual para Perseverar</h2>
+        <p>
+          Na Exortação Apostólica Pós-Sinodal <em>Verbum Domini</em> (nn. 86-87), o Papa Bento XVI recordou que a <em>Lectio divina</em> é capaz de abrir ao fiel o tesouro da Palavra de Deus e também de criar o encontro com Cristo, Palavra divina viva. Para que esse hábito floresça em sua rotina:
+        </p>
+        <ul>
+          <li>
+            <strong>Invoque sempre o Espírito Santo antes de ler:</strong> A Sagrada Escritura deve ser lida e interpretada com a ajuda do mesmo Espírito mediante o qual foi escrita (<em>Dei Verbum</em>, n. 12).
+          </li>
+          <li>
+            <strong>Leia em comunhão com a liturgia da Igreja:</strong> Seguir as leituras propostas pelo <Link href="/liturgia">calendário litúrgico</Link> evita que leiamos apenas os textos que já conhecemos ou que agradam ao nosso gosto imediato, abrindo-nos à totalidade da Revelação.
+          </li>
+          <li>
+            <strong>Anote uma palavra-chave num caderno espiritual:</strong> Escrever em uma linha a frase bíblica que tocou seu coração ajuda a fixá-la na memória e permite perceber, ao longo das semanas, como Deus vem conduzindo sua história.
+          </li>
+        </ul>
         <p>
           Se a regularidade diária ajudar em sua caminhada, você pode{" "}
           <Link href="#newsletter">receber a liturgia diária por e-mail</Link> e reservar esse encontro para o começo de cada manhã, consultando também o guia de{" "}
-          <Link href="/acompanhar">como acompanhar a liturgia diária</Link>.
+          <Link href="/acompanhar">como acompanhar a liturgia diária</Link> e nossos artigos formativos no{" "}
+          <Link href="/blog">blog da LiturgiaNews</Link>.
+        </p>
+        <hr />
+        <p className="text-xs text-slate-600">
+          <em>Referências documentais: Constituição Dogmática Dei Verbum (nn. 12, 21, 25), Exortação Apostólica Verbum Domini (nn. 86-87), Catecismo da Igreja Católica (nn. 1177, 2700-2719).</em>
         </p>
       </article>
       <NewsletterPanel source="lectio_divina" />

@@ -19,7 +19,8 @@ import { metadata as tempoMetadata } from "../app/tempo-liturgico/page.tsx";
 import { metadata as termosMetadata } from "../app/termos/page.tsx";
 import securityHeaders from "../headers.ts";
 import { createAnalyticsTracker } from "./analytics.ts";
-import { getContentIndex, getContentSlugSet } from "./content-metadata.ts";
+import { getContentIndex, getContentSlugSet, isOriginalLiturgyEntry, readContentSource } from "./content-metadata.ts";
+import { generateMetadata as generateLiturgySlugMetadata } from "../app/liturgia/[slug]/page.tsx";
 import { getLiturgicalDate } from "./liturgical-date.ts";
 import { buildPageMetadata, DEFAULT_OG_IMAGE, SITE_URL } from "./seo.ts";
 
@@ -269,7 +270,73 @@ test("RootLayout mantém links globais de descoberta RSS no head compartilhado",
   assert.equal(layoutSource.includes("/liturgia/feed.xml"), true);
 });
 
-test("blog possui pelo menos 6 artigos originais indexados em content/", () => {
+test("blog possui pelo menos 12 artigos originais indexados em content/ com no mínimo 800 palavras cada", () => {
   const blogPosts = getContentIndex("content");
-  assert.equal(blogPosts.length >= 6, true);
+  assert.equal(blogPosts.length >= 12, true);
+  for (const post of blogPosts) {
+    const raw = readContentSource("content", post.slug) ?? "";
+    const body = raw.replace(/^export const metadata = \{[\s\S]*?\};\s*/, "");
+    const words = body.split(/\s+/).filter(Boolean).length;
+    assert.equal(
+      words >= 800,
+      true,
+      `Artigo ${post.slug} possui apenas ${words} palavras (mínimo 800)`,
+    );
+  }
+});
+
+test("liturgias não contêm Notícias do Vaticano nem entidades HTML, e todas desde 2026-10-15 possuem publishedAt e reflexão entre 150 e 260 palavras", () => {
+  const index = getContentIndex("liturgia-content");
+  for (const entry of index) {
+    const source = readContentSource("liturgia-content", entry.slug) ?? "";
+    assert.equal(
+      /^##\s+Notícias do Vaticano/m.test(source),
+      false,
+      `Liturgia ${entry.slug} ainda contém seção Notícias do Vaticano`,
+    );
+    assert.equal(
+      /&(?:atilde|eacute|ccedil|oacute|acirc|mdash|nbsp);/i.test(source),
+      false,
+      `Liturgia ${entry.slug} contém entidades HTML`,
+    );
+    const refMatch = /##\s+Reflexão do Evangelho\s*\n+([\s\S]*?)(?=\n##\s|$)/.exec(source);
+    assert.ok(refMatch, `Liturgia ${entry.slug} sem Reflexão do Evangelho`);
+    if (entry.date >= "2026-10-15") {
+      assert.equal(
+        isOriginalLiturgyEntry(entry),
+        true,
+        `Liturgia ${entry.slug} (${entry.date}) sem publishedAt (possível sobrescrita de bot externo)`,
+      );
+      const refText = refMatch[1].trim();
+      const paragraphs = refText.split(/\n\n+/).filter(Boolean);
+      const words = refText.split(/\s+/).filter(Boolean).length;
+      assert.equal(
+        paragraphs.length >= 2 && paragraphs.length <= 3,
+        true,
+        `Liturgia ${entry.slug} deve ter 2 a 3 parágrafos na reflexão (atual: ${paragraphs.length})`,
+      );
+      assert.equal(
+        words >= 150 && words <= 260,
+        true,
+        `Liturgia ${entry.slug} deve ter entre 150 e 260 palavras na reflexão (atual: ${words})`,
+      );
+    }
+  }
+});
+
+test("sitemap exclui acervo legado sem publishedAt e páginas legadas recebem noindex", async () => {
+  const entries = sitemap();
+  const urls = new Set(entries.map((entry) => entry.url));
+  assert.equal(urls.has(`${SITE_URL}/liturgia/15-agosto-2025`), false);
+  assert.equal(urls.has(`${SITE_URL}/liturgia/17-novembro-2026`), true);
+
+  const legacyMeta = await generateLiturgySlugMetadata({
+    params: Promise.resolve({ slug: "15-agosto-2025" }),
+  });
+  assert.deepEqual(legacyMeta.robots, { index: false, follow: true });
+
+  const currentMeta = await generateLiturgySlugMetadata({
+    params: Promise.resolve({ slug: "17-novembro-2026" }),
+  });
+  assert.equal(currentMeta.robots, undefined);
 });

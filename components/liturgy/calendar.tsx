@@ -6,6 +6,7 @@ import { CalendarPicker } from "@/components/liturgy/calendar-picker";
 import type { ContentIndexEntry } from "@/lib/content-metadata";
 import { adjacentMonth, buildMonthWeeks, calendarHref, calendarMonthLabel, getCalendarMonths, monthContainsDate } from "@/lib/liturgy-calendar";
 import { civilDateToIso, formatCivilDate, MONTH_NAMES } from "@/lib/liturgical-date";
+import { describeCalendarMonth } from "@/lib/liturgical-season";
 
 const weekdays = ["domingo", "segunda-feira", "terça-feira", "quarta-feira", "quinta-feira", "sexta-feira", "sábado"];
 const shortWeekdays = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
@@ -21,10 +22,11 @@ export function LiturgyCalendar({ year, month, entries, today, isIndex = false }
   const next = adjacentMonth(year, month, 1);
   const available = (candidate: { year: number; month: number }) => months.some(item => item.year === candidate.year && item.month === candidate.month);
   const url = `https://www.liturgianews.site${isIndex ? "/liturgia" : calendarHref({ year, month })}`;
+  const monthGuide = describeCalendarMonth(year, month);
   return <div className="page-container">
     {!isIndex && <Breadcrumbs items={[{ label: "Calendário", href: "/liturgia" }, { label, href: calendarHref({ year, month }) }]} />}
     <header className="calendar-heading">
-      <div><p className="eyebrow">Liturgia diária</p><h1 className="page-title">Calendário litúrgico{!isIndex && <span className="sr-only"> de {label}</span>}</h1><p className="mt-3 max-w-xl text-base leading-relaxed text-slate-600">Encontre as leituras de hoje ou escolha uma data para acompanhar a liturgia.</p></div>
+      <div><p className="eyebrow">Liturgia diária</p><h1 className="page-title">Calendário litúrgico{!isIndex && <span className="sr-only"> de {label}</span>}</h1><p className="mt-3 max-w-xl text-base leading-relaxed text-slate-600">Encontre as leituras de hoje ou escolha uma data para acompanhar a liturgia, os salmos e a meditação diária do Evangelho.</p></div>
       <Link href="/liturgia/hoje" className="inline-flex min-h-11 items-center gap-2 rounded-md bg-amber-100 px-4 py-3 text-sm font-medium text-amber-900 transition-colors hover:bg-amber-200"><BookOpen className="size-4" aria-hidden="true" />Abrir a liturgia de hoje<ArrowUpRight className="size-4" aria-hidden="true" /></Link>
     </header>
     <section aria-label={`Dias de ${label}`}>
@@ -54,6 +56,19 @@ export function LiturgyCalendar({ year, month, entries, today, isIndex = false }
       </table>
       <p className="calendar-legend"><span>Hoje está destacado em âmbar.</span><span>Dias sem link ainda não têm liturgia disponível.</span></p>
       {monthEntries.length === 0 && <p className="mt-6 text-sm leading-relaxed text-slate-600">Não há liturgias disponíveis neste mês.{months.length > 0 && <> Você pode consultar <Link className="text-link" href={months.at(-1)!.href}>{months.at(-1)!.label}</Link> ou escolher outro mês.</>}</p>}
+    </section>
+    <section className="mt-10 rounded-xl border border-amber-200/80 bg-amber-50/40 p-6 space-y-3" aria-labelledby="month-guide-heading">
+      <h2 id="month-guide-heading" className="font-serif text-xl font-semibold text-slate-900">
+        {monthGuide.heading} — {label}
+      </h2>
+      <p className="text-sm leading-relaxed text-slate-700">{monthGuide.overview}</p>
+      <p className="text-sm leading-relaxed text-slate-700">{monthGuide.liturgicalHighlights}</p>
+      <p className="text-xs leading-relaxed text-slate-600 pt-1">
+        Para compreender melhor a estrutura das leituras bíblicas deste mês, consulte nossos guias de{" "}
+        <Link href="/tempo-liturgico" className="text-link">Tempo Litúrgico</Link>,{" "}
+        <Link href="/lectio-divina" className="text-link">Lectio Divina</Link> e{" "}
+        <Link href="/acompanhar" className="text-link">Como acompanhar a liturgia diária</Link>.
+      </p>
     </section>
     <JsonLd data={{ "@context": "https://schema.org", "@type": "CollectionPage", name: `Calendário litúrgico de ${label}`, url, inLanguage: "pt-BR", mainEntity: { "@type": "ItemList", itemListElement: [...monthEntries].sort((a,b) => a.date.localeCompare(b.date)).map((entry, index) => ({ "@type": "ListItem", position: index + 1, name: `Liturgia de ${entry.formattedDate}`, url: `https://www.liturgianews.site/liturgia/${entry.slug}` })) } }} />
   </div>;

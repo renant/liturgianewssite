@@ -3,9 +3,9 @@ import { mock, test } from "node:test";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { buildMdx, generateLiturgies, parseDaysAhead } from "./generate-future-liturgies.mjs";
+import { buildMdx, generateLiturgies, parseDaysAhead, parseForceReflection } from "./generate-future-liturgies.mjs";
 import { attachReflection } from "./generate-future-liturgies.mjs";
-import { generateLiturgyReflection, validateReflection } from "./generate-liturgy-reflection.mjs";
+import { extractReadingsReferences, generateLiturgyReflection, validateReflection } from "./generate-liturgy-reflection.mjs";
 
 const validReflection = `${Array.from({ length: 80 }, (_, index) => `palavra${index}`).join(" ")}\n\n${Array.from({ length: 80 }, (_, index) => `texto${index}`).join(" ")}`;
 const fakeReflectionGenerator = async () => ({ text: validReflection, model: "test-model" });
@@ -224,22 +224,46 @@ test("geração de 90 dias atravessa o ano e completa páginas sem reflexão", a
   assert.equal(fetchMock.mock.callCount(), 180);
 });
 
-test("valida reflexão e chama a Responses API com saída estruturada", async () => {
+test("valida reflexão, extrai referências bíblicas e faz auto-correção quando a 1ª tentativa vem fora da faixa de palavras", async () => {
   assert.equal(validateReflection(validReflection.split("\n\n")), validReflection);
   assert.throws(() => validateReflection(["curta", "texto curto"]), /150 a 260 palavras/);
   assert.throws(() => validateReflection([validReflection, validReflection, validReflection]), /150 a 260 palavras/);
-  let request;
+  assert.throws(() => validateReflection(["<p>tag html</p>", "segundo parágrafo"]), /2 a 3 parágrafos em prosa/);
+
+  const refs = extractReadingsReferences(
+    "<strong>Primeira Leitura</strong> (1Jo 3,22-4,6)\n\nTexto.\n\n<strong>Responsório</strong> Sl 2,7-8\n\n<strong>Evangelho</strong> (Mt 4,12-17.23-25)",
+  );
+  assert.equal(refs.firstReading, "1Jo 3,22-4,6");
+  assert.equal(refs.gospel, "Mt 4,12-17.23-25");
+  assert.doesNotMatch(refs.cleanReadingsText, /<strong>/);
+
+  const requests = [];
   const result = await generateLiturgyReflection({
-    date: "2026-11-09", title: "Memória", readings: "Evangelho e salmo", apiKey: "test-key",
+    date: "2026-11-09",
+    title: "Memória",
+    readings: "<strong>Primeira Leitura</strong> (1Jo 3,22-4,6)\n<strong>Evangelho</strong> (Mt 4,12-17)",
+    apiKey: "test-key",
     fetchImpl: async (url, options) => {
-      request = { url, options };
-      return new Response(JSON.stringify({ status: "completed", output: [{ content: [{ type: "output_text", text: JSON.stringify({ paragraphs: validReflection.split("\n\n") }) }] }] }));
+      requests.push({ url, body: JSON.parse(options.body), headers: options.headers });
+      const paragraphs =
+        requests.length === 1
+          ? ["Rascunho curto demais.", "Apenas duas frases."]
+          : validReflection.split("\n\n");
+      return new Response(
+        JSON.stringify({
+          status: "completed",
+          output: [{ content: [{ type: "output_text", text: JSON.stringify({ paragraphs }) }] }],
+        }),
+      );
     },
   });
   assert.equal(result.text, validReflection);
-  assert.equal(request.url, "https://api.openai.com/v1/responses");
-  assert.equal(request.options.headers.Authorization, "Bearer test-key");
-  assert.equal(JSON.parse(request.options.body).text.format.type, "json_schema");
+  assert.equal(requests.length, 2);
+  assert.equal(requests[0].url, "https://api.openai.com/v1/responses");
+  assert.equal(requests[0].headers.Authorization, "Bearer test-key");
+  assert.equal(requests[0].body.text.format.type, "json_schema");
+  assert.match(requests[0].body.input, /Evangelho do dia \(foco principal\): Mt 4,12-17/);
+  assert.match(requests[1].body.input, /correção obrigatória/);
 });
 
 test("completa reflexão ausente, reaproveita a gerada e preserva reflexão editorial", async () => {
@@ -255,4 +279,22 @@ test("completa reflexão ausente, reaproveita a gerada e preserva reflexão edit
   const preserved = await attachReflection(base, editorial, { reflectionGenerator: generator });
   assert.match(preserved, /Reflexão escrita pela equipe/);
   assert.equal(calls, 1);
+
+  assert.equal(parseForceReflection([], {}), false);
+  assert.equal(parseForceReflection(["--force-reflection"], {}), true);
+  assert.equal(parseForceReflection([], { FORCE_REFLECTION: "true" }), true);
+
+  const forcedFromGenerated = await attachReflection(base, generated, {
+    reflectionGenerator: generator,
+    forceReflection: true,
+  });
+  assert.equal(calls, 2);
+  assert.match(forcedFromGenerated, /## Reflexão do Evangelho/);
+
+  const forcedFromEditorial = await attachReflection(base, editorial, {
+    reflectionGenerator: generator,
+    forceReflection: true,
+  });
+  assert.equal(calls, 3);
+  assert.doesNotMatch(forcedFromEditorial, /Reflexão escrita pela equipe/);
 });

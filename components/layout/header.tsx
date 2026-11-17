@@ -8,6 +8,7 @@ import { hasLocalNewsletterAnchor } from "@/lib/newsletter";
 const links = [
   { href: "/liturgia/hoje", label: "Hoje" },
   { href: "/liturgia", label: "Calendário" },
+  { href: "/lectio-divina", label: "Lectio Divina" },
   { href: "/blog", label: "Blog" },
 ];
 

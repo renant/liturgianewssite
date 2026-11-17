@@ -35,6 +35,13 @@ export function parseDaysAhead(args = process.argv, env = process.env) {
   return days;
 }
 
+export function parseForceReflection(args = process.argv, env = process.env) {
+  return (
+    args.includes("--force-reflection") ||
+    String(env.FORCE_REFLECTION ?? "").toLowerCase() === "true"
+  );
+}
+
 function isoDate(date) {
   return date.toISOString().slice(0, 10);
 }
@@ -167,7 +174,11 @@ function renderMdx({ title, date, publishedAt, updatedAt, body, reflectionMeta }
   return `export const metadata = { ${entries.join(", ")} };\n\n${body.trimEnd()}\n`;
 }
 
-export async function attachReflection(baseMdx, existing, { reflectionGenerator = generateLiturgyReflection } = {}) {
+export async function attachReflection(
+  baseMdx,
+  existing,
+  { reflectionGenerator = generateLiturgyReflection, forceReflection = false } = {},
+) {
   const body = bodyWithoutMetadata(baseMdx);
   const priorBody = existing ? bodyWithoutMetadata(existing) : "";
   const existingReflection = reflectionSection(existing ?? "");
@@ -180,7 +191,7 @@ export async function attachReflection(baseMdx, existing, { reflectionGenerator 
   const inputHash = sha256(`${REFLECTION_PROMPT_VERSION}\n${metadataValue(baseMdx, "date")}\n${metadataValue(baseMdx, "title")}\n${currentReadings}`);
   const readingsChanged = Boolean(existing && existingReadings !== currentReadings);
 
-  if (existingReflection && !isGenerated) {
+  if (!forceReflection && existingReflection && !isGenerated) {
     if (readingsChanged) console.warn("A liturgia foi atualizada, mas a reflexão editorial foi preservada; revisar se necessário.");
     const editorial = priorBody.match(/^##\s+(?:Reflexão do Evangelho|Notícias do Vaticano)\s*\n[\s\S]*$/im)?.[0] ?? "";
     const untouched = editorial ? body.replace(/\s*$/, "\n\n") + editorial : `${body.trimEnd()}\n`;
@@ -191,7 +202,10 @@ export async function attachReflection(baseMdx, existing, { reflectionGenerator 
     return renderMdx({ ...fields, body: untouched });
   }
 
-  const shouldGenerate = !existingReflection || (isGenerated && (storedInputHash !== inputHash || readingsChanged));
+  const shouldGenerate =
+    forceReflection ||
+    !existingReflection ||
+    (isGenerated && (storedInputHash !== inputHash || readingsChanged));
   if (!shouldGenerate) return existing;
 
   const readings = currentReadings;
@@ -228,7 +242,8 @@ export async function generateLiturgies({
   daysAhead = parseDaysAhead(),
   today = todayInSaoPaulo(),
   directory = outputDirectory,
-  refreshExisting = process.argv.includes("--refresh-existing"),
+  forceReflection = parseForceReflection(),
+  refreshExisting = process.argv.includes("--refresh-existing") || forceReflection,
   allowUnavailable = process.argv.includes("--allow-unavailable"),
   reflectionGenerator = generateLiturgyReflection,
   delayMs = 800,
@@ -251,14 +266,14 @@ export async function generateLiturgies({
       existing = fs.readFileSync(filePath, "utf8");
       publishedAt = metadataValue(existing, "publishedAt");
       const hasReflection = Boolean(reflectionSection(existing));
-      if (!refreshExisting && hasReflection) {
+      if (!refreshExisting && !forceReflection && hasReflection) {
         console.info(`Já existe; mantendo sem alteração: ${slug}`);
         continue;
       }
     }
     try {
       let mdx = await buildMdx(date, publishedAt);
-      mdx = await attachReflection(mdx, existing, { reflectionGenerator });
+      mdx = await attachReflection(mdx, existing, { reflectionGenerator, forceReflection });
       if (existing) {
         const comparable = (value) => value.replace(/,?\s*(?:publishedAt|updatedAt):\s*['"][^'"]+['"]/g, "")
           .replace(/\r\n?/g, "\n").trimEnd();

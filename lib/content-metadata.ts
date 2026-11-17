@@ -97,6 +97,10 @@ export function getContentSlugSet(directory: "liturgia-content" | "content"): Re
   return slugSetCache.get(directory)!;
 }
 
+export function isOriginalLiturgyEntry(entry: Pick<ContentMetadata, "publishedAt">): boolean {
+  return Boolean(entry.publishedAt);
+}
+
 export function getLiturgyEntry(slug: string) {
   return getContentIndex("liturgia-content").find((entry) => entry.slug === slug) || null;
 }

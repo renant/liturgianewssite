@@ -11,8 +11,9 @@ import { SocialShare } from "@/components/social-share/social-share";
 import { NewsletterInline } from "@/components/newsletter-inline";
 import { NewsletterPanel } from "@/components/newsletter-panel";
 import { getAdSenseConfig } from "@/lib/adsense";
-import type { ContentIndexEntry } from "@/lib/content-metadata";
+import { isOriginalLiturgyEntry, type ContentIndexEntry } from "@/lib/content-metadata";
 import { formatCivilDate, parseCivilDate } from "@/lib/liturgical-date";
+import { describeLiturgicalCelebration } from "@/lib/liturgical-season";
 import { calendarHref, calendarMonthLabel } from "@/lib/liturgy-calendar";
 import { buildLiturgyDescription, extractLiturgyFacts } from "@/lib/liturgy-facts";
 import { contentPublishedAt, contentModifiedAt } from "@/lib/content-dates";
@@ -118,19 +119,16 @@ export function LiturgyPage({
       label: "Reflexão",
       available: /^##\s+Reflexão do Evangelho\s*$/m.test(source),
     },
-    {
-      id: "noticias",
-      label: "Notícias",
-      available: hasNews,
-    },
   ].filter((section) => section.available);
   const slug = todayRoute ? "hoje" : entry.slug;
   const url = `${SITE_URL}/liturgia/${slug}`;
   const imageUrl = `${url}/opengraph-image`;
   const { midSlot, bottomSlot } = getAdSenseConfig();
+  const showAds = isOriginalLiturgyEntry(entry);
+  const liturgicalInfo = describeLiturgicalCelebration(entry.title, entry.date);
   return (
     <div className="reading-container">
-      <AdSenseScript />
+      {showAds && <AdSenseScript />}
       <LiturgyTracker slug={entry.slug} isToday={isToday} />
       <div className="liturgy-topline">
         <Link href={monthUrl}>
@@ -145,6 +143,22 @@ export function LiturgyPage({
           <span className="block">{formatted}</span>
         </h1>
         <p className="liturgy-context">{context}</p>
+        <div
+          className="mt-3 flex flex-wrap items-center gap-2 text-xs"
+          aria-label="Informações do tempo litúrgico"
+        >
+          <span className="inline-flex items-center rounded-full border border-amber-300 bg-amber-100/80 px-2.5 py-0.5 font-medium text-amber-950">
+            {liturgicalInfo.season}
+          </span>
+          <span
+            className={`inline-flex items-center rounded-full border px-2.5 py-0.5 font-medium ${liturgicalInfo.colorBadgeClass}`}
+          >
+            Cor Litúrgica: {liturgicalInfo.color}
+          </span>
+          <span className="inline-flex items-center rounded-full border border-slate-300 bg-slate-100 px-2.5 py-0.5 font-medium text-slate-800">
+            {liturgicalInfo.sundayCycle} · {liturgicalInfo.weekdayCycle}
+          </span>
+        </div>
       </header>
       {sections.length > 0 && (
         <nav aria-label="Seções da liturgia" className="section-nav">
@@ -164,7 +178,7 @@ export function LiturgyPage({
       <article className="editorial-prose liturgy-prose" aria-label={title}>
         {children}
       </article>
-      {!hasNews && (
+      {showAds && !hasNews && (
         <AdUnit
           key={`${entry.slug}-mid-fallback`}
           slot={midSlot}
@@ -172,51 +186,65 @@ export function LiturgyPage({
         />
       )}
       <section
-        className="below-fold-section my-8 rounded-lg border border-amber-200/80 bg-amber-50/40 p-5 sm:p-6"
+        className="below-fold-section my-8 space-y-4 rounded-lg border border-amber-200/80 bg-amber-50/40 p-5 sm:p-6"
         aria-labelledby="prayer-guide-title"
       >
-        <h2
-          id="prayer-guide-title"
-          className="font-serif text-xl font-semibold text-slate-900"
-        >
-          Como rezar e meditar esta liturgia
-        </h2>
-        <p className="mt-2 text-sm leading-relaxed text-slate-700">
-          Para acolher com profundidade a Palavra proclamada nesta celebração (
-          <strong className="font-medium text-slate-900">{context}</strong>
-          {facts.firstReading ? `, primeira leitura ${facts.firstReading}` : ""}
-          {facts.gospel ? ` e Evangelho ${facts.gospel}` : ""}), reserve alguns
-          minutos de silêncio seguindo os passos da{" "}
-          <Link href="/lectio-divina" className="text-link">
-            Lectio Divina
-          </Link>
-          :
-        </p>
-        <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-slate-700">
-          <li>
-            <strong className="font-medium text-slate-900">
-              Leitura (Lectio):
-            </strong>{" "}
-            Releia com calma o Evangelho{" "}
-            {facts.gospel ? `(${facts.gospel})` : "do dia"} e observe as
-            palavras, gestos e atitudes de Jesus diante dos seus interlocutores.
-          </li>
-          <li>
-            <strong className="font-medium text-slate-900">
-              Meditação (Meditatio):
-            </strong>{" "}
-            Identifique uma frase ou convite que toca sua realidade hoje e
-            conecte-o com a reflexão do Evangelho acima.
-          </li>
-          <li>
-            <strong className="font-medium text-slate-900">
-              Oração e Ação (Oratio &amp; Actio):
-            </strong>{" "}
-            Converse com Deus com confiança filial, agradecendo pela luz da
-            Palavra, e escolha um gesto concreto de caridade, paciência ou
-            fidelidade para viver ao longo deste dia.
-          </li>
-        </ol>
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wider text-amber-900">
+            {liturgicalInfo.season} · {liturgicalInfo.rank}
+          </p>
+          <h2
+            id="prayer-guide-title"
+            className="mt-1 font-serif text-xl font-semibold text-slate-900"
+          >
+            Contexto Litúrgico e Roteiro de Oração (Lectio Divina)
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-slate-700">
+            {liturgicalInfo.summary} {liturgicalInfo.prayerFocus}
+          </p>
+        </div>
+        <div className="border-t border-amber-200/70 pt-3">
+          <p className="text-sm leading-relaxed text-slate-700">
+            Para meditar com profundidade a Palavra proclamada nesta celebração (
+            <strong className="font-medium text-slate-900">{context}</strong>
+            {facts.firstReading ? `, primeira leitura ${facts.firstReading}` : ""}
+            {facts.gospel ? ` e Evangelho ${facts.gospel}` : ""}), reserve alguns
+            minutos de silêncio seguindo os passos tradicionais da{" "}
+            <Link href="/lectio-divina" className="text-link">
+              Lectio Divina
+            </Link>{" "}
+            e do{" "}
+            <Link href="/tempo-liturgico" className="text-link">
+              Ano Litúrgico
+            </Link>
+            :
+          </p>
+          <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-slate-700">
+            <li>
+              <strong className="font-medium text-slate-900">
+                Leitura (Lectio):
+              </strong>{" "}
+              Releia pausadamente o Evangelho{" "}
+              {facts.gospel ? `(${facts.gospel})` : "do dia"} e observe as
+              palavras, gestos e atitudes de Jesus diante dos seus interlocutores.
+            </li>
+            <li>
+              <strong className="font-medium text-slate-900">
+                Meditação (Meditatio):
+              </strong>{" "}
+              Identifique uma frase ou apelo que ilumina sua realidade hoje e
+              articule-o com a reflexão pastoral acima.
+            </li>
+            <li>
+              <strong className="font-medium text-slate-900">
+                Oração e Ação (Oratio &amp; Actio):
+              </strong>{" "}
+              Responda ao Senhor em oração filial e escolha um gesto concreto de
+              conversão, paciência, reconciliação ou caridade fraterna para viver
+              ao longo deste dia.
+            </li>
+          </ol>
+        </div>
       </section>
       <AdjacentDays date={entry.date} afterReading />
       <section
@@ -233,11 +261,13 @@ export function LiturgyPage({
           imagePath={`/liturgia/${slug}/opengraph-image`}
         />
       </section>
-      <AdUnit
-        key={`${entry.slug}-bottom`}
-        slot={bottomSlot}
-        position="after-reading"
-      />
+      {showAds && (
+        <AdUnit
+          key={`${entry.slug}-bottom`}
+          slot={bottomSlot}
+          position="after-reading"
+        />
+      )}
       <NewsletterPanel source={todayRoute ? "liturgia_hoje" : "liturgia_datada"} />
       <JsonLd
         data={[

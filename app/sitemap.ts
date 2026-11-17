@@ -1,4 +1,4 @@
-import { getContentIndex } from "@/lib/content-metadata";
+import { getContentIndex, isOriginalLiturgyEntry } from "@/lib/content-metadata";
 import { getLiturgicalDate, MONTH_NAMES } from "@/lib/liturgical-date";
 import { contentModifiedAt } from "@/lib/content-dates";
 import { SITE_URL } from "@/lib/seo";
@@ -6,9 +6,18 @@ import type { MetadataRoute } from "next";
 
 export const revalidate = 300;
 
+function addCivilDaysIso(isoDate: string, days: number): string {
+  const [y, m, d] = isoDate.split("-").map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d + days));
+  return date.toISOString().slice(0, 10);
+}
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const today = getLiturgicalDate();
-  const liturgies = getContentIndex("liturgia-content");
+  const maxIndexableDate = addCivilDaysIso(today.iso, 7);
+  const liturgies = getContentIndex("liturgia-content").filter(
+    (entry) => isOriginalLiturgyEntry(entry) && entry.date <= maxIndexableDate,
+  );
   const blogPosts = getContentIndex("content");
   const months = new Map<string, string | undefined>();
 

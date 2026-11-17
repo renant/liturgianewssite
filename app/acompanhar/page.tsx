@@ -68,9 +68,36 @@ export default function Page() {
           Nos dias de semana, o Lecionário segue uma leitura semicontínua: um mesmo livro bíblico é lido em sequência dia após dia. Por isso, retomar as leituras todos os dias permite reconhecer temas, promessas e movimentos espirituais que uma leitura isolada não mostra. Caso perca um dia, você sempre pode consultar o{" "}
           <Link href="/liturgia">calendário litúrgico</Link> para retomar o fio da meditação.
         </p>
+
+        <h2>5. Como unir a leitura pessoal à celebração da Santa Missa</h2>
         <p>
-          Para receber esse lembrete gratuito todas as manhãs e manter a fidelidade à oração,{" "}
-          <Link href="#newsletter">assine gratuitamente a newsletter</Link>.
+          A leitura individual ou familiar da liturgia diária não substitui a participação sacramental na Eucaristia, mas prepara o coração de maneira extraordinária para vivê-la com mais fruto. A <em>Instrução Geral do Missal Romano</em> (n. 55) recorda que, na Liturgia da Palavra, o próprio Cristo está presente e fala ao seu povo, e o Espírito Santo torna eficaz a palavra proclamada no coração dos ouvintes.
+        </p>
+        <p>
+          Quando você lê com antecedência as leituras do domingo ou da Missa ferial, a escuta na assembleia litúrgica deixa de ser passiva: você reconhece as conexões entre o Antigo Testamento e o Evangelho, acompanha melhor a homilia do sacerdote e responde ao Salmo Responsorial com verdadeira sintonia interior. E nos dias em que as obrigações de trabalho, estudo ou saúde impedem sua presença física na igreja, rezar com a liturgia diária mantém você espiritualmente unido à mesa da Palavra celebrada em todo o mundo católico.
+        </p>
+
+        <h2>6. Superando as dificuldades mais comuns na oração diária</h2>
+        <ul>
+          <li>
+            <strong>Falta de tempo pela manhã:</strong> Não espere ter meia hora livre para abrir as leituras. Dez minutos bem aproveitados antes de iniciar o expediente, ou mesmo durante o deslocamento diário, são suficientes para ler com recolhimento e rezar o Evangelho.
+          </li>
+          <li>
+            <strong>Textos bíblicos mais difíceis do Antigo Testamento:</strong> É natural encontrar passagens históricas ou proféticas menos familiares na Primeira Leitura. Nesses dias, apoie-se na luz do Evangelho e na reflexão pastoral da página, lembrando que toda a Escritura converge para Jesus Cristo (cf. Lc 24,27).
+          </li>
+          <li>
+            <strong>Aridez espiritual ou distração:</strong> Quando a mente parecer dispersa, volte suavemente ao texto lendo em voz baixa ou sussurrada, repita o versículo do Salmo como uma jaculatória e confie que a fidelidade perseverante agrada profundamente a Deus.
+          </li>
+        </ul>
+
+        <p>
+          Para aprofundar sua formação, consulte também nossos artigos no{" "}
+          <Link href="/blog">blog de espiritualidade e liturgia</Link> ou{" "}
+          <Link href="#newsletter">assine gratuitamente a newsletter</Link> para receber esse lembrete todas as manhãs em seu e-mail.
+        </p>
+        <hr />
+        <p className="text-xs text-slate-600">
+          <em>Referências documentais: Constituição Dogmática Dei Verbum (nn. 21-25), Instrução Geral do Missal Romano (IGMR, nn. 55-67), Catecismo da Igreja Católica (nn. 101-108, 1177).</em>
         </p>
       </article>
       <NewsletterPanel source="acompanhar" />
