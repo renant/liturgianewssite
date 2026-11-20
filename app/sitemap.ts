@@ -6,6 +6,8 @@ import type { MetadataRoute } from "next";
 
 export const revalidate = 300;
 
+const LITURGY_SITEMAP_DAYS_AHEAD = 30;
+
 function addCivilDaysIso(isoDate: string, days: number): string {
   const [y, m, d] = isoDate.split("-").map(Number);
   const date = new Date(Date.UTC(y, m - 1, d + days));
@@ -14,7 +16,7 @@ function addCivilDaysIso(isoDate: string, days: number): string {
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const today = getLiturgicalDate();
-  const maxIndexableDate = addCivilDaysIso(today.iso, 7);
+  const maxIndexableDate = addCivilDaysIso(today.iso, LITURGY_SITEMAP_DAYS_AHEAD);
   const liturgies = getContentIndex("liturgia-content").filter(
     (entry) => isOriginalLiturgyEntry(entry) && entry.date <= maxIndexableDate,
   );
