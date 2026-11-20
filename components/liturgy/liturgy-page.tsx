@@ -244,6 +244,13 @@ export function LiturgyPage({
               ao longo deste dia.
             </li>
           </ol>
+          <p className="mt-3 text-sm leading-relaxed text-slate-700">
+            Para acompanhar a ordem das leituras desta Missa, veja também a{" "}
+            <Link href="/blog/estrutura-da-liturgia-da-palavra-na-missa-catolica" className="text-link">
+              estrutura da Liturgia da Palavra
+            </Link>
+            .
+          </p>
         </div>
       </section>
       <AdjacentDays date={entry.date} afterReading />

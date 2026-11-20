@@ -6,8 +6,8 @@ import { buildPageMetadata } from "@/lib/seo";
 
 export const revalidate = 300;
 export const metadata: Metadata = buildPageMetadata({
-  title: "Calendário litúrgico — Liturgia Católica Diária",
-  description: "Consulte a liturgia de hoje e as leituras de cada dia no calendário. Navegue entre meses e encontre liturgias passadas e futuras disponíveis.",
+  title: "Calendário litúrgico de hoje",
+  description: "Veja o calendário litúrgico de hoje, abra a liturgia do dia e navegue pelas leituras de outros dias. O destaque indica a celebração e o tempo litúrgico atuais.",
   path: "/liturgia",
 });
 

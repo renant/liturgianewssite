@@ -235,10 +235,10 @@ export default function Home() {
         </h2>
         <div className="mt-4 grid gap-6 text-sm leading-relaxed text-slate-700 md:grid-cols-2">
           <p>
-            Na tradição católica, a Liturgia da Palavra propõe diariamente um itinerário bíblico contínuo que une comunidades, paróquias e famílias do mundo inteiro em torno das mesmas Escrituras. Ao acompanhar a Primeira Leitura, o Salmo Responsorial e o Evangelho do dia, o fiel percorre os principais livros do Antigo e do Novo Testamento guiado pela sabedoria materna da Igreja.
+            Na tradição católica, a <Link href="/blog/estrutura-da-liturgia-da-palavra-na-missa-catolica" className="text-link">Liturgia da Palavra</Link> propõe diariamente um itinerário bíblico contínuo que une comunidades, paróquias e famílias do mundo inteiro em torno das mesmas Escrituras. Ao acompanhar a Primeira Leitura, o Salmo Responsorial e o Evangelho do dia, o fiel percorre os principais livros do Antigo e do Novo Testamento guiado pela sabedoria materna da Igreja.
           </p>
           <p>
-            A <strong>LiturgiaNews</strong> organiza esse conteúdo com clareza tipográfica, sem distrações, acrescentando reflexões pastorais originais e roteiros de oração baseados na <em>Lectio Divina</em>. Você pode consultar gratuitamente qualquer data no{" "}
+            A <strong>LiturgiaNews</strong> organiza esse conteúdo com clareza tipográfica, sem distrações, acrescentando reflexões pastorais originais e roteiros de oração baseados na <Link href="/lectio-divina" className="text-link"><em>Lectio Divina</em></Link>. Você pode consultar gratuitamente qualquer data no{" "}
             <Link href="/liturgia" className="text-link">
               calendário litúrgico
             </Link>{" "}

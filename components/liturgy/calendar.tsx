@@ -26,7 +26,7 @@ export function LiturgyCalendar({ year, month, entries, today, isIndex = false }
   return <div className="page-container">
     {!isIndex && <Breadcrumbs items={[{ label: "Calendário", href: "/liturgia" }, { label, href: calendarHref({ year, month }) }]} />}
     <header className="calendar-heading">
-      <div><p className="eyebrow">Liturgia diária</p><h1 className="page-title">Calendário litúrgico{!isIndex && <span className="sr-only"> de {label}</span>}</h1><p className="mt-3 max-w-xl text-base leading-relaxed text-slate-600">Encontre as leituras de hoje ou escolha uma data para acompanhar a liturgia, os salmos e a meditação diária do Evangelho.</p></div>
+      <div><p className="eyebrow">Liturgia diária</p><h1 className="page-title">Calendário litúrgico{!isIndex && <span className="sr-only"> de {label}</span>}</h1><p className="mt-3 max-w-xl text-base leading-relaxed text-slate-600">Consulte o calendário litúrgico de hoje, veja a celebração e o tempo litúrgico destacados no dia atual e escolha outra data para abrir as leituras, os salmos e a meditação do Evangelho.</p></div>
       <Link href="/liturgia/hoje" className="inline-flex min-h-11 items-center gap-2 rounded-md bg-amber-100 px-4 py-3 text-sm font-medium text-amber-900 transition-colors hover:bg-amber-200"><BookOpen className="size-4" aria-hidden="true" />Abrir a liturgia de hoje<ArrowUpRight className="size-4" aria-hidden="true" /></Link>
     </header>
     <section aria-label={`Dias de ${label}`}>
@@ -66,7 +66,8 @@ export function LiturgyCalendar({ year, month, entries, today, isIndex = false }
       <p className="text-xs leading-relaxed text-slate-600 pt-1">
         Para compreender melhor a estrutura das leituras bíblicas deste mês, consulte nossos guias de{" "}
         <Link href="/tempo-liturgico" className="text-link">Tempo Litúrgico</Link>,{" "}
-        <Link href="/lectio-divina" className="text-link">Lectio Divina</Link> e{" "}
+        <Link href="/lectio-divina" className="text-link">Lectio Divina</Link>,{" "}
+        <Link href="/blog/estrutura-da-liturgia-da-palavra-na-missa-catolica" className="text-link">Liturgia da Palavra</Link> e{" "}
         <Link href="/acompanhar" className="text-link">Como acompanhar a liturgia diária</Link>.
       </p>
     </section>

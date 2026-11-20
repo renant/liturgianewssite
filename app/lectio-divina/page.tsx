@@ -6,7 +6,7 @@ import { NewsletterPanel } from "@/components/newsletter-panel";
 import { buildPageMetadata, DEFAULT_OG_IMAGE, SITE_URL } from "@/lib/seo";
 
 const title = "Lectio divina: o que é e como fazer";
-const description = "Conheça um roteiro prático de leitura, meditação, oração e contemplação da Palavra.";
+const description = "Saiba o que é a lectio divina e como fazer a leitura orante da Palavra: leitura, meditação, oração e contemplação, a partir da liturgia e do Evangelho de hoje.";
 const path = "/lectio-divina";
 
 export const metadata: Metadata = buildPageMetadata({ title, description, path, type: "article" });
@@ -86,7 +86,7 @@ export default function Page() {
             <strong>Invoque sempre o Espírito Santo antes de ler:</strong> A Sagrada Escritura deve ser lida e interpretada com a ajuda do mesmo Espírito mediante o qual foi escrita (<em>Dei Verbum</em>, n. 12).
           </li>
           <li>
-            <strong>Leia em comunhão com a liturgia da Igreja:</strong> Seguir as leituras propostas pelo <Link href="/liturgia">calendário litúrgico</Link> evita que leiamos apenas os textos que já conhecemos ou que agradam ao nosso gosto imediato, abrindo-nos à totalidade da Revelação.
+            <strong>Leia em comunhão com a liturgia da Igreja:</strong> Seguir as leituras propostas pelo <Link href="/liturgia">calendário litúrgico</Link> evita que leiamos apenas os textos que já conhecemos ou que agradam ao nosso gosto imediato, abrindo-nos à totalidade da Revelação. O guia da <Link href="/blog/estrutura-da-liturgia-da-palavra-na-missa-catolica">estrutura da Liturgia da Palavra</Link> explica a ordem dessas leituras na Missa.
           </li>
           <li>
             <strong>Anote uma palavra-chave num caderno espiritual:</strong> Escrever em uma linha a frase bíblica que tocou seu coração ajuda a fixá-la na memória e permite perceber, ao longo das semanas, como Deus vem conduzindo sua história.
