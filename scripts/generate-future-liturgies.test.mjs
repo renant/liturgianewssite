@@ -5,7 +5,7 @@ import os from "node:os";
 import path from "node:path";
 import { buildMdx, generateLiturgies, parseDaysAhead, parseForceReflection } from "./generate-future-liturgies.mjs";
 import { attachReflection } from "./generate-future-liturgies.mjs";
-import { extractReadingsReferences, generateLiturgyReflection, validateReflection } from "./generate-liturgy-reflection.mjs";
+import { extractReadingsReferences, findGospelReferenceMismatches, generateLiturgyReflection, validateReflection } from "./generate-liturgy-reflection.mjs";
 
 const validReflection = `${Array.from({ length: 80 }, (_, index) => `palavra${index}`).join(" ")}\n\n${Array.from({ length: 80 }, (_, index) => `texto${index}`).join(" ")}`;
 const fakeReflectionGenerator = async () => ({ text: validReflection, model: "test-model" });
@@ -297,4 +297,30 @@ test("completa reflexão ausente, reaproveita a gerada e preserva reflexão edit
   });
   assert.equal(calls, 3);
   assert.doesNotMatch(forcedFromEditorial, /Reflexão escrita pela equipe/);
+});
+
+test("reflexão gerada precisa comentar o Evangelho das leituras do dia", async () => {
+  assert.deepEqual(findGospelReferenceMismatches("Vigiai (Mc 13,33-37).", "Mc 13,33-37"), []);
+  assert.deepEqual(findGospelReferenceMismatches("O Espírito virá sobre ti (Lc 1,35).", "Lc 1,26-38"), []);
+  assert.deepEqual(findGospelReferenceMismatches("Missão (Mt 10,6).", "Mt 9,35–10,1.6-8"), []);
+  assert.deepEqual(findGospelReferenceMismatches("Ver 1Jo 3,1.", "Jo 1,1-18"), []);
+  assert.deepEqual(findGospelReferenceMismatches("Como nos dias de Noé (Mt 24,37-44).", "Mc 13,33-37"), ["Mt 24,37"]);
+  assert.deepEqual(findGospelReferenceMismatches("José acolhe Maria (Mt 1,18-24).", "Lc 1,26-38"), ["Mt 1,18"]);
+  assert.deepEqual(findGospelReferenceMismatches("Visitação (Lc 1,39-45).", "Lc 1,26-38"), ["Lc 1,39"]);
+
+  // O Evangelho vem depois da Primeira Leitura, do Salmo e da Segunda Leitura, como nas páginas reais.
+  const base = `export const metadata = { title: "1º Domingo do Advento", date: '2026-11-29', publishedAt: '2026-10-20T10:00:00Z', updatedAt: '2026-10-20T10:00:00Z' };\n\n# 1º Domingo do Advento\n\n## Leituras do Dia\n\n<strong>Primeira Leitura</strong> <strong>(Is 63,16b-17.19b;64,2b-7)</strong>\n\nTexto de Isaías.\n\n<strong>Responsório Sl 79(80),2ac.3b.15-16.18-19 (R. 4)</strong>\n\n<strong>Segunda Leitura</strong> <strong>(1Cor 1,3-9)</strong>\n\nTexto de Paulo.\n\nEvangelho <strong>(Mc 13,33-37)</strong>\n\nVigiai!`;
+  const received = [];
+  const reflectionAbout = (reference) => async ({ readings }) => {
+    received.push(readings);
+    return { text: validReflection.replace("palavra0", `(${reference})`), model: "test-model" };
+  };
+  const generated = await attachReflection(base, null, { reflectionGenerator: reflectionAbout("Mc 13,33-37") });
+  assert.match(received[0], /Evangelho <strong>\(Mc 13,33-37\)<\/strong>/);
+  assert.equal(extractReadingsReferences(received[0]).gospel, "Mc 13,33-37");
+  assert.match(generated, /\(Mc 13,33-37\)/);
+  await assert.rejects(
+    attachReflection(base, null, { reflectionGenerator: reflectionAbout("Mt 24,37-44") }),
+    /comenta Mt 24,37, mas o Evangelho do dia é Mc 13,33-37/,
+  );
 });

@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { htmlToMarkdown } from "./future-liturgy-format.mjs";
-import { DEFAULT_REFLECTION_MODEL, REFLECTION_PROMPT_VERSION, generateLiturgyReflection, sha256, validateReflection } from "./generate-liturgy-reflection.mjs";
+import { DEFAULT_REFLECTION_MODEL, REFLECTION_PROMPT_VERSION, assertReflectionMatchesGospel, extractReadingsReferences, generateLiturgyReflection, sha256, validateReflection } from "./generate-liturgy-reflection.mjs";
 
 const baseUrl = "https://liturgia.cancaonova.com";
 const outputDirectory = path.join(process.cwd(), "liturgia-content");
@@ -186,8 +186,10 @@ export async function attachReflection(
   const storedInputHash = metadataValue(existing ?? "", "reflectionInputHash");
   const isGenerated = Boolean(existingReflection && storedTextHash && storedInputHash
     && sha256(existingReflection) === storedTextHash);
-  const existingReadings = priorBody.match(/^## Leituras do Dia\s*\n([\s\S]*?)(?=^##\s|\s*$)/im)?.[1]?.trim();
-  const currentReadings = body.match(/^## Leituras do Dia\s*\n([\s\S]*?)(?=^##\s|\s*$)/im)?.[1]?.trim();
+  // Fim da seção = próximo "##" ou fim do texto. Com a flag m, "\s*$" parava na 1ª linha
+  // e o gerador recebia só a referência da Primeira Leitura, sem o Evangelho.
+  const existingReadings = priorBody.match(/^## Leituras do Dia\s*\n([\s\S]*?)(?=^##\s|(?![\s\S]))/im)?.[1]?.trim();
+  const currentReadings = body.match(/^## Leituras do Dia\s*\n([\s\S]*?)(?=^##\s|(?![\s\S]))/im)?.[1]?.trim();
   const inputHash = sha256(`${REFLECTION_PROMPT_VERSION}\n${metadataValue(baseMdx, "date")}\n${metadataValue(baseMdx, "title")}\n${currentReadings}`);
   const readingsChanged = Boolean(existing && existingReadings !== currentReadings);
 
@@ -218,6 +220,7 @@ export async function attachReflection(
         readings,
       });
       generated.text = validateReflection(generated.text.split(/\n\n+/));
+      assertReflectionMatchesGospel(generated.text, extractReadingsReferences(readings).gospel);
       break;
     } catch (error) {
       if (error?.status >= 400 && error.status < 500 && error.status !== 429) throw error;

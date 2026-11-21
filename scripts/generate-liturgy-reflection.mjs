@@ -38,6 +38,47 @@ export function extractReadingsReferences(readings = "") {
   };
 }
 
+const GOSPEL_POINT = /(?<![\p{L}\d])(Mt|Mc|Lc|Jo)\s*(\d+)\s*,\s*(\d+)/gu;
+
+function gospelPericope(reference) {
+  const match = /^\s*(Mt|Mc|Lc|Jo)\s*(\d[\s\S]*)$/u.exec(String(reference ?? ""));
+  if (!match) return null;
+  const points = [];
+  let chapter = null;
+  for (const segment of match[2].replace(/[\u2010-\u2015]/g, "-").split(/[.;]/)) {
+    for (const part of segment.split("-")) {
+      const numbers = part.replace(/[a-z]/gi, "").split(",").map((value) => Number(value.trim()));
+      if (numbers.some((value) => !Number.isInteger(value) || value <= 0)) continue;
+      if (numbers.length === 2) [chapter] = numbers;
+      if (chapter === null) continue;
+      points.push(chapter * 1000 + numbers[numbers.length - 1]);
+    }
+  }
+  if (points.length === 0) return null;
+  return { book: match[1], start: points[0], end: Math.max(...points) };
+}
+
+// Referências de Evangelho citadas na reflexão que não pertencem ao Evangelho das leituras.
+export function findGospelReferenceMismatches(text, gospelReference) {
+  const pericope = gospelPericope(gospelReference);
+  if (!pericope) return [];
+  return [...String(text).matchAll(GOSPEL_POINT)]
+    .filter(([, book, chapter, verse]) => {
+      const point = Number(chapter) * 1000 + Number(verse);
+      return book !== pericope.book || point < pericope.start || point > pericope.end;
+    })
+    .map(([reference]) => reference);
+}
+
+export function assertReflectionMatchesGospel(text, gospelReference) {
+  const mismatches = findGospelReferenceMismatches(text, gospelReference);
+  if (mismatches.length > 0) {
+    throw new Error(
+      `A reflexão comenta ${mismatches.join(", ")}, mas o Evangelho do dia é ${gospelReference}.`,
+    );
+  }
+}
+
 export function validateReflection(paragraphs) {
   if (
     !Array.isArray(paragraphs) ||
@@ -206,7 +247,9 @@ export async function generateLiturgyReflection({
     });
 
     try {
-      return { text: validateReflection(paragraphs), model };
+      const text = validateReflection(paragraphs);
+      assertReflectionMatchesGospel(text, extractReadingsReferences(readings).gospel);
+      return { text, model };
     } catch (validationError) {
       lastError = validationError;
       previousAttempt = {
