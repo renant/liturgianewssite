@@ -27,7 +27,9 @@ export default function Page() {
         </p>
         <ul>
           <li>
-            <strong>Tempo do Advento:</strong> Quatro semanas de vigilância alegre e preparação espiritual com dupla dimensão: preparar a celebração do Natal do Senhor e renovar a esperança na segunda vinda gloriosa de Cristo.
+            <strong>Tempo do Advento:</strong> Quatro semanas de vigilância alegre e preparação espiritual com dupla dimensão: preparar a celebração do Natal do Senhor e renovar a esperança na segunda vinda gloriosa de Cristo. Veja{" "}
+            <Link href="/blog/o-que-e-o-advento">o que é o Advento</Link> e{" "}
+            <Link href="/blog/como-viver-o-advento-preparacao-espiritual-para-o-natal">como viver o Advento</Link>.
           </li>
           <li>
             <strong>Tempo do Natal:</strong> Inicia-se nas Primeiras Vésperas do Natal (24 de dezembro à noite) e estende-se até a Festa do Batismo do Senhor, contemplando a Encarnação do Verbo, a Sagrada Família, Santa Maria Mãe de Deus e a Epifania do Senhor a todos os povos.
