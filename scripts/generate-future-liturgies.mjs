@@ -114,6 +114,52 @@ async function sourceUrlFor(date) {
   throw new SourceNotAvailableError(`A fonte ainda não oferece link do calendário para ${isoDate(date)}.`);
 }
 
+// As abas da Canção Nova ("1ª Leitura", "2ª Leitura", "Evangelho Lc 1,26-38") às vezes
+// discordam do título dentro da leitura. A aba é a referência conferida pela fonte.
+function tabFor(content, index) {
+  const link = new RegExp(`<a\\b[^>]*href=["']#liturgia-${index}["'][^>]*>([\\s\\S]*?)<\\/a>`, "i").exec(content ?? "");
+  if (!link) return null;
+  const text = (pattern) => decodeHtml(pattern.exec(link[1])?.[1]?.replace(/<[^>]+>/g, "") ?? "").replace(/\s+/g, " ").trim();
+  return {
+    label: text(/<label\b[^>]*>([\s\S]*?)<\/label>/i),
+    reference: text(/<div\b[^>]*class=["'][^"']*\breferencia\b[^"']*["'][^>]*>([\s\S]*?)<\/div>/i),
+  };
+}
+
+const GOSPEL_REFERENCE = /(?:Mt|Mc|Lc|Jo)\s*\d+,[\dabc.,;\-\u2013]*\d[abc]?/g;
+const EVANGELISTS = { Mateus: "Mt", Marcos: "Mc", Lucas: "Lc", "João": "Jo" };
+const comparableReference = (reference) => reference.replace(/\s+/g, "").replace(/\u2013/g, "-");
+
+// Uma referência só vale se bater com o texto proclamado: evangelista ("segundo Lucas")
+// e primeiro e último versículos numerados do texto.
+function matchesGospelText(reference, markdown) {
+  const book = EVANGELISTS[/segundo\s+(Mateus|Marcos|Lucas|João)/.exec(markdown)?.[1]];
+  const verses = [...markdown.matchAll(/<strong>\s*(\d+)[abc]?\s*<\/strong>/g)].map((match) => Number(match[1]));
+  const numbers = reference.replace(/^[A-Za-z]+\s*\d+,/, "").match(/\d+/g)?.map(Number) ?? [];
+  if (!book || verses.length === 0 || numbers.length === 0) return false;
+  return reference.startsWith(book) && numbers[0] === verses[0] && numbers[numbers.length - 1] === verses[verses.length - 1];
+}
+
+export function alignReadingWithTab(markdown, tab) {
+  if (!tab) return markdown;
+  if (/^2ª Leitura/i.test(tab.label)) {
+    return markdown.includes("Segunda Leitura") ? markdown : markdown.replace("Primeira Leitura", "Segunda Leitura");
+  }
+  if (!/^Evangelho/i.test(tab.label)) return markdown;
+  const tabReferences = tab.reference.match(GOSPEL_REFERENCE) ?? [];
+  const heading = /\(((?:Mt|Mc|Lc|Jo)\s*\d[^)]*)\)/.exec(markdown);
+  const headingReference = heading?.[1].match(GOSPEL_REFERENCE)?.[0];
+  if (tabReferences.length !== 1 || !headingReference
+    || comparableReference(headingReference) === comparableReference(tabReferences[0])) return markdown;
+  if (matchesGospelText(headingReference, markdown) || !matchesGospelText(tabReferences[0], markdown)) {
+    console.warn(`Aba da fonte diz ${tabReferences[0]}, mas o texto do Evangelho confirma ${headingReference}; mantendo.`);
+    return markdown;
+  }
+  console.warn(`Evangelho corrigido pela aba da fonte: ${headingReference} -> ${tabReferences[0]}`);
+  const fixedHeading = heading[0].replace(headingReference, tabReferences[0]);
+  return markdown.slice(0, heading.index) + fixedHeading + markdown.slice(heading.index + heading[0].length);
+}
+
 export async function buildMdx(date, publishedAt) {
   const sourceUrl = await sourceUrlFor(date);
   const html = await getHtml(sourceUrl);
@@ -138,7 +184,10 @@ export async function buildMdx(date, publishedAt) {
   for (let index = 1; index <= 8; index += 1) {
     const section = elementById(content, `liturgia-${index}`);
     if (!section) continue;
-    const markdown = htmlToMarkdown(section.replace(/\r\n?/g, "\n")).replace(/[\t ]+$/gm, "");
+    const markdown = alignReadingWithTab(
+      htmlToMarkdown(section.replace(/\r\n?/g, "\n")).replace(/[\t ]+$/gm, ""),
+      tabFor(content, index),
+    );
     if (markdown) readings.push(markdown);
   }
   if (readings.length < 3) throw new Error(`Leituras incompletas para ${isoDate(date)}.`);

@@ -3,7 +3,7 @@ import { mock, test } from "node:test";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { buildMdx, generateLiturgies, parseDaysAhead, parseForceReflection } from "./generate-future-liturgies.mjs";
+import { alignReadingWithTab, buildMdx, generateLiturgies, parseDaysAhead, parseForceReflection } from "./generate-future-liturgies.mjs";
 import { attachReflection } from "./generate-future-liturgies.mjs";
 import { extractReadingsReferences, findGospelReferenceMismatches, generateLiturgyReflection, validateReflection } from "./generate-liturgy-reflection.mjs";
 
@@ -323,4 +323,22 @@ test("reflexão gerada precisa comentar o Evangelho das leituras do dia", async 
     attachReflection(base, null, { reflectionGenerator: reflectionAbout("Mt 24,37-44") }),
     /comenta Mt 24,37, mas o Evangelho do dia é Mc 13,33-37/,
   );
+});
+
+test("confere o Evangelho com a aba da Canção Nova sem confiar cegamente em nenhum dos dois", (t) => {
+  t.mock.method(console, "warn", () => {});
+  // 08/12/2026: título da leitura diz Lc 5,17-26, mas a aba e o texto (v. 26 a 38) são Lc 1,26-38.
+  const imaculada = 'Evangelho <strong>(Lc 5,17-26)</strong>\n\nProclamação do Evangelho de Jesus Cristo segundo Lucas.\n\nNaquele tempo, <strong>26</strong> no sexto mês, o anjo Gabriel... <strong>38</strong> Maria, então, disse.';
+  assert.match(alignReadingWithTab(imaculada, { label: "Evangelho", reference: "Lc 1,26-38 (Anunciação)" }), /^Evangelho <strong>\(Lc 1,26-38\)<\/strong>/);
+  // 10/01/2027: a aba diz Mt 3,13-17, mas o texto proclamado é Mc 1,7-11; mantém o título.
+  const batismo = '<strong>Evangelho (Mc 1,7-11)</strong>\n\nProclamação do Evangelho de Jesus Cristo segundo Marcos.\n\nNaquele tempo,<strong>7 </strong>João Batista pregava... <strong>11</strong> E do céu veio uma voz.';
+  assert.equal(alignReadingWithTab(batismo, { label: "Evangelho", reference: "Mt 3,13-17" }), batismo);
+  // Mais de uma opção na aba: não mexe.
+  assert.equal(alignReadingWithTab(imaculada, { label: "Evangelho", reference: "Lc 1,26-38 e Mt 1,1-25" }), imaculada);
+  // Segunda Leitura rotulada como Primeira dentro do texto da fonte.
+  assert.equal(
+    alignReadingWithTab("<strong>Primeira Leitura</strong> <strong>(2Pd 3,8-14)</strong>\n\nTexto.", { label: "2ª Leitura", reference: "2Pd 3,8-14" }),
+    "<strong>Segunda Leitura</strong> <strong>(2Pd 3,8-14)</strong>\n\nTexto.",
+  );
+  assert.equal(alignReadingWithTab("<strong>Primeira Leitura</strong> (Is 40,1-5)", { label: "1ª Leitura", reference: "Is 40,1-5" }), "<strong>Primeira Leitura</strong> (Is 40,1-5)");
 });
