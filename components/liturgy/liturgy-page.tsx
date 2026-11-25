@@ -1,7 +1,7 @@
 import type { HTMLAttributes, ReactNode } from "react";
 import type { MDXComponents } from "mdx/types";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AdUnit } from "@/components/ads/ad-unit";
 import { AdSenseScript } from "@/components/ads/adsense-script";
 import { LiturgyTracker } from "@/components/analytics/liturgy-tracker";
@@ -12,7 +12,7 @@ import { NewsletterInline } from "@/components/newsletter-inline";
 import { NewsletterPanel } from "@/components/newsletter-panel";
 import { getAdSenseConfig } from "@/lib/adsense";
 import { isOriginalLiturgyEntry, type ContentIndexEntry } from "@/lib/content-metadata";
-import { formatCivilDate, parseCivilDate } from "@/lib/liturgical-date";
+import { formatCivilDate, getDayOfWeek, parseCivilDate } from "@/lib/liturgical-date";
 import { describeLiturgicalCelebration } from "@/lib/liturgical-season";
 import { calendarHref, calendarMonthLabel } from "@/lib/liturgy-calendar";
 import { buildLiturgyDescription, extractLiturgyFacts } from "@/lib/liturgy-facts";
@@ -136,6 +136,7 @@ export function LiturgyPage({
           Calendário de {calendarMonthLabel(date.year, date.month)}
         </Link>
         {!isToday && <TrackedTodayLink>Liturgia de hoje</TrackedTodayLink>}
+        {todayRoute && getDayOfWeek(date) !== 0 && <Link href="/liturgia/domingo">Próximo domingo<ArrowRight className="size-4" aria-hidden="true" /></Link>}
       </div>
       <header className="liturgy-header">
         <h1>

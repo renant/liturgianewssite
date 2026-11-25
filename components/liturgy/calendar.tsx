@@ -1,4 +1,4 @@
-import { BookOpen, ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
+import { BookOpen, CalendarDays, ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/breadcrumbs/breadcrumbs";
 import JsonLd from "@/components/jsonld/JsonLd";
@@ -27,7 +27,10 @@ export function LiturgyCalendar({ year, month, entries, today, isIndex = false }
     {!isIndex && <Breadcrumbs items={[{ label: "Calendário", href: "/liturgia" }, { label, href: calendarHref({ year, month }) }]} />}
     <header className="calendar-heading">
       <div><p className="eyebrow">Liturgia diária</p><h1 className="page-title">Calendário litúrgico{!isIndex && <span className="sr-only"> de {label}</span>}</h1><p className="mt-3 max-w-xl text-base leading-relaxed text-slate-600">Consulte o calendário litúrgico de hoje, veja a celebração e o tempo litúrgico destacados no dia atual e escolha outra data para abrir as leituras, os salmos e a meditação do Evangelho.</p></div>
-      <Link href="/liturgia/hoje" className="inline-flex min-h-11 items-center gap-2 rounded-md bg-amber-100 px-4 py-3 text-sm font-medium text-amber-900 transition-colors hover:bg-amber-200"><BookOpen className="size-4" aria-hidden="true" />Abrir a liturgia de hoje<ArrowUpRight className="size-4" aria-hidden="true" /></Link>
+      <div className="flex flex-wrap gap-3">
+        <Link href="/liturgia/hoje" className="inline-flex min-h-11 items-center gap-2 rounded-md bg-amber-100 px-4 py-3 text-sm font-medium text-amber-900 transition-colors hover:bg-amber-200"><BookOpen className="size-4" aria-hidden="true" />Abrir a liturgia de hoje<ArrowUpRight className="size-4" aria-hidden="true" /></Link>
+      <Link href="/liturgia/domingo" className="inline-flex min-h-11 items-center gap-2 rounded-md bg-amber-100 px-4 py-3 text-sm font-medium text-amber-900 transition-colors hover:bg-amber-200"><CalendarDays className="size-4" aria-hidden="true" />Próximo domingo<ArrowUpRight className="size-4" aria-hidden="true" /></Link>
+      </div>
     </header>
     <section aria-label={`Dias de ${label}`}>
       <div className="calendar-toolbar">

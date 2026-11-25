@@ -61,6 +61,13 @@ export default function Home() {
               <ArrowRight className="size-4" aria-hidden="true" />
             </Link>
             <Link
+              href="/liturgia/domingo"
+              className="text-link inline-flex min-h-11 items-center gap-2 text-sm"
+            >
+              <CalendarDays className="size-4" aria-hidden="true" />
+              Próximo domingo
+            </Link>
+            <Link
               href="/liturgia"
               className="text-link inline-flex min-h-11 items-center gap-2 text-sm"
             >
