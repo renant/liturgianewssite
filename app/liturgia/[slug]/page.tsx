@@ -4,7 +4,7 @@ import { buildLiturgyMdxComponents, LiturgyPage } from "@/components/liturgy/lit
 import { contentPublishedAt, contentModifiedAt } from "@/lib/content-dates";
 import { getContentIndex, isOriginalLiturgyEntry } from "@/lib/content-metadata";
 import { currentLiturgyDate, loadLiturgy } from "@/lib/liturgy-data";
-import { buildLiturgyDescription, buildSundayDescription, buildSundayTitle, extractLiturgyFacts, isUpcomingSunday } from "@/lib/liturgy-facts";
+import { buildLiturgyDescription, buildLiturgyPageTitle, buildSundayDescription, extractLiturgyFacts, isSunday, isUpcomingSunday, liturgyCelebrationName, liturgyDocumentTitle } from "@/lib/liturgy-facts";
 
 type Props = { params: Promise<{ slug: string }> };
 export const revalidate = 300;
@@ -15,9 +15,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!liturgy) notFound();
   const { entry, source } = liturgy;
   const facts = extractLiturgyFacts(source);
-  const sunday = isUpcomingSunday(entry.date, currentLiturgyDate().iso);
-  const title = sunday ? buildSundayTitle(entry.title, entry.formattedDate) : facts.gospel ? `Liturgia de ${entry.formattedDate}: Evangelho ${facts.gospel}` : `Liturgia de ${entry.formattedDate}`;
-  const description = sunday ? buildSundayDescription(entry.title, entry.formattedDate, facts) : buildLiturgyDescription(entry.title, entry.formattedDate, facts);
+  const upcomingSunday = isUpcomingSunday(entry.date, currentLiturgyDate().iso);
+  const extras = isSunday(entry.date)
+    ? [liturgyCelebrationName(entry.title), facts.gospel]
+    : [facts.gospel];
+  const title = liturgyDocumentTitle(buildLiturgyPageTitle(entry.formattedDate, extras));
+  const description = upcomingSunday ? buildSundayDescription(entry.title, entry.formattedDate, facts) : buildLiturgyDescription(entry.title, entry.formattedDate, facts);
   const url = `https://www.liturgianews.site/liturgia/${entry.slug}`;
   return {
     title: { absolute: title },

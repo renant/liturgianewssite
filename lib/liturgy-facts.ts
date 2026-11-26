@@ -21,17 +21,42 @@ export function buildLiturgyDescription(title: string, formattedDate: string, fa
   ].filter(Boolean).join(" ");
 }
 
-// Domingo ainda por vir (ou hoje): title e description com a busca "evangelho do dia <data>".
+// Domingo ainda por vir (ou hoje): description com a busca "evangelho do dia <data>".
 export function isUpcomingSunday(isoDate: string, todayIso: string) {
   return isoDate >= todayIso && getDayOfWeek(isoDate) === 0;
+}
+
+export function isSunday(isoDate: string) {
+  return getDayOfWeek(isoDate) === 0;
 }
 
 export function liturgyCelebrationName(title: string) {
   return title.split("|")[0].replace(/\s+-\s+(Festa|Solenidade|Memória)\s*$/i, "").trim();
 }
 
-export function buildSundayTitle(title: string, formattedDate: string) {
-  return `Evangelho do dia ${formattedDate}, ${liturgyCelebrationName(title)}`;
+// Molde aprovado: "Evangelho do dia [data]", com evangelho ou celebração se couber em cerca de 60 caracteres (teto 70).
+const TITLE_CORE_MAX = 70;
+const BRAND_SUFFIX = " | LiturgiaNews";
+const TITLE_WITH_BRAND_MAX = 70;
+
+export function buildLiturgyPageTitle(formattedDate: string, extras: Array<string | undefined> = []) {
+  const base = `Evangelho do dia ${formattedDate}`;
+  for (const extra of extras) {
+    const value = extra?.trim();
+    if (!value) continue;
+    const withExtra = `${base}, ${value}`;
+    if (withExtra.length <= TITLE_CORE_MAX) return withExtra;
+  }
+  return base;
+}
+
+export function liturgyDocumentTitle(core: string) {
+  const branded = `${core}${BRAND_SUFFIX}`;
+  return branded.length <= TITLE_WITH_BRAND_MAX ? branded : core;
+}
+
+export function buildSundayTitle(title: string, formattedDate: string, gospel?: string) {
+  return buildLiturgyPageTitle(formattedDate, [liturgyCelebrationName(title), gospel]);
 }
 
 export function buildSundayDescription(title: string, formattedDate: string, facts: LiturgyFacts) {
