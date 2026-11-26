@@ -17,6 +17,7 @@ import sitemap from "../app/sitemap.ts";
 import { metadata as sobreMetadata } from "../app/sobre/page.tsx";
 import { metadata as tempoMetadata } from "../app/tempo-liturgico/page.tsx";
 import { metadata as termosMetadata } from "../app/termos/page.tsx";
+import { metadata as editorialMetadata } from "../app/politica-editorial/page.tsx";
 import securityHeaders from "../headers.ts";
 import { createAnalyticsTracker } from "./analytics.ts";
 import { getContentIndex, getContentSlugSet, isOriginalLiturgyEntry, readContentSource } from "./content-metadata.ts";
@@ -62,6 +63,7 @@ test("todas as rotas estáticas exportam OpenGraph 1200x630 e canonical próprio
     { meta: donateMetadata, url: `${SITE_URL}/donate` },
     { meta: privacidadeMetadata, url: `${SITE_URL}/privacidade` },
     { meta: termosMetadata, url: `${SITE_URL}/termos` },
+    { meta: editorialMetadata, url: `${SITE_URL}/politica-editorial` },
   ];
 
   for (const { meta, url } of pages) {
@@ -123,6 +125,7 @@ test("sitemap inclui rotas principais/guias, exclui rotas noindex e nunca emite 
     `${SITE_URL}/donate`,
     `${SITE_URL}/privacidade`,
     `${SITE_URL}/termos`,
+    `${SITE_URL}/politica-editorial`,
   ]) {
     assert.equal(urls.has(required), true, `Faltando ${required} no sitemap`);
   }

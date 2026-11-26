@@ -1,6 +1,7 @@
 import JsonLd from "@/components/jsonld/JsonLd";
 import { buildPageMetadata, SITE_URL } from "@/lib/seo";
 import { Metadata } from "next";
+import Link from "next/link";
 import ContactForm from "./contact-form";
 
 export const metadata: Metadata = buildPageMetadata({
@@ -17,8 +18,8 @@ export default function Contact() {
           Entre em contato
         </h1>
         <p className="page-description">
-          Estamos aqui para ajudar. Envie-nos sua mensagem e responderemos o
-          mais breve possível.
+          Fale com a equipe da LiturgiaNews: envie dúvidas, sugestões ou o aviso
+          de um erro que você encontrou. Respondemos o mais breve possível.
         </p>
       </header>
 
@@ -28,6 +29,25 @@ export default function Contact() {
         </section>
 
         <aside className="space-y-8">
+          <section className="space-y-3" aria-label="Sobre o contato">
+            <h2 className="text-xl font-serif font-semibold text-foreground">
+              Antes de escrever
+            </h2>
+            <p className="text-muted-foreground leading-relaxed">
+              A <strong>LiturgiaNews</strong> é um portal católico independente
+              que publica a liturgia diária, reflexões e artigos de formação.
+              O contato é feito pelo formulário desta página.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              Para avisar de um erro, informe o endereço da página e o trecho.
+              Veja como conferimos e corrigimos o conteúdo na{" "}
+              <Link href="/politica-editorial" className="text-link">
+                política editorial
+              </Link>
+              . As leituras seguem o Lecionário da CNBB, conferidas com a
+              liturgia diária da Canção Nova.
+            </p>
+          </section>
           <section className="space-y-4" aria-label="Perguntas frequentes">
             <h2 className="text-xl font-serif font-semibold text-foreground">
               Perguntas frequentes

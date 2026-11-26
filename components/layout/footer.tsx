@@ -4,6 +4,7 @@ const links = [
   { href: "/sobre", label: "Sobre" },
   { href: "/contact", label: "Contato" },
   { href: "/donate", label: "Apoiar" },
+  { href: "/politica-editorial", label: "Política editorial" },
   { href: "/privacidade", label: "Privacidade" },
   { href: "/termos", label: "Termos de Uso" },
   { href: "/acompanhar", label: "Como acompanhar" },

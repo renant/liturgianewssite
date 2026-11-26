@@ -17,7 +17,7 @@ export default function Sobre() {
           Sobre a LiturgiaNews
         </h1>
         <p className="page-description">
-          Somos uma iniciativa editorial católica dedicada a conectar pessoas à
+          A LiturgiaNews é um portal católico independente dedicado a conectar pessoas à
           Palavra de Deus com fidelidade litúrgica, clareza e constância diária.
         </p>
       </header>
@@ -39,52 +39,64 @@ export default function Sobre() {
           Jesus Cristo.
         </p>
         <p className="text-muted-foreground leading-relaxed">
-          Acreditamos que o contato perseverante com a Sagrada Escritura —
+          Acreditamos que o contato perseverante com a Sagrada Escritura,
           lida em sintonia com o{" "}
           <Link href="/tempo-liturgico" className="text-link">
             ano litúrgico
           </Link>{" "}
-          da Igreja — transforma o coração humano, ilumina as decisões do dia a
+          da Igreja, transforma o coração humano, ilumina as decisões do dia a
           dia e educa para a caridade cristã.
         </p>
       </section>
 
       <section className="space-y-4" aria-label="Metodologia editorial e fontes">
         <h2 className="text-2xl font-serif font-semibold text-foreground">
-          Metodologia editorial e fontes litúrgicas
+          Fontes e método editorial
         </h2>
         <p className="text-muted-foreground leading-relaxed">
-          Todo o conteúdo publicado na LiturgiaNews segue rigorosamente a
-          ordenação bíblica do{" "}
-          <strong>Lecionário Oficial da Igreja Católica no Brasil</strong>{" "}
-          (Conferência Nacional dos Bispos do Brasil — CNBB) e as normas do{" "}
-          <em>Calendário Romano Geral</em> (Ciclo Dominical Anos A, B e C,
-          Ciclo Ferial Anos Pares e Ímpares e Próprio dos Santos).
+          As leituras de cada dia seguem o <strong>Lecionário da CNBB</strong>{" "}
+          e são conferidas com a{" "}
+          <a
+            href="https://liturgia.cancaonova.com/pb/"
+            className="text-link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            liturgia diária da Canção Nova
+          </a>
+          . O calendário segue as normas do <em>Calendário Romano Geral</em>.
         </p>
         <p className="text-muted-foreground leading-relaxed">
-          Para cada dia do calendário, nossa equipe editorial organiza e revisa:
+          O que você encontra em cada página de liturgia:
         </p>
         <ul className="list-disc space-y-2 pl-5 text-muted-foreground leading-relaxed">
           <li>
-            <strong>As Leituras do Dia:</strong> Primeira Leitura, Salmo
-            Responsorial, Segunda Leitura (nos domingos e solenidades),
-            Aclamação ao Evangelho e Proclamação do Santo Evangelho.
+            <strong>Leituras do Dia:</strong> primeira leitura, salmo
+            responsorial, segunda leitura (nos domingos e solenidades),
+            aclamação e Evangelho.
           </li>
           <li>
-            <strong>Reflexão do Evangelho:</strong> Meditações pastorais e
-            espirituais próprias, redigidas em linguagem clara e fiel ao
-            Catecismo da Igreja Católica e à tradição patrística, conectando a
-            Primeira Leitura ao Evangelho proclamado.
+            <strong>Reflexão do Evangelho:</strong> texto produzido pela equipe
+            da LiturgiaNews, a partir do Evangelho do dia e das fontes
+            católicas citadas na nossa política editorial.
           </li>
           <li>
-            <strong>Roteiro de Lectio Divina e Formação:</strong> Orientações
-            práticas de leitura orante em cada página de liturgia, além de{" "}
+            <strong>Roteiro de Lectio Divina:</strong> orientações práticas de
+            leitura orante, além de{" "}
             <Link href="/blog" className="text-link">
               artigos de formação litúrgica
             </Link>{" "}
             sobre os tempos sagrados, símbolos e orações da Igreja.
           </li>
         </ul>
+        <p className="text-muted-foreground leading-relaxed">
+          Leia a{" "}
+          <Link href="/politica-editorial" className="text-link">
+            política editorial
+          </Link>{" "}
+          para ver as fontes completas, como corrigimos erros e como tratamos
+          independência e anúncios.
+        </p>
       </section>
 
       <section className="space-y-4" aria-label="Newsletter e sustentabilidade">
@@ -124,10 +136,16 @@ export default function Sobre() {
             Quero receber a liturgia diária
           </Link>
           <Link
+            href="/politica-editorial"
+            className="inline-flex text-sm font-medium text-slate-700 underline underline-offset-4 hover:text-amber-800 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-sm"
+          >
+            Política editorial
+          </Link>
+          <Link
             href="/contact"
             className="inline-flex text-sm font-medium text-slate-700 underline underline-offset-4 hover:text-amber-800 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-sm"
           >
-            Falar com nossa equipe editorial
+            Falar com a LiturgiaNews
           </Link>
         </div>
       </section>

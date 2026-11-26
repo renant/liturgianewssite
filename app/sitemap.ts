@@ -86,6 +86,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.5,
     },
     {
+      url: `${SITE_URL}/politica-editorial`,
+      lastModified: "2026-11-26",
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
+    {
       url: `${SITE_URL}/privacidade`,
       lastModified: "2026-10-14",
       changeFrequency: "yearly",

@@ -3,6 +3,7 @@ import type { MDXComponents } from "mdx/types";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AdUnit } from "@/components/ads/ad-unit";
+import { SourceReview } from "@/components/liturgy/source-review";
 import { AdSenseScript } from "@/components/ads/adsense-script";
 import { LiturgyTracker } from "@/components/analytics/liturgy-tracker";
 import { TrackedTodayLink } from "@/components/analytics/tracked-today-link";
@@ -255,6 +256,7 @@ export function LiturgyPage({
         </div>
       </section>
       <AdjacentDays date={entry.date} afterReading />
+      <SourceReview />
       <section
         className="my-8 border-t border-amber-200/70 pt-6"
         aria-labelledby="share-title"
